@@ -1,0 +1,24 @@
+[phases.setup]
+nixPkgs = ["nodejs_22", "npm-9_x"]
+
+[phases.install]
+cmd = "npm ci --only=production --no-audit --no-fund"
+
+[variables]
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium"
+NODE_ENV = "production"
+NPM_CONFIG_CACHE = "/tmp/.npm"
+NPM_CONFIG_UPDATE_NOTIFIER = "false"
+
+[build]
+ignore = [
+  "node_modules",
+  ".git",
+  "*.md",
+  ".env*",
+  "*.log",
+  ".cache",
+  "tracking_data.json",
+  "player_tracking_data.json"
+]

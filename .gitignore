@@ -1,0 +1,49 @@
+# Environment variables
+.env
+.env.*
+*.env
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Tracking data (contains dynamic data)
+player_tracking_data.json
+tracking_data.json
+*tracking_data.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cache
+.cache/
+.npm/
+.eslintcache
+
+# Build outputs
+dist/
+build/

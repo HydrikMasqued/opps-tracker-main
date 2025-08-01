@@ -1,0 +1,32 @@
+{
+  "name": "larry-bot-fivem",
+  "version": "1.0.0",
+  "description": "Discord bot for monitoring FiveM server status and player count",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "fivem",
+    "server",
+    "monitoring"
+  ],
+  "author": "Larry Bot",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "axios": "^1.6.2",
+    "dotenv": "^16.3.1",
+    "cheerio": "^1.0.0-rc.12",
+    "puppeteer": "^21.6.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

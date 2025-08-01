@@ -1,0 +1,16 @@
+[build]
+builder = "nixpacks"
+watchPatterns = ["**/*.js", "package.json"]
+
+[deploy]
+startCommand = "node 'Enhanced Player Tracker with Join Leave Logging.js'"
+restartPolicyType = "always"
+restartPolicyMaxRetries = 10
+
+[variables]
+NODE_ENV = "production"
+PORT = "3000"
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium"
+NPM_CONFIG_CACHE = "/tmp/.npm"
+NPM_CONFIG_UPDATE_NOTIFIER = "false"
