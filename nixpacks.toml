@@ -1,15 +1,27 @@
 [phases.setup]
 nixPkgs = ["nodejs_22", "npm-9_x"]
+nixPkgsArchive = "ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7"
 
 [phases.install]
-cmd = "npm ci --only=production --no-audit --no-fund"
+cmd = "npm ci --omit=dev --no-audit --no-fund --prefer-offline --cache /tmp/.npm --maxsockets 1"
+
+[phases.build]
+cmd = "echo 'No build step required'"
 
 [variables]
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+PUPPETEER_SKIP_DOWNLOAD = "true"
 PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium"
+CHROME_BIN = "/usr/bin/chromium"
 NODE_ENV = "production"
 NPM_CONFIG_CACHE = "/tmp/.npm"
 NPM_CONFIG_UPDATE_NOTIFIER = "false"
+NPM_CONFIG_PROGRESS = "false"
+NPM_CONFIG_AUDIT = "false"
+NPM_CONFIG_FUND = "false"
+NPM_CONFIG_LOGLEVEL = "error"
+NPM_CONFIG_PREFER_OFFLINE = "true"
+NPM_CONFIG_MAXSOCKETS = "1"
 
 [build]
 ignore = [
@@ -20,5 +32,9 @@ ignore = [
   "*.log",
   ".cache",
   "tracking_data.json",
-  "player_tracking_data.json"
+  "player_tracking_data.json",
+  "README.md",
+  ".gitignore",
+  "*.tmp",
+  "*.temp"
 ]
