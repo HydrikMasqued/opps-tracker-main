@@ -5,7 +5,8 @@
   "main": "bot.js",
   "scripts": {
     "start": "node 'Enhanced Player Tracker with Join Leave Logging.js'",
-    "dev": "nodemon 'Enhanced Player Tracker with Join Leave Logging.js'"
+    "dev": "nodemon 'Enhanced Player Tracker with Join Leave Logging.js'",
+    "postinstall": "echo 'Install completed successfully'"
   },
   "keywords": [
     "discord",

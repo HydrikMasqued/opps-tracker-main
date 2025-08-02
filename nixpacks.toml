@@ -3,7 +3,7 @@ nixPkgs = ["nodejs_22", "npm-9_x"]
 nixPkgsArchive = "ffeebf0acf3ae8b29f8c7049cd911b9636efd7e7"
 
 [phases.install]
-cmd = "npm ci --omit=dev --no-audit --no-fund --prefer-offline --cache /tmp/.npm --maxsockets 1"
+cmd = "chmod +x build.sh && ./build.sh"
 
 [phases.build]
 cmd = "echo 'No build step required'"
