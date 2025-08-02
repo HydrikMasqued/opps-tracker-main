@@ -5,7 +5,5 @@ restartPolicyMaxRetries = 10
 
 [variables]
 NODE_ENV = "production"
-PORT = "3000"
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
-PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium-browser"
-CHROME_BIN = "/usr/bin/chromium-browser"
+PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium"
