@@ -1,7 +1,6 @@
 [build]
-builder = "nixpacks"
-watchPatterns = ["**/*.js", "package.json"]
-nixpacksInstallCmd = "npm ci --omit=dev --no-audit --no-fund --prefer-offline --cache /tmp/.npm --maxsockets 1"
+builder = "dockerfile"
+watchPatterns = ["**/*.js", "package.json", "Dockerfile"]
 
 [deploy]
 startCommand = "node 'Enhanced Player Tracker with Join Leave Logging.js'"

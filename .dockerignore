@@ -14,3 +14,7 @@ player_tracking_data.json
 Thumbs.db
 *.tmp
 *.temp
+build.sh
+nixpacks.toml
+.github
+*.md
