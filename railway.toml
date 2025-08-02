@@ -1,7 +1,3 @@
-[build]
-builder = "dockerfile"
-watchPatterns = ["**/*.js", "package.json", "Dockerfile"]
-
 [deploy]
 startCommand = "node 'Enhanced Player Tracker with Join Leave Logging.js'"
 restartPolicyType = "always"
@@ -11,6 +7,5 @@ restartPolicyMaxRetries = 10
 NODE_ENV = "production"
 PORT = "3000"
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
-PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium"
-NPM_CONFIG_CACHE = "/tmp/.npm"
-NPM_CONFIG_UPDATE_NOTIFIER = "false"
+PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium-browser"
+CHROME_BIN = "/usr/bin/chromium-browser"
