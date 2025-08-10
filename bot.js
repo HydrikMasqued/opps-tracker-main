@@ -85,7 +85,8 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
     
     let browser;
     try {
-        browser = await puppeteer.launch({
+        // Container-optimized Puppeteer configuration
+        const launchOptions = {
             headless: 'new',
             args: [
                 '--no-sandbox',
@@ -96,9 +97,42 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
                 '--no-zygote',
                 '--disable-gpu',
                 '--disable-web-security',
-                '--disable-features=VizDisplayCompositor'
+                '--disable-features=VizDisplayCompositor',
+                '--disable-background-timer-throttling',
+                '--disable-backgrounding-occluded-windows',
+                '--disable-renderer-backgrounding',
+                '--single-process'
             ]
-        });
+        };
+        
+        // Try to find Chrome executable in container
+        if (process.env.CHROME_BIN) {
+            launchOptions.executablePath = process.env.CHROME_BIN;
+        } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+            launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+        } else {
+            // Common Chrome paths in containers
+            const chromePaths = [
+                '/usr/bin/chromium-browser',
+                '/usr/bin/chromium',
+                '/usr/bin/google-chrome-stable',
+                '/usr/bin/google-chrome',
+                '/snap/bin/chromium'
+            ];
+            
+            for (const path of chromePaths) {
+                try {
+                    require('fs').accessSync(path, require('fs').constants.F_OK);
+                    launchOptions.executablePath = path;
+                    console.log(`✅ Found Chrome at: ${path}`);
+                    break;
+                } catch (e) {
+                    // Continue searching
+                }
+            }
+        }
+        
+        browser = await puppeteer.launch(launchOptions);
         
         const page = await browser.newPage();
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
@@ -170,7 +204,8 @@ async function extractAndTrackPlayers() {
     
     let browser;
     try {
-        browser = await puppeteer.launch({
+        // Container-optimized Puppeteer configuration
+        const launchOptions = {
             headless: 'new',
             args: [
                 '--no-sandbox',
@@ -181,9 +216,42 @@ async function extractAndTrackPlayers() {
                 '--no-zygote',
                 '--disable-gpu',
                 '--disable-web-security',
-                '--disable-features=VizDisplayCompositor'
+                '--disable-features=VizDisplayCompositor',
+                '--disable-background-timer-throttling',
+                '--disable-backgrounding-occluded-windows',
+                '--disable-renderer-backgrounding',
+                '--single-process'
             ]
-        });
+        };
+        
+        // Try to find Chrome executable in container
+        if (process.env.CHROME_BIN) {
+            launchOptions.executablePath = process.env.CHROME_BIN;
+        } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+            launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+        } else {
+            // Common Chrome paths in containers
+            const chromePaths = [
+                '/usr/bin/chromium-browser',
+                '/usr/bin/chromium',
+                '/usr/bin/google-chrome-stable',
+                '/usr/bin/google-chrome',
+                '/snap/bin/chromium'
+            ];
+            
+            for (const path of chromePaths) {
+                try {
+                    require('fs').accessSync(path, require('fs').constants.F_OK);
+                    launchOptions.executablePath = path;
+                    console.log(`✅ Found Chrome at: ${path}`);
+                    break;
+                } catch (e) {
+                    // Continue searching
+                }
+            }
+        }
+        
+        browser = await puppeteer.launch(launchOptions);
         
         const page = await browser.newPage();
         await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
