@@ -130,19 +130,17 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
     // Try API first (Chrome-free method)
     try {
         const apiResult = await extractPlayersViaAPI(server.id);
-        if (apiResult.players.length > 0 || apiResult.serverInfo.clients > 0) {
-            console.log(`✅ API extraction successful: ${apiResult.players.length} players`);
-            return {
-                players: apiResult.players,
-                serverInfo: {
-                    ...apiResult.serverInfo,
-                    serverName: server.name,
-                    serverId: server.id
-                }
-            };
-        }
+        console.log(`✅ API extraction successful: ${apiResult.players.length} players`);
+        return {
+            players: apiResult.players,
+            serverInfo: {
+                ...apiResult.serverInfo,
+                serverName: server.name,
+                serverId: server.id
+            }
+        };
     } catch (apiError) {
-        console.log(`⚠️ API method failed, trying Puppeteer...`);
+        console.log(`⚠️ API method failed (${apiError.message}), trying Puppeteer...`);
     }
     
     // Fallback to Puppeteer if API fails
@@ -265,102 +263,129 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
 async function extractAndTrackPlayers() {
     console.log('🎯 Starting player extraction with tracking...');
     
-    let browser;
+    // Try API first (Chrome-free method)
+    let currentPlayers = [];
+    let serverInfo = { clients: 0, maxClients: 0, hostname: 'Unknown' };
+    
     try {
-        // Container-optimized Puppeteer configuration
-        const launchOptions = {
-            headless: 'new',
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
-                '--disable-gpu',
-                '--disable-web-security',
-                '--disable-features=VizDisplayCompositor',
-                '--disable-background-timer-throttling',
-                '--disable-backgrounding-occluded-windows',
-                '--disable-renderer-backgrounding',
-                '--single-process'
-            ]
-        };
+        const apiResult = await extractPlayersViaAPI(SERVER_ID);
+        currentPlayers = apiResult.players;
+        serverInfo = apiResult.serverInfo;
+        console.log(`✅ API extraction successful for tracking: ${currentPlayers.length} players`);
+    } catch (apiError) {
+        console.log(`⚠️ API method failed for tracking (${apiError.message}), trying Puppeteer...`);
         
-        // Try to find Chrome executable in container
-        if (process.env.CHROME_BIN) {
-            launchOptions.executablePath = process.env.CHROME_BIN;
-        } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
-            launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-        } else {
-            // Common Chrome paths in containers
-            const chromePaths = [
-                '/usr/bin/chromium-browser',
-                '/usr/bin/chromium',
-                '/usr/bin/google-chrome-stable',
-                '/usr/bin/google-chrome',
-                '/snap/bin/chromium'
-            ];
+        // Fallback to Puppeteer if API fails
+        let browser;
+        try {
+            // Container-optimized Puppeteer configuration
+            const launchOptions = {
+                headless: 'new',
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--no-first-run',
+                    '--no-zygote',
+                    '--disable-gpu',
+                    '--disable-web-security',
+                    '--disable-features=VizDisplayCompositor',
+                    '--disable-background-timer-throttling',
+                    '--disable-backgrounding-occluded-windows',
+                    '--disable-renderer-backgrounding',
+                    '--single-process'
+                ]
+            };
             
-            for (const path of chromePaths) {
-                try {
-                    require('fs').accessSync(path, require('fs').constants.F_OK);
-                    launchOptions.executablePath = path;
-                    console.log(`✅ Found Chrome at: ${path}`);
-                    break;
-                } catch (e) {
-                    // Continue searching
+            // Try to find Chrome executable in container
+            if (process.env.CHROME_BIN) {
+                launchOptions.executablePath = process.env.CHROME_BIN;
+            } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
+                launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+            } else {
+                // Common Chrome paths in containers
+                const chromePaths = [
+                    '/usr/bin/chromium-browser',
+                    '/usr/bin/chromium',
+                    '/usr/bin/google-chrome-stable',
+                    '/usr/bin/google-chrome',
+                    '/snap/bin/chromium'
+                ];
+                
+                for (const path of chromePaths) {
+                    try {
+                        require('fs').accessSync(path, require('fs').constants.F_OK);
+                        launchOptions.executablePath = path;
+                        console.log(`✅ Found Chrome at: ${path}`);
+                        break;
+                    } catch (e) {
+                        // Continue searching
+                    }
                 }
             }
-        }
-        
-        browser = await puppeteer.launch(launchOptions);
-        
-        const page = await browser.newPage();
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-        await page.setViewport({ width: 1920, height: 1080 });
-        
-        // Monitor API calls for player data
-        await page.setRequestInterception(true);
-        let playerApiData = null;
-        
-        page.on('request', (request) => {
-            request.continue();
-        });
-        
-        page.on('response', async (response) => {
-            if (response.url().includes('api/servers/single/') && response.url().includes(SERVER_ID)) {
-                try {
-                    playerApiData = await response.json();
-                } catch (e) {
-                    console.log('❌ Could not parse API response');
+            
+            browser = await puppeteer.launch(launchOptions);
+            
+            const page = await browser.newPage();
+            await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+            await page.setViewport({ width: 1920, height: 1080 });
+            
+            // Monitor API calls for player data
+            await page.setRequestInterception(true);
+            let playerApiData = null;
+            
+            page.on('request', (request) => {
+                request.continue();
+            });
+            
+            page.on('response', async (response) => {
+                if (response.url().includes('api/servers/single/') && response.url().includes(SERVER_ID)) {
+                    try {
+                        playerApiData = await response.json();
+                    } catch (e) {
+                        console.log('❌ Could not parse API response');
+                    }
                 }
+            });
+            
+            await page.goto(SERVER_URL, { 
+                waitUntil: 'networkidle0',
+                timeout: 60000 
+            });
+            
+            await page.waitForTimeout(10000);
+            await browser.close();
+            
+            // Extract player names from API data
+            if (playerApiData && playerApiData.Data && playerApiData.Data.players) {
+                currentPlayers = playerApiData.Data.players
+                    .map(p => p.name || p)
+                    .filter(name => name && typeof name === 'string')
+                    .filter(name => {
+                        const uiElements = [
+                            'github', 'forum', 'docs', 'portal', 'terms', 'privacy', 'support',
+                            'connect', 'server', 'admin', 'owner', 'staff', 'moderator',
+                            'website', 'discord', 'support', 'help', 'about', 'contact'
+                        ];
+                        return !uiElements.some(element => name.toLowerCase().includes(element));
+                    });
+                
+                serverInfo = {
+                    clients: playerApiData?.Data?.clients || 0,
+                    maxClients: playerApiData?.Data?.sv_maxclients || 0,
+                    hostname: playerApiData?.Data?.hostname || 'Unknown'
+                };
             }
-        });
-        
-        await page.goto(SERVER_URL, { 
-            waitUntil: 'networkidle0',
-            timeout: 60000 
-        });
-        
-        await page.waitForTimeout(10000);
-        await browser.close();
-        
-        // Extract player names from API data
-        let currentPlayers = [];
-        if (playerApiData && playerApiData.Data && playerApiData.Data.players) {
-            currentPlayers = playerApiData.Data.players
-                .map(p => p.name || p)
-                .filter(name => name && typeof name === 'string')
-                .filter(name => {
-                    const uiElements = [
-                        'github', 'forum', 'docs', 'portal', 'terms', 'privacy', 'support',
-                        'connect', 'server', 'admin', 'owner', 'staff', 'moderator',
-                        'website', 'discord', 'support', 'help', 'about', 'contact'
-                    ];
-                    return !uiElements.some(element => name.toLowerCase().includes(element));
-                });
+            
+        } catch (error) {
+            console.log(`❌ Puppeteer extraction failed: ${error.message}`);
+            if (browser) await browser.close();
+            return { players: [], error: error.message };
         }
+    }
+    
+    try {
         
         // Update player tracking
         const currentTime = Date.now();
@@ -424,11 +449,7 @@ async function extractAndTrackPlayers() {
         
         return {
             players: currentPlayers,
-            serverInfo: {
-                clients: playerApiData?.Data?.clients || 0,
-                maxClients: playerApiData?.Data?.sv_maxclients || 0,
-                hostname: playerApiData?.Data?.hostname || 'Unknown'
-            },
+            serverInfo: serverInfo,
             tracking: playerTracker
         };
         
