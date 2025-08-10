@@ -11,6 +11,21 @@ const client = new Client({
     ]
 });
 
+// Server configurations
+const SERVERS = {
+    royalty: {
+        id: 'pz8m77',
+        name: 'Royalty RP',
+        url: 'https://servers.fivem.net/servers/detail/pz8m77'
+    },
+    horizon: {
+        id: 'brqqod',
+        name: 'Horizon',
+        url: 'https://servers.fivem.net/servers/detail/brqqod'
+    }
+};
+
+// Default server for monitoring
 const SERVER_ID = 'pz8m77';
 const SERVER_URL = `https://servers.fivem.net/servers/detail/${SERVER_ID}`;
 
@@ -59,7 +74,97 @@ function formatDuration(milliseconds) {
     return `${seconds}s`;
 }
 
-// Enhanced player extraction with tracking
+// Generic player extraction function for any server
+async function extractPlayersFromServer(serverKey = 'royalty') {
+    const server = SERVERS[serverKey];
+    if (!server) {
+        throw new Error(`Unknown server: ${serverKey}`);
+    }
+    
+    console.log(`🎯 Starting player extraction for ${server.name} (${server.id})...`);
+    
+    let browser;
+    try {
+        browser = await puppeteer.launch({
+            headless: 'new',
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--no-first-run',
+                '--no-zygote',
+                '--disable-gpu',
+                '--disable-web-security',
+                '--disable-features=VizDisplayCompositor'
+            ]
+        });
+        
+        const page = await browser.newPage();
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
+        await page.setViewport({ width: 1920, height: 1080 });
+        
+        // Monitor API calls for player data
+        await page.setRequestInterception(true);
+        let playerApiData = null;
+        
+        page.on('request', (request) => {
+            request.continue();
+        });
+        
+        page.on('response', async (response) => {
+            if (response.url().includes('api/servers/single/') && response.url().includes(server.id)) {
+                try {
+                    playerApiData = await response.json();
+                } catch (e) {
+                    console.log('❌ Could not parse API response');
+                }
+            }
+        });
+        
+        await page.goto(server.url, { 
+            waitUntil: 'networkidle0',
+            timeout: 60000 
+        });
+        
+        await page.waitForTimeout(10000);
+        await browser.close();
+        
+        // Extract player names from API data
+        let currentPlayers = [];
+        if (playerApiData && playerApiData.Data && playerApiData.Data.players) {
+            currentPlayers = playerApiData.Data.players
+                .map(p => p.name || p)
+                .filter(name => name && typeof name === 'string')
+                .filter(name => {
+                    const uiElements = [
+                        'github', 'forum', 'docs', 'portal', 'terms', 'privacy', 'support',
+                        'connect', 'server', 'admin', 'owner', 'staff', 'moderator',
+                        'website', 'discord', 'support', 'help', 'about', 'contact'
+                    ];
+                    return !uiElements.some(element => name.toLowerCase().includes(element));
+                });
+        }
+        
+        return {
+            players: currentPlayers,
+            serverInfo: {
+                clients: playerApiData?.Data?.clients || 0,
+                maxClients: playerApiData?.Data?.sv_maxclients || 0,
+                hostname: playerApiData?.Data?.hostname || server.name,
+                serverName: server.name,
+                serverId: server.id
+            }
+        };
+        
+    } catch (error) {
+        console.log(`❌ Extraction failed for ${server.name}: ${error.message}`);
+        if (browser) await browser.close();
+        return { players: [], error: error.message, serverInfo: { serverName: server.name, serverId: server.id } };
+    }
+}
+
+// Enhanced player extraction with tracking (for Royalty RP only)
 async function extractAndTrackPlayers() {
     console.log('🎯 Starting player extraction with tracking...');
     
@@ -503,13 +608,122 @@ client.on('messageCreate', async (message) => {
         }
     }
     
+    // Horizon server player list command
+    if (content === '!horizon') {
+        const loadingEmbed = new EmbedBuilder()
+            .setColor('#9932cc')
+            .setTitle('🌅 Extracting Horizon Player Names...')
+            .setDescription('Getting current player list from Horizon server...\n\n*This may take 30-60 seconds*')
+            .setTimestamp();
+        
+        const loadingMessage = await message.reply({ embeds: [loadingEmbed] });
+        
+        try {
+            const results = await extractPlayersFromServer('horizon');
+            
+            if (results.error) {
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#ff0000')
+                    .setTitle('❌ Extraction Error')
+                    .setDescription('Error occurred during player name extraction.')
+                    .addFields({ name: 'Error Details', value: results.error })
+                    .setTimestamp();
+                
+                return loadingMessage.edit({ embeds: [errorEmbed] });
+            }
+            
+            if (results.players.length === 0) {
+                const noPlayersEmbed = new EmbedBuilder()
+                    .setColor('#ffaa00')
+                    .setTitle('⚠️ No Player Names Found')
+                    .setDescription('Horizon server appears to be empty or inaccessible.')
+                    .setTimestamp();
+                
+                return loadingMessage.edit({ embeds: [noPlayersEmbed] });
+            }
+            
+            // Success - display found players
+            const cleanHostname = results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim();
+            
+            const embed = new EmbedBuilder()
+                .setColor('#9932cc')
+                .setTitle('🌅 Horizon Online Players')
+                .setDescription(`**${cleanHostname}**`)
+                .setTimestamp();
+            
+            // Add player counter
+            embed.addFields({
+                name: '👥 Players Online',
+                value: `**${results.players.length}** out of **${results.serverInfo.maxClients}** slots`,
+                inline: false
+            });
+            
+            // Create player list (no session times for Horizon as it's not tracked)
+            const playerList = results.players.join('\n');
+            
+            // Handle Discord's character limit
+            if (playerList.length <= 1024) {
+                embed.addFields({
+                    name: '📋 Complete Player List',
+                    value: playerList,
+                    inline: false
+                });
+            } else {
+                // Split into chunks if too long
+                const chunkSize = 900;
+                let currentChunk = '';
+                let chunkNumber = 1;
+                
+                results.players.forEach(player => {
+                    const playerLine = player + '\n';
+                    
+                    if (currentChunk.length + playerLine.length > chunkSize) {
+                        embed.addFields({
+                            name: chunkNumber === 1 ? '📋 Player List' : '📋 Player List (continued)',
+                            value: currentChunk.trim(),
+                            inline: false
+                        });
+                        currentChunk = playerLine;
+                        chunkNumber++;
+                    } else {
+                        currentChunk += playerLine;
+                    }
+                });
+                
+                if (currentChunk.trim()) {
+                    embed.addFields({
+                        name: chunkNumber === 1 ? '📋 Player List' : '📋 Player List (continued)',
+                        value: currentChunk.trim(),
+                        inline: false
+                    });
+                }
+            }
+            
+            embed.setFooter({ text: `Server ID: ${results.serverInfo.serverId} | Horizon Server` });
+            
+            loadingMessage.edit({ embeds: [embed] });
+            
+        } catch (error) {
+            console.error('Error during Horizon extraction:', error);
+            
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#ff0000')
+                .setTitle('❌ Unexpected Error')
+                .setDescription('An unexpected error occurred during extraction.')
+                .addFields({ name: 'Error Details', value: error.message })
+                .setTimestamp();
+            
+            loadingMessage.edit({ embeds: [errorEmbed] });
+        }
+    }
+    
     if (content === '!help') {
         const helpEmbed = new EmbedBuilder()
             .setColor('#0099ff')
             .setTitle('🎯 Enhanced FiveM Player Tracker')
             .setDescription('Track player names and session durations with logging')
             .addFields(
-                { name: '👥 Player Commands', value: '`!players` - Show current players with session times\n`!durations` - Show current session durations\n`!names` / `!list` - Same as !players', inline: false },
+                { name: '👥 Player Commands', value: '`!players` - Show Royalty RP players with session times\n`!horizon` - Show Horizon server players\n`!durations` - Show current session durations\n`!names` / `!list` - Same as !players', inline: false },
                 { name: '⚙️ Admin Commands', value: '`!setchannel [ID]` - Set logging channel\n`!startmonitor` - Start automatic monitoring\n`!stopmonitor` - Stop automatic monitoring', inline: false },
                 { name: '📊 Features', value: '• Real-time player tracking\n• Session duration logging\n• Join/leave notifications\n• Persistent data storage\n• 5-minute monitoring intervals', inline: false }
             )
