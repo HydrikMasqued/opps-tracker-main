@@ -74,6 +74,50 @@ function formatDuration(milliseconds) {
     return `${seconds}s`;
 }
 
+// Chrome-free API fallback
+async function extractPlayersViaAPI(serverId) {
+    console.log(`🌐 Using API fallback for server: ${serverId}`);
+    
+    try {
+        const axios = require('axios');
+        const response = await axios.get(`https://servers.fivem.net/api/servers/single/${serverId}`, {
+            timeout: 10000,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+            }
+        });
+        
+        if (response.data && response.data.Data && response.data.Data.players) {
+            const players = response.data.Data.players
+                .map(p => p.name || p)
+                .filter(name => name && typeof name === 'string')
+                .filter(name => {
+                    const uiElements = [
+                        'github', 'forum', 'docs', 'portal', 'terms', 'privacy', 'support',
+                        'connect', 'server', 'admin', 'owner', 'staff', 'moderator',
+                        'website', 'discord', 'support', 'help', 'about', 'contact'
+                    ];
+                    return !uiElements.some(element => name.toLowerCase().includes(element));
+                });
+            
+            return {
+                players: players,
+                serverInfo: {
+                    clients: response.data.Data.clients || 0,
+                    maxClients: response.data.Data.sv_maxclients || 0,
+                    hostname: response.data.Data.hostname || 'Unknown'
+                }
+            };
+        }
+        
+        return { players: [], serverInfo: { clients: 0, maxClients: 0, hostname: 'Unknown' } };
+        
+    } catch (error) {
+        console.log(`❌ API fallback failed: ${error.message}`);
+        throw error;
+    }
+}
+
 // Generic player extraction function for any server
 async function extractPlayersFromServer(serverKey = 'royalty') {
     const server = SERVERS[serverKey];
@@ -83,6 +127,25 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
     
     console.log(`🎯 Starting player extraction for ${server.name} (${server.id})...`);
     
+    // Try API first (Chrome-free method)
+    try {
+        const apiResult = await extractPlayersViaAPI(server.id);
+        if (apiResult.players.length > 0 || apiResult.serverInfo.clients > 0) {
+            console.log(`✅ API extraction successful: ${apiResult.players.length} players`);
+            return {
+                players: apiResult.players,
+                serverInfo: {
+                    ...apiResult.serverInfo,
+                    serverName: server.name,
+                    serverId: server.id
+                }
+            };
+        }
+    } catch (apiError) {
+        console.log(`⚠️ API method failed, trying Puppeteer...`);
+    }
+    
+    // Fallback to Puppeteer if API fails
     let browser;
     try {
         // Container-optimized Puppeteer configuration
