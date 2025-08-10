@@ -1,12 +1,11 @@
 {
-  "name": "larry-bot-fivem",
-  "version": "1.0.1",
-  "description": "Discord bot for monitoring FiveM server status and player count",
+  "name": "opps-tracker-fivem",
+  "version": "1.0.2",
+  "description": "Discord bot for monitoring FiveM server status and player count with multi-server support",
   "main": "bot.js",
   "scripts": {
-    "preinstall": "echo 'Setting Puppeteer environment variables...' && export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true && export PUPPETEER_SKIP_DOWNLOAD=true",
-    "start": "node 'Enhanced Player Tracker with Join Leave Logging.js'",
-    "dev": "nodemon 'Enhanced Player Tracker with Join Leave Logging.js'"
+    "start": "node bot.js",
+    "dev": "nodemon bot.js"
   },
   "keywords": [
     "discord",
