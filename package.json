@@ -1,11 +1,10 @@
 {
-  "name": "opps-tracker-fivem",
-  "version": "1.0.2",
-  "description": "Discord bot for monitoring FiveM server status and player count with multi-server support",
+  "name": "opps-tracker-bot",
+  "version": "1.0.3",
+  "description": "Discord bot for FiveM server monitoring with multi-server support",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js",
-    "dev": "nodemon bot.js"
+    "start": "node bot.js"
   },
   "keywords": [
     "discord",
@@ -14,7 +13,7 @@
     "server",
     "monitoring"
   ],
-  "author": "Larry Bot",
+  "author": "OPPS TRACKER",
   "license": "MIT",
   "dependencies": {
     "discord.js": "^14.14.1",
@@ -23,15 +22,9 @@
     "cheerio": "^1.0.0-rc.12",
     "puppeteer": "^21.6.1"
   },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
-  },
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
-  },
-  "config": {
-    "unsafe-perm": true
   },
   "puppeteer": {
     "skipDownload": true
