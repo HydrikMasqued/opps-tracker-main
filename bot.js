@@ -1641,10 +1641,6 @@ client.on('interactionCreate', async interaction => {
                     }
                     return player;
                 });
-                        return `${player} (Total: ${formatDuration(trackingData.totalTime)})`;
-                    }
-                    return player;
-                });
 
                 const playerList = playerListWithTimes.join('\n');
 
