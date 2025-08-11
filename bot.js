@@ -742,9 +742,16 @@ client.on('messageCreate', async (message) => {
         const loadingMessage = await message.reply({ embeds: [loadingEmbed] });
         
         try {
+            console.log('🎯 Discord command triggered: !players');
             const results = await extractAndTrackPlayers();
+            console.log('📋 Results received:', {
+                players: results.players?.length || 0,
+                error: results.error || 'None',
+                serverInfo: results.serverInfo || {}
+            });
             
             if (results.error) {
+                console.log('❌ Command failed with error:', results.error);
                 const errorEmbed = new EmbedBuilder()
                     .setColor('#ff0000')
                     .setTitle('❌ Extraction Error')
