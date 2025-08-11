@@ -4,15 +4,27 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 require('dotenv').config();
 
-// Auto Chrome installer
-const { autoInstallChrome } = require('./auto-chrome-installer');
+// Chrome installer for cloud deployment
+const { installChrome } = require('./install-chrome');
 
-// Run Chrome installer on startup
+// Run Chrome installer BEFORE starting bot
 (async () => {
-    console.log('🔧 Running auto Chrome installer...');
-    await autoInstallChrome();
-    console.log('🎯 Chrome installer completed - starting bot...');
+    console.log('🚀 Running Chrome installer for cloud deployment...');
+    console.log('Cache path will be: /home/container/.cache/puppeteer (if container)');
+    
+    try {
+        await installChrome();
+        console.log('✅ Chrome installer completed - starting bot...');
+    } catch (error) {
+        console.log('⚠️ Chrome installation had issues, but bot will still try to run...');
+        console.log('Error:', error.message);
+    }
+    
+    // Start the bot after Chrome setup
+    startBot();
 })();
+
+function startBot() {
 
 const client = new Client({
     intents: [
@@ -985,3 +997,5 @@ process.on('SIGINT', () => {
 });
 
 client.login(process.env.DISCORD_TOKEN);
+
+} // End startBot function

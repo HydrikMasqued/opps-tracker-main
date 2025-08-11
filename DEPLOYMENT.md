@@ -10,18 +10,22 @@ npm install
 npm start
 ```
 
-### Container/Cloud Deployment
+### Container/Cloud Deployment (IMPORTANT)
 ```bash
+# Method 1: Explicit Chrome installation (RECOMMENDED)
 npm install
-node install-chrome-container.js
+npx puppeteer browsers install chrome
 node bot.js
-```
 
-### Alternative Container Command
-```bash
+# Method 2: Using npm script
 npm install
+npm run cloud
+
+# Method 3: Container script
 npm run container
 ```
+
+**Critical:** Chrome must be installed BEFORE running the bot on cloud servers!
 
 ## Environment Configuration
 

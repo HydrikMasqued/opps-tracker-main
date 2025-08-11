@@ -1,29 +1,91 @@
-const puppeteer = require('puppeteer');
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
+/**
+ * Chrome Installation Script for Cloud Deployment
+ * Uses the exact approach recommended: npx puppeteer browsers install chrome
+ * with proper cache directory configuration
+ */
+
 async function installChrome() {
-  console.log('🔄 Installing Chrome for Puppeteer in container environment...');
+  console.log('🚀 Chrome Installation for Cloud Deployment');
+  console.log('============================================');
   
-  // Check if we're in a container environment
+  // Detect container environment
   const isContainer = process.env.NODE_ENV === 'production' || 
-                     fs.existsSync('/.dockerenv') || 
-                     process.env.PTERODACTYL_ENVIRONMENT;
+                     process.env.CONTAINER_ENV || 
+                     process.cwd().includes('/home/container') ||
+                     process.cwd().includes('/app') ||
+                     process.platform === 'linux';
   
-  if (isContainer) {
-    console.log('📦 Container environment detected, using system approach...');
-    return installChromeInContainer();
+  console.log('🔍 Environment Detection:');
+  console.log('  - Platform:', process.platform);
+  console.log('  - Working Directory:', process.cwd());
+  console.log('  - Container Environment:', isContainer);
+  console.log('  - NODE_ENV:', process.env.NODE_ENV);
+  
+  // Set CORRECT cache directory for container
+  const cacheDir = isContainer 
+    ? '/home/container/.cache/puppeteer'
+    : path.join(__dirname, '.cache', 'puppeteer');
+  
+  console.log('📁 Cache Directory:', cacheDir);
+  
+  // Create cache directory
+  try {
+    if (!fs.existsSync(cacheDir)) {
+      fs.mkdirSync(cacheDir, { recursive: true });
+      console.log('✅ Created cache directory');
+    }
+    
+    // Test write permissions
+    fs.accessSync(cacheDir, fs.constants.W_OK);
+    console.log('✅ Cache directory is writable');
+    
+  } catch (error) {
+    console.error('❌ Cache directory issue:', error.message);
+    if (isContainer) {
+      try {
+        execSync(`chmod -R 755 ${cacheDir}`, { stdio: 'inherit' });
+        console.log('✅ Fixed permissions');
+      } catch (e) {
+        console.warn('⚠️ Permission fix failed, continuing...');
+      }
+    }
   }
   
-  // First try to use @puppeteer/browsers to install Chrome
+  // Set environment for Puppeteer
+  process.env.PUPPETEER_CACHE_DIR = cacheDir;
+  
+  // Use the EXACT command you specified
+  console.log('\n🔧 Installing Chrome using: npx puppeteer browsers install chrome');
+  console.log('Cache Directory:', cacheDir);
+  
   try {
-    console.log('📦 Attempting to install Chrome using @puppeteer/browsers...');
-    execSync('npx puppeteer browsers install chrome', { stdio: 'inherit' });
-    console.log('✅ Chrome installed successfully via @puppeteer/browsers!');
-    return;
+    execSync('npx puppeteer browsers install chrome', {
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        PUPPETEER_CACHE_DIR: cacheDir
+      }
+    });
+    
+    console.log('✅ Chrome installation completed successfully!');
+    
+    // Verify installation
+    try {
+      execSync('npx puppeteer browsers list', { stdio: 'inherit' });
+    } catch (e) {
+      console.log('⚠️ Could not list browsers, but installation may have succeeded');
+    }
+    
+    return true;
+    
   } catch (error) {
-    console.log('⚠️ @puppeteer/browsers installation failed, trying direct method...');
+    console.error('❌ npx puppeteer browsers install failed:', error.message);
+    console.log('\n🔧 Trying fallback installation...');
+    return installChromeInContainer();
   }
   
   // Fallback: try to launch Puppeteer to trigger download

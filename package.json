@@ -5,9 +5,11 @@
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
-    "container": "node container-setup.js && node bot.js",
-    "preinstall": "echo 'Configuring for Pterodactyl hosting...'",
-    "postinstall": "node auto-chrome-installer.js && npx puppeteer browsers install chrome || echo 'Chrome installation failed, but continuing...'"
+    "container": "node install-chrome.js && node bot.js",
+    "install-chrome": "npx puppeteer browsers install chrome",
+    "cloud": "npx puppeteer browsers install chrome && node bot.js",
+    "debug": "node debug-puppeteer.js",
+    "postinstall": "echo 'Bot installed successfully! Chrome will be installed automatically on first run.'"
   },
   "keywords": [
     "discord",
