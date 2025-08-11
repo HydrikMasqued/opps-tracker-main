@@ -1,5 +1,5 @@
 // Container deployment timestamp: 2025-08-10 17:30 UTC
-const { Client, GatewayIntentBits, EmbedBuilder, ActivityType } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ActivityType, SlashCommandBuilder, REST, Routes } = require('discord.js');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 require('dotenv').config();
@@ -61,24 +61,313 @@ let monitoringInterval = null;
 // File to persist player data
 const PLAYER_DATA_FILE = './player_tracking_data.json';
 
-// Load existing player data on startup
+// Advanced tracking system files
+const TRACKED_PLAYERS_FILE = './tracked_players.json';
+const TRACKING_NOTIFICATIONS_FILE = './tracking_notifications.json';
+
+// Tracking categories
+const TRACKING_CATEGORIES = {
+    poi: {
+        name: 'People of Interest',
+        emoji: '📍',
+        color: '#FFD700',
+        description: 'Players being monitored for activity'
+    },
+    club: {
+        name: 'Club Members & Associates',
+        emoji: '🏢', 
+        color: '#00FF00',
+        description: 'Friendly players and allies'
+    },
+    enemies: {
+        name: 'Enemies',
+        emoji: '⚔️',
+        color: '#FF0000', 
+        description: 'Hostile players to watch carefully'
+    }
+};
+
+// Tracked players storage
+let trackedPlayers = {};
+let trackingNotifications = {};
+let horizonPlayerTracker = {};  // Separate tracking for Horizon server
+
+// Player database for name history
+let playerDatabase = {};
+const PLAYER_DATABASE_FILE = './player_database.json';
+
+// Load player database
+function loadPlayerDatabase() {
+    try {
+        if (fs.existsSync(PLAYER_DATABASE_FILE)) {
+            const data = fs.readFileSync(PLAYER_DATABASE_FILE, 'utf8');
+            playerDatabase = JSON.parse(data);
+            console.log(`🗃️ Loaded player database with ${Object.keys(playerDatabase).length} unique players`);
+        }
+    } catch (error) {
+        console.error('Error loading player database:', error);
+        playerDatabase = {};
+    }
+}
+
+// Save player database
+function savePlayerDatabase() {
+    try {
+        fs.writeFileSync(PLAYER_DATABASE_FILE, JSON.stringify(playerDatabase, null, 2));
+    } catch (error) {
+        console.error('Error saving player database:', error);
+    }
+}
+
+// Add players to database
+function addPlayersToDatabase(players, serverKey) {
+    const currentTime = Date.now();
+    players.forEach(playerName => {
+        const playerId = playerName.toLowerCase().trim();
+        if (!playerDatabase[playerId]) {
+            playerDatabase[playerId] = {
+                name: playerName,
+                firstSeen: currentTime,
+                lastSeen: currentTime,
+                servers: [serverKey],
+                totalSightings: 1
+            };
+        } else {
+            // Update existing entry
+            playerDatabase[playerId].lastSeen = currentTime;
+            playerDatabase[playerId].totalSightings++;
+            if (!playerDatabase[playerId].servers.includes(serverKey)) {
+                playerDatabase[playerId].servers.push(serverKey);
+            }
+        }
+    });
+    savePlayerDatabase();
+}
+
+// Search player database
+function searchPlayerDatabase(searchTerm) {
+    const search = searchTerm.toLowerCase().trim();
+    const matches = [];
+    
+    for (const [playerId, data] of Object.entries(playerDatabase)) {
+        if (data.name.toLowerCase().includes(search)) {
+            matches.push({
+                id: playerId,
+                ...data,
+                relevance: data.name.toLowerCase().indexOf(search) === 0 ? 2 : 1 // Exact start match gets higher relevance
+            });
+        }
+    }
+    
+    // Sort by relevance then by total sightings
+    return matches.sort((a, b) => {
+        if (a.relevance !== b.relevance) return b.relevance - a.relevance;
+        return b.totalSightings - a.totalSightings;
+    }).slice(0, 10); // Return top 10 matches
+}
+
+// Load existing player data on startup (both servers)
 function loadPlayerData() {
     try {
+        // Load Royalty RP data
         if (fs.existsSync(PLAYER_DATA_FILE)) {
             const data = fs.readFileSync(PLAYER_DATA_FILE, 'utf8');
             playerTracker = JSON.parse(data);
-            console.log(`📁 Loaded tracking data for ${Object.keys(playerTracker).length} players`);
+            console.log(`📁 Loaded Royalty RP tracking data for ${Object.keys(playerTracker).length} players`);
+        }
+        
+        // Load Horizon data
+        const HORIZON_DATA_FILE = './horizon_tracking_data.json';
+        if (fs.existsSync(HORIZON_DATA_FILE)) {
+            const horizonData = fs.readFileSync(HORIZON_DATA_FILE, 'utf8');
+            horizonPlayerTracker = JSON.parse(horizonData);
+            console.log(`📁 Loaded Horizon tracking data for ${Object.keys(horizonPlayerTracker).length} players`);
         }
     } catch (error) {
         console.error('Error loading player data:', error);
         playerTracker = {};
+        horizonPlayerTracker = {};
     }
 }
 
-// Save player data to file
+// Load tracked players data
+function loadTrackedPlayers() {
+    try {
+        if (fs.existsSync(TRACKED_PLAYERS_FILE)) {
+            const data = fs.readFileSync(TRACKED_PLAYERS_FILE, 'utf8');
+            trackedPlayers = JSON.parse(data);
+            console.log(`📍 Loaded ${Object.keys(trackedPlayers).length} tracked players`);
+        }
+    } catch (error) {
+        console.error('Error loading tracked players:', error);
+        trackedPlayers = {};
+    }
+}
+
+// Save tracked players data
+function saveTrackedPlayers() {
+    try {
+        fs.writeFileSync(TRACKED_PLAYERS_FILE, JSON.stringify(trackedPlayers, null, 2));
+    } catch (error) {
+        console.error('Error saving tracked players:', error);
+    }
+}
+
+// Load tracking notifications data
+function loadTrackingNotifications() {
+    try {
+        if (fs.existsSync(TRACKING_NOTIFICATIONS_FILE)) {
+            const data = fs.readFileSync(TRACKING_NOTIFICATIONS_FILE, 'utf8');
+            trackingNotifications = JSON.parse(data);
+            console.log(`🔔 Loaded tracking notifications`);
+        }
+    } catch (error) {
+        console.error('Error loading tracking notifications:', error);
+        trackingNotifications = {};
+    }
+}
+
+// Save tracking notifications data
+function saveTrackingNotifications() {
+    try {
+        fs.writeFileSync(TRACKING_NOTIFICATIONS_FILE, JSON.stringify(trackingNotifications, null, 2));
+    } catch (error) {
+        console.error('Error saving tracking notifications:', error);
+    }
+}
+
+// Add a player to tracking
+function addTrackedPlayer(playerName, category, addedBy, reason = '') {
+    const cleanName = playerName.trim();
+    const trackingId = cleanName.toLowerCase();
+    
+    trackedPlayers[trackingId] = {
+        name: cleanName,
+        category: category,
+        addedBy: addedBy,
+        addedAt: Date.now(),
+        reason: reason,
+        notifications: {
+            joinAlerts: true,
+            leaveAlerts: true,
+            sessionUpdates: true
+        },
+        servers: ['royalty', 'horizon'], // Track on both servers by default
+        lastSeen: {
+            royalty: null,
+            horizon: null
+        },
+        sessionData: {
+            royalty: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 },
+            horizon: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 }
+        }
+    };
+    
+    saveTrackedPlayers();
+    return trackedPlayers[trackingId];
+}
+
+// Remove a player from tracking
+function removeTrackedPlayer(playerName) {
+    const trackingId = playerName.toLowerCase().trim();
+    if (trackedPlayers[trackingId]) {
+        delete trackedPlayers[trackingId];
+        saveTrackedPlayers();
+        return true;
+    }
+    return false;
+}
+
+// Check if a player is being tracked
+function isPlayerTracked(playerName) {
+    const trackingId = playerName.toLowerCase().trim();
+    return trackedPlayers[trackingId] || null;
+}
+
+// Get tracked players by category
+function getTrackedPlayersByCategory(category) {
+    return Object.values(trackedPlayers).filter(player => player.category === category);
+}
+
+// Send enhanced tracking notification with ping
+async function sendTrackedPlayerNotification(playerData, action, serverKey, sessionDuration = null) {
+    if (!LOG_CHANNEL_ID) return;
+    
+    try {
+        const channel = client.channels.cache.get(LOG_CHANNEL_ID);
+        if (!channel) return;
+        
+        const category = TRACKING_CATEGORIES[playerData.category];
+        const serverName = SERVERS[serverKey]?.name || serverKey;
+        
+        // Get total time for this player
+        const tracker = serverKey === 'royalty' ? playerTracker : horizonPlayerTracker;
+        const totalTime = tracker[playerData.name]?.totalTime || 0;
+        
+        const embed = new EmbedBuilder()
+            .setTimestamp()
+            .setColor(category.color);
+        
+        if (action === 'joined') {
+            embed.setTitle(`${category.emoji} ${category.name} - Player Joined`)
+                .setDescription(`**${playerData.name}** joined **${serverName}**`)
+                .addFields(
+                    { name: 'Category', value: category.name, inline: true },
+                    { name: 'Server', value: serverName, inline: true },
+                    { name: 'Total Time', value: formatDuration(totalTime), inline: true },
+                    { name: 'Time', value: new Date().toLocaleString(), inline: true }
+                );
+                
+            if (playerData.reason) {
+                embed.addFields({ name: 'Tracking Reason', value: playerData.reason, inline: false });
+            }
+        } else if (action === 'left') {
+            const newTotalTime = totalTime + (sessionDuration || 0);
+            embed.setTitle(`${category.emoji} ${category.name} - Player Left`)
+                .setDescription(`**${playerData.name}** left **${serverName}**`)
+                .addFields(
+                    { name: 'Category', value: category.name, inline: true },
+                    { name: 'Server', value: serverName, inline: true },
+                    { name: 'Session Duration', value: formatDuration(sessionDuration), inline: true },
+                    { name: 'Total Time', value: formatDuration(newTotalTime), inline: true },
+                    { name: 'Time', value: new Date().toLocaleString(), inline: true }
+                );
+        }
+        
+        // Enhanced ping system for all tracked players
+        let messageContent = '@here ';
+        if (playerData.category === 'enemies') {
+            messageContent = '@here 🚨 **ENEMY ALERT** 🚨';
+        } else if (playerData.category === 'poi') {
+            messageContent = '@here 📍 **PERSON OF INTEREST ACTIVITY**';
+        } else if (playerData.category === 'club') {
+            messageContent = '@here 🏢 **CLUB MEMBER ACTIVITY**';
+        }
+        
+        await channel.send({ 
+            content: messageContent,
+            embeds: [embed] 
+        });
+        
+    } catch (error) {
+        console.error('Error sending tracked player notification:', error);
+    }
+}
+
+// Send tracking notification (legacy - keeping for compatibility)
+async function sendTrackingNotification(playerData, action, serverKey, sessionDuration = null) {
+    return await sendTrackedPlayerNotification(playerData, action, serverKey, sessionDuration);
+}
+
+// Save player data to file (both servers)
 function savePlayerData() {
     try {
+        // Save Royalty RP data
         fs.writeFileSync(PLAYER_DATA_FILE, JSON.stringify(playerTracker, null, 2));
+        
+        // Save Horizon data
+        const HORIZON_DATA_FILE = './horizon_tracking_data.json';
+        fs.writeFileSync(HORIZON_DATA_FILE, JSON.stringify(horizonPlayerTracker, null, 2));
     } catch (error) {
         console.error('Error saving player data:', error);
     }
@@ -343,6 +632,11 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
                 });
         }
         
+        // Always save extracted players to database before returning
+        if (currentPlayers && currentPlayers.length > 0) {
+            addPlayersToDatabase(currentPlayers, serverKey);
+        }
+        
         return {
             players: currentPlayers,
             serverInfo: {
@@ -536,6 +830,11 @@ async function extractAndTrackPlayers() {
             }
         });
         
+        // Add players to database
+        if (currentPlayers.length > 0) {
+            addPlayersToDatabase(currentPlayers, 'royalty');
+        }
+        
         // Save data
         savePlayerData();
         
@@ -552,8 +851,8 @@ async function extractAndTrackPlayers() {
     }
 }
 
-// Log player activity to Discord
-async function logPlayerActivity(playerName, action, duration = null) {
+// Log player activity to Discord with server information
+async function logPlayerActivity(playerName, action, duration = null, serverKey = 'royalty') {
     if (!LOG_CHANNEL_ID) return;
     
     try {
@@ -563,19 +862,24 @@ async function logPlayerActivity(playerName, action, duration = null) {
             return;
         }
         
+        const serverName = SERVERS[serverKey]?.name || serverKey;
         const embed = new EmbedBuilder()
             .setTimestamp();
         
         if (action === 'joined') {
             embed.setColor('#00ff00')
                 .setTitle('🟢 Player Joined')
-                .setDescription(`**${playerName}** joined the server`)
-                .addFields({ name: 'Time', value: new Date().toLocaleString(), inline: true });
+                .setDescription(`**${playerName}** joined **${serverName}**`)
+                .addFields(
+                    { name: 'Server', value: serverName, inline: true },
+                    { name: 'Time', value: new Date().toLocaleString(), inline: true }
+                );
         } else if (action === 'left') {
             embed.setColor('#ff0000')
                 .setTitle('🔴 Player Left')
-                .setDescription(`**${playerName}** left the server`)
+                .setDescription(`**${playerName}** left **${serverName}**`)
                 .addFields(
+                    { name: 'Server', value: serverName, inline: true },
                     { name: 'Session Duration', value: formatDuration(duration), inline: true },
                     { name: 'Time', value: new Date().toLocaleString(), inline: true }
                 );
@@ -588,6 +892,106 @@ async function logPlayerActivity(playerName, action, duration = null) {
     }
 }
 
+// Enhanced monitoring for both servers
+async function monitorBothServers() {
+    if (!MONITORING_ENABLED) return;
+    
+    try {
+        // Monitor both servers simultaneously
+        const [royaltyResults, horizonResults] = await Promise.all([
+            extractPlayersFromServer('royalty'),
+            extractPlayersFromServer('horizon')
+        ]);
+        
+        // Process Royalty RP server
+        if (royaltyResults.players && royaltyResults.players.length > 0) {
+            await processServerPlayerChanges('royalty', royaltyResults.players, playerTracker);
+            addPlayersToDatabase(royaltyResults.players, 'royalty');
+        }
+        
+        // Process Horizon server
+        if (horizonResults.players && horizonResults.players.length > 0) {
+            await processServerPlayerChanges('horizon', horizonResults.players, horizonPlayerTracker);
+            addPlayersToDatabase(horizonResults.players, 'horizon');
+        }
+        
+        // Save all tracking data
+        savePlayerData();
+        
+    } catch (error) {
+        console.error('Error during dual-server monitoring:', error);
+    }
+}
+
+// Process player changes for a specific server
+async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
+    const currentTime = Date.now();
+    const previousPlayers = Object.keys(tracker);
+    const serverName = SERVERS[serverKey]?.name || serverKey;
+    
+    // Add new players or update rejoining players
+    currentPlayers.forEach(player => {
+        if (!tracker[player]) {
+            tracker[player] = {
+                joinTime: currentTime,
+                totalTime: 0,
+                sessionCount: 1,
+                lastSeen: currentTime,
+                isOnline: true
+            };
+            console.log(`✅ [${serverName}] New player joined: ${player}`);
+            
+            // Check if player is tracked and send notification with ping
+            const trackedPlayer = isPlayerTracked(player);
+            if (trackedPlayer && LOG_CHANNEL_ID) {
+                await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
+            } else if (LOG_CHANNEL_ID) {
+                logPlayerActivity(player, 'joined', null, serverKey);
+            }
+        } else if (!tracker[player].isOnline) {
+            // Player rejoined after being offline
+            tracker[player].joinTime = currentTime;
+            tracker[player].sessionCount += 1;
+            tracker[player].lastSeen = currentTime;
+            tracker[player].isOnline = true;
+            
+            console.log(`🔄 [${serverName}] Player rejoined: ${player} (Total time: ${formatDuration(tracker[player].totalTime)})`);
+            
+            // Check if player is tracked and send notification with ping
+            const trackedPlayer = isPlayerTracked(player);
+            if (trackedPlayer && LOG_CHANNEL_ID) {
+                await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
+            } else if (LOG_CHANNEL_ID) {
+                logPlayerActivity(player, 'joined', null, serverKey);
+            }
+        } else {
+            // Player is still online, update last seen
+            tracker[player].lastSeen = currentTime;
+            tracker[player].isOnline = true;
+        }
+    });
+    
+    // Check for players who left
+    previousPlayers.forEach(player => {
+        if (tracker[player].isOnline && !currentPlayers.includes(player)) {
+            // Player left - add session time to total
+            const sessionDuration = currentTime - tracker[player].joinTime;
+            tracker[player].totalTime += sessionDuration;
+            tracker[player].isOnline = false;
+            
+            console.log(`❌ [${serverName}] Player left: ${player} (Session: ${formatDuration(sessionDuration)}, Total: ${formatDuration(tracker[player].totalTime)})`);
+            
+            // Check if player is tracked and send notification with ping
+            const trackedPlayer = isPlayerTracked(player);
+            if (trackedPlayer && LOG_CHANNEL_ID) {
+                await sendTrackedPlayerNotification(trackedPlayer, 'left', serverKey, sessionDuration);
+            } else if (LOG_CHANNEL_ID) {
+                logPlayerActivity(player, 'left', sessionDuration, serverKey);
+            }
+        }
+    });
+}
+
 // Start monitoring players
 function startMonitoring() {
     if (monitoringInterval) {
@@ -595,18 +999,14 @@ function startMonitoring() {
     }
     
     MONITORING_ENABLED = true;
-    console.log('🔄 Started player monitoring (5-minute intervals)');
+    console.log('🔄 Started enhanced monitoring for both servers (1-minute intervals)');
     
-    // Monitor every 5 minutes
+    // Monitor every 1 minute
     monitoringInterval = setInterval(async () => {
         if (MONITORING_ENABLED) {
-            try {
-                await extractAndTrackPlayers();
-            } catch (error) {
-                console.error('Error during monitoring:', error);
-            }
+            await monitorBothServers();
         }
-    }, 5 * 60 * 1000); // 5 minutes
+    }, 1 * 60 * 1000); // 1 minute
 }
 
 // Stop monitoring players
@@ -619,17 +1019,788 @@ function stopMonitoring() {
     console.log('⏹️ Stopped player monitoring');
 }
 
-client.on('ready', () => {
+// Slash command definitions
+const commands = [
+    new SlashCommandBuilder()
+        .setName('track')
+        .setDescription('Add a player to the tracking list')
+        .addStringOption(option =>
+            option.setName('player')
+                .setDescription('Player name to track')
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('category')
+                .setDescription('Tracking category')
+                .setRequired(true)
+                .addChoices(
+                    { name: '📍 People of Interest', value: 'poi' },
+                    { name: '🏢 Club Members & Associates', value: 'club' },
+                    { name: '⚔️ Enemies', value: 'enemies' }
+                ))
+        .addStringOption(option =>
+            option.setName('reason')
+                .setDescription('Reason for tracking (optional)')
+                .setRequired(false)),
+    
+    new SlashCommandBuilder()
+        .setName('untrack')
+        .setDescription('Remove a player from tracking')
+        .addStringOption(option =>
+            option.setName('player')
+                .setDescription('Player name to untrack')
+                .setRequired(true)),
+    
+    new SlashCommandBuilder()
+        .setName('tracked')
+        .setDescription('View all tracked players with enhanced UI'),
+    
+    new SlashCommandBuilder()
+        .setName('find')
+        .setDescription('Search for a tracked player on servers')
+        .addStringOption(option =>
+            option.setName('player')
+                .setDescription('Player name to find')
+                .setRequired(true)),
+    
+    new SlashCommandBuilder()
+        .setName('search')
+        .setDescription('Search player database history')
+        .addStringOption(option =>
+            option.setName('name')
+                .setDescription('Partial player name to search for')
+                .setRequired(true)),
+    
+    new SlashCommandBuilder()
+        .setName('royalty')
+        .setDescription('Get current Royalty RP player list'),
+    
+    new SlashCommandBuilder()
+        .setName('horizon')
+        .setDescription('Get current Horizon server player list'),
+    
+    new SlashCommandBuilder()
+        .setName('categories')
+        .setDescription('View available tracking categories'),
+    
+    new SlashCommandBuilder()
+        .setName('startmonitor')
+        .setDescription('Start automatic player monitoring (Admin only)'),
+    
+    new SlashCommandBuilder()
+        .setName('stopmonitor')
+        .setDescription('Stop automatic player monitoring (Admin only)'),
+    
+    new SlashCommandBuilder()
+        .setName('setchannel')
+        .setDescription('Set the logging channel (Admin only)')
+        .addChannelOption(option =>
+            option.setName('channel')
+                .setDescription('Channel for logging (optional - uses current if not specified)')
+                .setRequired(false))
+].map(command => command.toJSON());
+
+// Register slash commands
+async function registerSlashCommands() {
+    try {
+        const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN);
+        console.log('🔄 Started refreshing application (/) commands.');
+        
+        await rest.put(
+            Routes.applicationCommands(client.user.id),
+            { body: commands }
+        );
+        
+        console.log('✅ Successfully reloaded application (/) commands.');
+    } catch (error) {
+        console.error('❌ Error registering slash commands:', error);
+    }
+}
+
+client.on('ready', async () => {
     console.log(`✅ ${client.user.tag} is online and ready!`);
     console.log(`🎯 Enhanced player tracker ready for server: ${SERVER_ID}`);
     
     // Load existing player data
     loadPlayerData();
+    loadTrackedPlayers();
+    loadTrackingNotifications();
+    loadPlayerDatabase();
     
     if (LOG_CHANNEL_ID) {
         console.log(`📊 Log channel configured: ${LOG_CHANNEL_ID}`);
     } else {
         console.log('⚠️ No log channel configured. Use !setchannel to set one.');
+    }
+    
+    console.log(`📍 Loaded ${Object.keys(trackedPlayers).length} tracked players`);
+    
+    // Register slash commands
+    await registerSlashCommands();
+});
+
+// Slash command interactions handler
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isChatInputCommand()) return;
+
+    const { commandName } = interaction;
+
+    try {
+        if (commandName === 'track') {
+            // Check admin permissions
+            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+                return await interaction.reply({ content: '❌ You need Administrator permissions to manage tracked players.', ephemeral: true });
+            }
+
+            const playerName = interaction.options.getString('player');
+            const category = interaction.options.getString('category');
+            const reason = interaction.options.getString('reason') || '';
+
+            const existingPlayer = isPlayerTracked(playerName);
+            if (existingPlayer) {
+                const categoryInfo = TRACKING_CATEGORIES[existingPlayer.category];
+                return await interaction.reply({ content: `❌ **${playerName}** is already being tracked as ${categoryInfo.emoji} ${categoryInfo.name}`, ephemeral: true });
+            }
+
+            const trackedPlayer = addTrackedPlayer(playerName, category, interaction.user.tag, reason);
+            const categoryInfo = TRACKING_CATEGORIES[category];
+
+            const embed = new EmbedBuilder()
+                .setColor(categoryInfo.color)
+                .setTitle(`${categoryInfo.emoji} Player Added to Tracking`)
+                .setDescription(`**${trackedPlayer.name}** is now being tracked`)
+                .addFields(
+                    { name: 'Category', value: `${categoryInfo.emoji} ${categoryInfo.name}`, inline: true },
+                    { name: 'Added By', value: trackedPlayer.addedBy, inline: true },
+                    { name: 'Servers', value: 'Royalty RP & Horizon', inline: true }
+                );
+
+            if (reason) {
+                embed.addFields({ name: 'Reason', value: reason, inline: false });
+            }
+
+            console.log(`📍 Player tracked: ${trackedPlayer.name} (${category}) by ${interaction.user.tag}`);
+            return await interaction.reply({ embeds: [embed] });
+        }
+
+        else if (commandName === 'untrack') {
+            // Check admin permissions
+            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+                return await interaction.reply({ content: '❌ You need Administrator permissions to manage tracked players.', ephemeral: true });
+            }
+
+            const playerName = interaction.options.getString('player');
+            const existingPlayer = isPlayerTracked(playerName);
+
+            if (!existingPlayer) {
+                return await interaction.reply({ content: `❌ **${playerName}** is not currently being tracked.`, ephemeral: true });
+            }
+
+            const categoryInfo = TRACKING_CATEGORIES[existingPlayer.category];
+            const removed = removeTrackedPlayer(playerName);
+
+            if (removed) {
+                const embed = new EmbedBuilder()
+                    .setColor('#ff6b6b')
+                    .setTitle('🗑️ Player Removed from Tracking')
+                    .setDescription(`**${existingPlayer.name}** is no longer being tracked`)
+                    .addFields(
+                        { name: 'Previous Category', value: `${categoryInfo.emoji} ${categoryInfo.name}`, inline: true },
+                        { name: 'Removed By', value: interaction.user.tag, inline: true }
+                    )
+                    .setTimestamp();
+
+                console.log(`📍 Player untracked: ${existingPlayer.name} by ${interaction.user.tag}`);
+                return await interaction.reply({ embeds: [embed] });
+            } else {
+                return await interaction.reply({ content: '❌ Failed to remove player from tracking.', ephemeral: true });
+            }
+        }
+
+        else if (commandName === 'tracked') {
+            const embed = new EmbedBuilder()
+                .setColor('#0099ff')
+                .setTitle('📍 Tracked Players - Names List')
+                .setDescription('Simple list of all tracked player names')
+                .setTimestamp();
+
+            const allPlayers = Object.values(trackedPlayers);
+            if (allPlayers.length === 0) {
+                embed.setDescription('No players are currently being tracked.\n\nUse `/track` to start tracking players.');
+                return await interaction.reply({ embeds: [embed] });
+            }
+
+            // Group players by category and show just names
+            const categories = ['enemies', 'poi', 'club']; // Enemies first for priority
+            for (const categoryKey of categories) {
+                const categoryPlayers = allPlayers.filter(p => p.category === categoryKey);
+                if (categoryPlayers.length === 0) continue;
+
+                const categoryInfo = TRACKING_CATEGORIES[categoryKey];
+                const playerNames = categoryPlayers.map(player => player.name).join(', ');
+
+                // Handle field length limits
+                if (playerNames.length <= 1024) {
+                    embed.addFields({
+                        name: `${categoryInfo.emoji} ${categoryInfo.name} (${categoryPlayers.length})`,
+                        value: playerNames,
+                        inline: false
+                    });
+                } else {
+                    // Split long lists by names, not arbitrary character chunks
+                    const names = categoryPlayers.map(player => player.name);
+                    let currentChunk = '';
+                    let chunkNumber = 1;
+
+                    names.forEach((name, index) => {
+                        const nameWithComma = index === names.length - 1 ? name : name + ', ';
+                        if (currentChunk.length + nameWithComma.length > 900) {
+                            embed.addFields({
+                                name: chunkNumber === 1 ? `${categoryInfo.emoji} ${categoryInfo.name} (${categoryPlayers.length})` : `${categoryInfo.name} (continued)`,
+                                value: currentChunk.trim(),
+                                inline: false
+                            });
+                            currentChunk = nameWithComma;
+                            chunkNumber++;
+                        } else {
+                            currentChunk += nameWithComma;
+                        }
+                    });
+
+                    if (currentChunk.trim()) {
+                        embed.addFields({
+                            name: chunkNumber === 1 ? `${categoryInfo.emoji} ${categoryInfo.name} (${categoryPlayers.length})` : `${categoryInfo.name} (continued)`,
+                            value: currentChunk.trim(),
+                            inline: false
+                        });
+                    }
+                }
+            }
+
+            embed.setFooter({ text: `Total: ${allPlayers.length} tracked players | Simple names view` });
+            return await interaction.reply({ embeds: [embed] });
+        }
+
+        else if (commandName === 'find') {
+            const searchPlayer = interaction.options.getString('player');
+            const trackedPlayer = isPlayerTracked(searchPlayer);
+
+            if (!trackedPlayer) {
+                return await interaction.reply({ content: `❌ **${searchPlayer}** is not in the tracking list.\nUse \`/track\` to start tracking them.`, ephemeral: true });
+            }
+
+            const loadingEmbed = new EmbedBuilder()
+                .setColor('#ffff00')
+                .setTitle('🔍 Searching for Player...')
+                .setDescription(`Looking for **${trackedPlayer.name}** on both servers...\n\n*This may take 30-60 seconds*`)
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [loadingEmbed] });
+
+            try {
+                // Check both servers
+                const [royaltyResults, horizonResults] = await Promise.all([
+                    extractPlayersFromServer('royalty'),
+                    extractPlayersFromServer('horizon')
+                ]);
+
+                const categoryInfo = TRACKING_CATEGORIES[trackedPlayer.category];
+                const isOnRoyalty = royaltyResults.players?.some(p => p.toLowerCase() === trackedPlayer.name.toLowerCase());
+                const isOnHorizon = horizonResults.players?.some(p => p.toLowerCase() === trackedPlayer.name.toLowerCase());
+
+                const embed = new EmbedBuilder()
+                    .setColor(categoryInfo.color)
+                    .setTitle(`🔍 Search Results: ${trackedPlayer.name}`)
+                    .setTimestamp();
+
+                if (isOnRoyalty || isOnHorizon) {
+                    const servers = [];
+                    if (isOnRoyalty) servers.push('**Royalty RP**');
+                    if (isOnHorizon) servers.push('**Horizon**');
+
+                    embed.setDescription(`🟢 **PLAYER FOUND ONLINE**\n\n${categoryInfo.emoji} **${trackedPlayer.name}** is currently on: ${servers.join(' and ')}`);
+
+                    if (trackedPlayer.category === 'enemies') {
+                        embed.setDescription(`🚨 **ENEMY ALERT** 🚨\n\n⚔️ **${trackedPlayer.name}** is currently on: ${servers.join(' and ')}`);
+                    }
+
+                    // Add server details
+                    if (isOnRoyalty && !royaltyResults.error) {
+                        embed.addFields({
+                            name: '🎭 Royalty RP',
+                            value: `**Players:** ${royaltyResults.players?.length || 0}/${royaltyResults.serverInfo?.maxClients || 'Unknown'}\n**Status:** 🟢 Online`,
+                            inline: true
+                        });
+                    }
+
+                    if (isOnHorizon && !horizonResults.error) {
+                        embed.addFields({
+                            name: '🌅 Horizon',
+                            value: `**Players:** ${horizonResults.players?.length || 0}/${horizonResults.serverInfo?.maxClients || 'Unknown'}\n**Status:** 🟢 Online`,
+                            inline: true
+                        });
+                    }
+
+                } else {
+                    embed.setDescription(`🔴 **PLAYER NOT FOUND**\n\n${categoryInfo.emoji} **${trackedPlayer.name}** is not currently online on either server.`);
+                    embed.setColor('#ff6b6b');
+                }
+
+                // Add tracking info in form style
+                embed.addFields({
+                    name: '📋 Tracking Information',
+                    value: `**Category:** ${categoryInfo.emoji} ${categoryInfo.name}\n**Added:** ${new Date(trackedPlayer.addedAt).toLocaleDateString()}\n**Added by:** ${trackedPlayer.addedBy.split('#')[0]}`,
+                    inline: false
+                });
+
+                if (trackedPlayer.reason) {
+                    embed.addFields({
+                        name: '📝 Tracking Reason',
+                        value: trackedPlayer.reason,
+                        inline: false
+                    });
+                }
+
+                await interaction.editReply({ embeds: [embed] });
+
+            } catch (error) {
+                console.error('Error during find command:', error);
+
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#ff0000')
+                    .setTitle('❌ Search Error')
+                    .setDescription('An error occurred while searching for the player.')
+                    .addFields({ name: 'Error Details', value: error.message })
+                    .setTimestamp();
+
+                await interaction.editReply({ embeds: [errorEmbed] });
+            }
+        }
+
+        else if (commandName === 'search') {
+            const searchTerm = interaction.options.getString('name');
+            const matches = searchPlayerDatabase(searchTerm);
+
+            if (matches.length === 0) {
+                const noResultsEmbed = new EmbedBuilder()
+                    .setColor('#ff6b6b')
+                    .setTitle('🔍 Player Database Search')
+                    .setDescription(`No players found matching "**${searchTerm}**"\n\nTry a different search term or check spelling.`)
+                    .addFields({ name: 'Database Size', value: `${Object.keys(playerDatabase).length} unique players recorded`, inline: true })
+                    .setTimestamp();
+
+                return await interaction.reply({ embeds: [noResultsEmbed] });
+            }
+
+            const embed = new EmbedBuilder()
+                .setColor('#00ff00')
+                .setTitle(`🔍 Player Database Search: "${searchTerm}"`)
+                .setDescription(`Found **${matches.length}** player${matches.length !== 1 ? 's' : ''}:`)
+                .setTimestamp();
+
+            const playerList = matches.map(player => {
+                const lastSeenDate = new Date(player.lastSeen).toLocaleDateString();
+                const firstSeenDate = new Date(player.firstSeen).toLocaleDateString();
+                const servers = player.servers.map(s => {
+                    return s === 'royalty' ? 'Royalty RP' : s === 'horizon' ? 'Horizon' : s;
+                }).join(', ');
+
+                let resultText = `**${player.name}**\n`;
+                resultText += `*Last seen:* ${lastSeenDate}\n`;
+                resultText += `*First seen:* ${firstSeenDate}\n`;
+                resultText += `*Total sightings:* ${player.totalSightings}\n`;
+                resultText += `*Servers:* ${servers}`;
+
+                // Check if player is currently tracked
+                const trackedPlayer = isPlayerTracked(player.name);
+                if (trackedPlayer) {
+                    const categoryInfo = TRACKING_CATEGORIES[trackedPlayer.category];
+                    resultText += `\n🎯 **Currently tracked as ${categoryInfo.emoji} ${categoryInfo.name}**`;
+                }
+
+                return resultText;
+            }).join('\n\n');
+
+            // Handle Discord's character limit for embeds
+            if (playerList.length <= 1024) {
+                embed.addFields({
+                    name: '📋 Search Results',
+                    value: playerList,
+                    inline: false
+                });
+            } else {
+                // Split into chunks if too long
+                const chunks = [];
+                let currentChunk = '';
+                matches.forEach((player, index) => {
+                    const playerText = playerList.split('\n\n')[index] + '\n\n';
+                    if (currentChunk.length + playerText.length > 900) {
+                        chunks.push(currentChunk.trim());
+                        currentChunk = playerText;
+                    } else {
+                        currentChunk += playerText;
+                    }
+                });
+                if (currentChunk.trim()) chunks.push(currentChunk.trim());
+
+                chunks.forEach((chunk, index) => {
+                    embed.addFields({
+                        name: index === 0 ? '📋 Search Results' : '📋 Search Results (continued)',
+                        value: chunk,
+                        inline: false
+                    });
+                });
+            }
+
+            embed.setFooter({ text: `Database contains ${Object.keys(playerDatabase).length} unique players | Showing top ${matches.length} matches` });
+            return await interaction.reply({ embeds: [embed] });
+        }
+
+        else if (commandName === 'royalty') {
+            const loadingEmbed = new EmbedBuilder()
+                .setColor('#ffff00')
+                .setTitle('🎯 Extracting Player Names...')
+                .setDescription('Getting current player list and updating tracking data...\n\n*This may take 30-60 seconds*')
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [loadingEmbed] });
+
+            try {
+                const results = await extractAndTrackPlayers();
+
+                if (results.error) {
+                    const errorEmbed = new EmbedBuilder()
+                        .setColor('#ff0000')
+                        .setTitle('❌ Extraction Error')
+                        .setDescription('Error occurred during player name extraction.')
+                        .addFields({ name: 'Error Details', value: results.error })
+                        .setTimestamp();
+
+                    return await interaction.editReply({ embeds: [errorEmbed] });
+                }
+
+                if (results.players.length === 0) {
+                    const noPlayersEmbed = new EmbedBuilder()
+                        .setColor('#ffaa00')
+                        .setTitle('⚠️ No Player Names Found')
+                        .setDescription('Server appears to be empty or inaccessible.')
+                        .setTimestamp();
+
+                    return await interaction.editReply({ embeds: [noPlayersEmbed] });
+                }
+
+                // Success - display found players with tracking info
+                const cleanHostname = results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim();
+
+                const embed = new EmbedBuilder()
+                    .setColor('#00ff00')
+                    .setTitle('🎮 Online Players')
+                    .setDescription(`**${cleanHostname}**`)
+                    .setTimestamp();
+
+                // Add player counter
+                embed.addFields({
+                    name: '👥 Players Online',
+                    value: `**${results.players.length}** out of **${results.serverInfo.maxClients}** slots`,
+                    inline: false
+                });
+
+                // Create player list with session times
+                const playerListWithTimes = results.players.map(player => {
+                    const trackingData = playerTracker[player];
+                    if (trackingData && trackingData.isOnline) {
+                        const currentSession = Date.now() - trackingData.joinTime;
+                        return `${player} (${formatDuration(currentSession)})`;
+                    }
+                    return player;
+                });
+
+                const playerList = playerListWithTimes.join('\n');
+
+                // Handle Discord's character limit
+                if (playerList.length <= 1024) {
+                    embed.addFields({
+                        name: '📋 Complete Player List (with session times)',
+                        value: playerList,
+                        inline: false
+                    });
+                } else {
+                    // Split into chunks if too long
+                    const chunkSize = 900;
+                    let currentChunk = '';
+                    let chunkNumber = 1;
+
+                    playerListWithTimes.forEach(player => {
+                        const playerLine = player + '\n';
+
+                        if (currentChunk.length + playerLine.length > chunkSize) {
+                            embed.addFields({
+                                name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
+                                value: currentChunk.trim(),
+                                inline: false
+                            });
+                            currentChunk = playerLine;
+                            chunkNumber++;
+                        } else {
+                            currentChunk += playerLine;
+                        }
+                    });
+
+                    if (currentChunk.trim()) {
+                        embed.addFields({
+                            name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
+                            value: currentChunk.trim(),
+                            inline: false
+                        });
+                    }
+                }
+
+                // Add monitoring status
+                embed.addFields({
+                    name: '📊 Tracking Status',
+                    value: MONITORING_ENABLED ? '🟢 Monitoring Active' : '🔴 Monitoring Inactive',
+                    inline: true
+                });
+
+                embed.setFooter({ text: `Server ID: ${SERVER_ID} | Enhanced Tracking` });
+
+                await interaction.editReply({ embeds: [embed] });
+
+            } catch (error) {
+                console.error('Error during extraction:', error);
+
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#ff0000')
+                    .setTitle('❌ Unexpected Error')
+                    .setDescription('An unexpected error occurred during extraction.')
+                    .addFields({ name: 'Error Details', value: error.message })
+                    .setTimestamp();
+
+                await interaction.editReply({ embeds: [errorEmbed] });
+            }
+        }
+
+        else if (commandName === 'horizon') {
+            const loadingEmbed = new EmbedBuilder()
+                .setColor('#9932cc')
+                .setTitle('🌅 Extracting Horizon Player Names...')
+                .setDescription('Getting current player list from Horizon server...\n\n*This may take 30-60 seconds*')
+                .setTimestamp();
+
+            await interaction.reply({ embeds: [loadingEmbed] });
+
+            try {
+                const results = await extractPlayersFromServer('horizon');
+
+                if (results.error) {
+                    const errorEmbed = new EmbedBuilder()
+                        .setColor('#ff0000')
+                        .setTitle('❌ Extraction Error')
+                        .setDescription('Error occurred during player name extraction.')
+                        .addFields({ name: 'Error Details', value: results.error })
+                        .setTimestamp();
+
+                    return await interaction.editReply({ embeds: [errorEmbed] });
+                }
+
+                if (results.players.length === 0) {
+                    const noPlayersEmbed = new EmbedBuilder()
+                        .setColor('#ffaa00')
+                        .setTitle('⚠️ No Player Names Found')
+                        .setDescription('Horizon server appears to be empty or inaccessible.')
+                        .setTimestamp();
+
+                    return await interaction.editReply({ embeds: [noPlayersEmbed] });
+                }
+
+                // Success - display found players
+                const cleanHostname = results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim();
+
+                const embed = new EmbedBuilder()
+                    .setColor('#9932cc')
+                    .setTitle('🌅 Horizon Online Players')
+                    .setDescription(`**${cleanHostname}**`)
+                    .setTimestamp();
+
+                // Add player counter
+                embed.addFields({
+                    name: '👥 Players Online',
+                    value: `**${results.players.length}** out of **${results.serverInfo.maxClients}** slots`,
+                    inline: false
+                });
+
+                // Create player list with session times for Horizon
+                const playerListWithTimes = results.players.map(player => {
+                    const trackingData = horizonPlayerTracker[player];
+                    if (trackingData && trackingData.isOnline) {
+                        const currentSession = Date.now() - trackingData.joinTime;
+                        const totalTime = trackingData.totalTime + currentSession;
+                        return `${player} (Total: ${formatDuration(totalTime)}, Current: ${formatDuration(currentSession)})`;
+                    } else if (trackingData) {
+                        // Player is offline but has total time
+                        return `${player} (Total: ${formatDuration(trackingData.totalTime)})`;
+                    }
+                    return player;
+                });
+                        return `${player} (Total: ${formatDuration(trackingData.totalTime)})`;
+                    }
+                    return player;
+                });
+
+                const playerList = playerListWithTimes.join('\n');
+
+                // Handle Discord's character limit
+                if (playerList.length <= 1024) {
+                    embed.addFields({
+                        name: '📋 Complete Player List (with session times)',
+                        value: playerList,
+                        inline: false
+                    });
+                } else {
+                    // Split into chunks if too long
+                    const chunkSize = 900;
+                    let currentChunk = '';
+                    let chunkNumber = 1;
+
+                    playerListWithTimes.forEach(player => {
+                        const playerLine = player + '\n';
+
+                        if (currentChunk.length + playerLine.length > chunkSize) {
+                            embed.addFields({
+                                name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
+                                value: currentChunk.trim(),
+                                inline: false
+                            });
+                            currentChunk = playerLine;
+                            chunkNumber++;
+                        } else {
+                            currentChunk += playerLine;
+                        }
+                    });
+
+                    if (currentChunk.trim()) {
+                        embed.addFields({
+                            name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
+                            value: currentChunk.trim(),
+                            inline: false
+                        });
+                    }
+                }
+
+                embed.setFooter({ text: `Server ID: ${results.serverInfo.serverId} | Horizon Server` });
+
+                await interaction.editReply({ embeds: [embed] });
+
+            } catch (error) {
+                console.error('Error during Horizon extraction:', error);
+
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#ff0000')
+                    .setTitle('❌ Unexpected Error')
+                    .setDescription('An unexpected error occurred during extraction.')
+                    .addFields({ name: 'Error Details', value: error.message })
+                    .setTimestamp();
+
+                await interaction.editReply({ embeds: [errorEmbed] });
+            }
+        }
+
+        else if (commandName === 'categories') {
+            const embed = new EmbedBuilder()
+                .setColor('#0099ff')
+                .setTitle('📂 Tracking Categories')
+                .setDescription('Available categories for player tracking:')
+                .setTimestamp();
+
+            Object.entries(TRACKING_CATEGORIES).forEach(([key, category]) => {
+                const count = getTrackedPlayersByCategory(key).length;
+                embed.addFields({
+                    name: `${category.emoji} ${category.name}`,
+                    value: `${category.description}\n**Currently tracking:** ${count} player${count !== 1 ? 's' : ''}`,
+                    inline: false
+                });
+            });
+
+            embed.addFields({
+                name: '📋 Usage',
+                value: 'Use `/track` to add players\nExample: `/track player:Ember category:enemies reason:Hostile player`',
+                inline: false
+            });
+
+            return await interaction.reply({ embeds: [embed] });
+        }
+
+        else if (commandName === 'startmonitor') {
+            // Check admin permissions
+            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+                return await interaction.reply({ content: '❌ You need Administrator permissions to start monitoring.', ephemeral: true });
+            }
+
+            startMonitoring();
+
+            const embed = new EmbedBuilder()
+                .setColor('#00ff00')
+                .setTitle('🔄 Enhanced Monitoring Started')
+                .setDescription('Player tracking has been started for both Royalty RP and Horizon servers. Players will be monitored every 1 minute.')
+                .setTimestamp();
+
+            return await interaction.reply({ embeds: [embed] });
+        }
+
+        else if (commandName === 'stopmonitor') {
+            // Check admin permissions
+            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+                return await interaction.reply({ content: '❌ You need Administrator permissions to stop monitoring.', ephemeral: true });
+            }
+
+            stopMonitoring();
+
+            const embed = new EmbedBuilder()
+                .setColor('#ff0000')
+                .setTitle('⏹️ Monitoring Stopped')
+                .setDescription('Player tracking has been stopped.')
+                .setTimestamp();
+
+            return await interaction.reply({ embeds: [embed] });
+        }
+
+        else if (commandName === 'setchannel') {
+            // Check admin permissions
+            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+                return await interaction.reply({ content: '❌ You need Administrator permissions to set the log channel.', ephemeral: true });
+            }
+
+            const channel = interaction.options.getChannel('channel') || interaction.channel;
+            const channelId = channel.id;
+            LOG_CHANNEL_ID = channelId;
+
+            // Update .env file
+            const envContent = fs.readFileSync('.env', 'utf8');
+            const newEnvContent = envContent.includes('PLAYER_LOG_CHANNEL=')
+                ? envContent.replace(/PLAYER_LOG_CHANNEL=.*/, `PLAYER_LOG_CHANNEL=${channelId}`)
+                : envContent + `\nPLAYER_LOG_CHANNEL=${channelId}`;
+
+            fs.writeFileSync('.env', newEnvContent);
+
+            const embed = new EmbedBuilder()
+                .setColor('#00ff00')
+                .setTitle('✅ Log Channel Set')
+                .setDescription(`Player activity will now be logged to <#${channelId}>`)
+                .setTimestamp();
+
+            console.log(`📊 Log channel set to: ${channelId}`);
+            return await interaction.reply({ embeds: [embed] });
+        }
+
+    } catch (error) {
+        console.error('Error handling slash command:', error);
+        
+        const errorMessage = { content: 'There was an error while executing this command!', ephemeral: true };
+        
+        if (interaction.deferred) {
+            await interaction.editReply(errorMessage);
+        } else {
+            await interaction.reply(errorMessage);
+        }
     }
 });
 
@@ -637,351 +1808,29 @@ client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
     
     const content = message.content.toLowerCase();
-    const args = message.content.split(' ');
     
-    // Set log channel command
-    if (content.startsWith('!setchannel')) {
-        if (!message.member.permissions.has('ADMINISTRATOR')) {
-            return message.reply('❌ You need Administrator permissions to set the log channel.');
-        }
+    // Only respond to slash command references to guide users
+    if (content.includes('!')) {
+        // Check if user is trying to use old commands
+        const oldCommands = ['!track', '!untrack', '!tracked', '!find', '!search', '!players', '!horizon', '!categories', '!startmonitor', '!stopmonitor', '!setchannel', '!help'];
+        const usedOldCommand = oldCommands.some(cmd => content.startsWith(cmd));
         
-        const channelId = args[1] || message.channel.id;
-        LOG_CHANNEL_ID = channelId;
-        
-        // Update .env file
-        const envContent = fs.readFileSync('.env', 'utf8');
-        const newEnvContent = envContent.includes('PLAYER_LOG_CHANNEL=') 
-            ? envContent.replace(/PLAYER_LOG_CHANNEL=.*/, `PLAYER_LOG_CHANNEL=${channelId}`)
-            : envContent + `\nPLAYER_LOG_CHANNEL=${channelId}`;
-        
-        fs.writeFileSync('.env', newEnvContent);
-        
-        const embed = new EmbedBuilder()
-            .setColor('#00ff00')
-            .setTitle('✅ Log Channel Set')
-            .setDescription(`Player activity will now be logged to <#${channelId}>`)
-            .setTimestamp();
-        
-        message.reply({ embeds: [embed] });
-        console.log(`📊 Log channel set to: ${channelId}`);
-        return;
-    }
-    
-    // Start monitoring command
-    if (content === '!startmonitor') {
-        if (!message.member.permissions.has('ADMINISTRATOR')) {
-            return message.reply('❌ You need Administrator permissions to start monitoring.');
-        }
-        
-        startMonitoring();
-        
-        const embed = new EmbedBuilder()
-            .setColor('#00ff00')
-            .setTitle('🔄 Monitoring Started')
-            .setDescription('Player tracking has been started. Players will be monitored every 5 minutes.')
-            .setTimestamp();
-        
-        message.reply({ embeds: [embed] });
-        return;
-    }
-    
-    // Stop monitoring command
-    if (content === '!stopmonitor') {
-        if (!message.member.permissions.has('ADMINISTRATOR')) {
-            return message.reply('❌ You need Administrator permissions to stop monitoring.');
-        }
-        
-        stopMonitoring();
-        
-        const embed = new EmbedBuilder()
-            .setColor('#ff0000')
-            .setTitle('⏹️ Monitoring Stopped')
-            .setDescription('Player tracking has been stopped.')
-            .setTimestamp();
-        
-        message.reply({ embeds: [embed] });
-        return;
-    }
-    
-    // Show player durations
-    if (content === '!durations' || content === '!times') {
-        const embed = new EmbedBuilder()
-            .setColor('#0099ff')
-            .setTitle('⏱️ Player Session Times')
-            .setTimestamp();
-        
-        const onlinePlayers = Object.entries(playerTracker)
-            .filter(([player, data]) => data.isOnline)
-            .map(([player, data]) => {
-                const currentSession = Date.now() - data.joinTime;
-                return `**${player}**: ${formatDuration(currentSession)} (current session)`;
-            });
-        
-        if (onlinePlayers.length === 0) {
-            embed.setDescription('No players currently being tracked.');
-        } else {
-            embed.setDescription(onlinePlayers.join('\n'));
-        }
-        
-        message.reply({ embeds: [embed] });
-        return;
-    }
-    
-    // Regular player list commands
-    if (content === '!players' || content === '!names' || content === '!list') {
-        const loadingEmbed = new EmbedBuilder()
-            .setColor('#ffff00')
-            .setTitle('🎯 Extracting Player Names...')
-            .setDescription('Getting current player list and updating tracking data...\n\n*This may take 30-60 seconds*')
-            .setTimestamp();
-        
-        const loadingMessage = await message.reply({ embeds: [loadingEmbed] });
-        
-        try {
-            console.log('🎯 Discord command triggered: !players');
-            const results = await extractAndTrackPlayers();
-            console.log('📋 Results received:', {
-                players: results.players?.length || 0,
-                error: results.error || 'None',
-                serverInfo: results.serverInfo || {}
-            });
-            
-            if (results.error) {
-                console.log('❌ Command failed with error:', results.error);
-                const errorEmbed = new EmbedBuilder()
-                    .setColor('#ff0000')
-                    .setTitle('❌ Extraction Error')
-                    .setDescription('Error occurred during player name extraction.')
-                    .addFields({ name: 'Error Details', value: results.error })
-                    .setTimestamp();
-                
-                return loadingMessage.edit({ embeds: [errorEmbed] });
-            }
-            
-            if (results.players.length === 0) {
-                const noPlayersEmbed = new EmbedBuilder()
-                    .setColor('#ffaa00')
-                    .setTitle('⚠️ No Player Names Found')
-                    .setDescription('Server appears to be empty or inaccessible.')
-                    .setTimestamp();
-                
-                return loadingMessage.edit({ embeds: [noPlayersEmbed] });
-            }
-            
-            // Success - display found players with tracking info
-            const cleanHostname = results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim();
-            
+        if (usedOldCommand) {
             const embed = new EmbedBuilder()
-                .setColor('#00ff00')
-                .setTitle('🎮 Online Players')
-                .setDescription(`**${cleanHostname}**`)
+                .setColor('#ffaa00')
+                .setTitle('⚠️ Commands Updated!')
+                .setDescription('This bot now uses **Slash Commands** only. The old `!` commands have been removed.')
+                .addFields(
+                    { name: '🔄 How to Use Slash Commands', value: 'Type `/` in Discord and you\'ll see all available commands with descriptions and options.', inline: false },
+                    { name: '📍 Main Commands', value: '• `/track` - Add player to tracking\n• `/untrack` - Remove player from tracking\n• `/tracked` - View tracked players list\n• `/find` - Search for tracked player\n• `/search` - Search player database\n• `/players` - Show Royalty RP players\n• `/horizon` - Show Horizon players\n• `/categories` - View tracking categories', inline: false },
+                    { name: '⚙️ Admin Commands', value: '• `/startmonitor` - Start monitoring\n• `/stopmonitor` - Stop monitoring\n• `/setchannel` - Set log channel', inline: false },
+                    { name: '✨ Benefits of Slash Commands', value: '• Built-in help and validation\n• Cleaner interface\n• Auto-complete options\n• Better Discord integration', inline: false }
+                )
+                .setFooter({ text: 'Start typing "/" to see all available commands!' })
                 .setTimestamp();
             
-            // Add player counter
-            embed.addFields({
-                name: '👥 Players Online',
-                value: `**${results.players.length}** out of **${results.serverInfo.maxClients}** slots`,
-                inline: false
-            });
-            
-            // Create player list with session times
-            const playerListWithTimes = results.players.map(player => {
-                const trackingData = playerTracker[player];
-                if (trackingData && trackingData.isOnline) {
-                    const currentSession = Date.now() - trackingData.joinTime;
-                    return `${player} (${formatDuration(currentSession)})`;
-                }
-                return player;
-            });
-            
-            const playerList = playerListWithTimes.join('\n');
-            
-            // Handle Discord's character limit
-            if (playerList.length <= 1024) {
-                embed.addFields({
-                    name: '📋 Complete Player List (with session times)',
-                    value: playerList,
-                    inline: false
-                });
-            } else {
-                // Split into chunks if too long
-                const chunkSize = 900;
-                let currentChunk = '';
-                let chunkNumber = 1;
-                
-                playerListWithTimes.forEach(player => {
-                    const playerLine = player + '\n';
-                    
-                    if (currentChunk.length + playerLine.length > chunkSize) {
-                        embed.addFields({
-                            name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
-                            value: currentChunk.trim(),
-                            inline: false
-                        });
-                        currentChunk = playerLine;
-                        chunkNumber++;
-                    } else {
-                        currentChunk += playerLine;
-                    }
-                });
-                
-                if (currentChunk.trim()) {
-                    embed.addFields({
-                        name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
-                        value: currentChunk.trim(),
-                        inline: false
-                    });
-                }
-            }
-            
-            // Add monitoring status
-            embed.addFields({
-                name: '📊 Tracking Status',
-                value: MONITORING_ENABLED ? '🟢 Monitoring Active' : '🔴 Monitoring Inactive',
-                inline: true
-            });
-            
-            embed.setFooter({ text: `Server ID: ${SERVER_ID} | Enhanced Tracking` });
-            
-            loadingMessage.edit({ embeds: [embed] });
-            
-        } catch (error) {
-            console.error('Error during extraction:', error);
-            
-            const errorEmbed = new EmbedBuilder()
-                .setColor('#ff0000')
-                .setTitle('❌ Unexpected Error')
-                .setDescription('An unexpected error occurred during extraction.')
-                .addFields({ name: 'Error Details', value: error.message })
-                .setTimestamp();
-            
-            loadingMessage.edit({ embeds: [errorEmbed] });
+            return message.reply({ embeds: [embed] });
         }
-    }
-    
-    // Horizon server player list command
-    if (content === '!horizon') {
-        const loadingEmbed = new EmbedBuilder()
-            .setColor('#9932cc')
-            .setTitle('🌅 Extracting Horizon Player Names...')
-            .setDescription('Getting current player list from Horizon server...\n\n*This may take 30-60 seconds*')
-            .setTimestamp();
-        
-        const loadingMessage = await message.reply({ embeds: [loadingEmbed] });
-        
-        try {
-            const results = await extractPlayersFromServer('horizon');
-            
-            if (results.error) {
-                const errorEmbed = new EmbedBuilder()
-                    .setColor('#ff0000')
-                    .setTitle('❌ Extraction Error')
-                    .setDescription('Error occurred during player name extraction.')
-                    .addFields({ name: 'Error Details', value: results.error })
-                    .setTimestamp();
-                
-                return loadingMessage.edit({ embeds: [errorEmbed] });
-            }
-            
-            if (results.players.length === 0) {
-                const noPlayersEmbed = new EmbedBuilder()
-                    .setColor('#ffaa00')
-                    .setTitle('⚠️ No Player Names Found')
-                    .setDescription('Horizon server appears to be empty or inaccessible.')
-                    .setTimestamp();
-                
-                return loadingMessage.edit({ embeds: [noPlayersEmbed] });
-            }
-            
-            // Success - display found players
-            const cleanHostname = results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim();
-            
-            const embed = new EmbedBuilder()
-                .setColor('#9932cc')
-                .setTitle('🌅 Horizon Online Players')
-                .setDescription(`**${cleanHostname}**`)
-                .setTimestamp();
-            
-            // Add player counter
-            embed.addFields({
-                name: '👥 Players Online',
-                value: `**${results.players.length}** out of **${results.serverInfo.maxClients}** slots`,
-                inline: false
-            });
-            
-            // Create player list (no session times for Horizon as it's not tracked)
-            const playerList = results.players.join('\n');
-            
-            // Handle Discord's character limit
-            if (playerList.length <= 1024) {
-                embed.addFields({
-                    name: '📋 Complete Player List',
-                    value: playerList,
-                    inline: false
-                });
-            } else {
-                // Split into chunks if too long
-                const chunkSize = 900;
-                let currentChunk = '';
-                let chunkNumber = 1;
-                
-                results.players.forEach(player => {
-                    const playerLine = player + '\n';
-                    
-                    if (currentChunk.length + playerLine.length > chunkSize) {
-                        embed.addFields({
-                            name: chunkNumber === 1 ? '📋 Player List' : '📋 Player List (continued)',
-                            value: currentChunk.trim(),
-                            inline: false
-                        });
-                        currentChunk = playerLine;
-                        chunkNumber++;
-                    } else {
-                        currentChunk += playerLine;
-                    }
-                });
-                
-                if (currentChunk.trim()) {
-                    embed.addFields({
-                        name: chunkNumber === 1 ? '📋 Player List' : '📋 Player List (continued)',
-                        value: currentChunk.trim(),
-                        inline: false
-                    });
-                }
-            }
-            
-            embed.setFooter({ text: `Server ID: ${results.serverInfo.serverId} | Horizon Server` });
-            
-            loadingMessage.edit({ embeds: [embed] });
-            
-        } catch (error) {
-            console.error('Error during Horizon extraction:', error);
-            
-            const errorEmbed = new EmbedBuilder()
-                .setColor('#ff0000')
-                .setTitle('❌ Unexpected Error')
-                .setDescription('An unexpected error occurred during extraction.')
-                .addFields({ name: 'Error Details', value: error.message })
-                .setTimestamp();
-            
-            loadingMessage.edit({ embeds: [errorEmbed] });
-        }
-    }
-    
-    if (content === '!help') {
-        const helpEmbed = new EmbedBuilder()
-            .setColor('#0099ff')
-            .setTitle('🎯 Enhanced FiveM Player Tracker')
-            .setDescription('Track player names and session durations with logging')
-            .addFields(
-                { name: '👥 Player Commands', value: '`!players` - Show Royalty RP players with session times\n`!horizon` - Show Horizon server players\n`!durations` - Show current session durations\n`!names` / `!list` - Same as !players', inline: false },
-                { name: '⚙️ Admin Commands', value: '`!setchannel [ID]` - Set logging channel\n`!startmonitor` - Start automatic monitoring\n`!stopmonitor` - Stop automatic monitoring', inline: false },
-                { name: '📊 Features', value: '• Real-time player tracking\n• Session duration logging\n• Join/leave notifications\n• Persistent data storage\n• 5-minute monitoring intervals', inline: false }
-            )
-            .setFooter({ text: 'Enhanced Player Tracker v4.0' })
-            .setTimestamp();
-        
-        message.reply({ embeds: [helpEmbed] });
     }
 });
 
