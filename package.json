@@ -7,7 +7,7 @@
     "start": "node bot.js",
     "container": "node container-setup.js && node bot.js",
     "preinstall": "echo 'Configuring for Pterodactyl hosting...'",
-    "postinstall": "node auto-chrome-installer.js || echo 'Chrome installation failed, but continuing...'"
+    "postinstall": "node auto-chrome-installer.js && npx puppeteer browsers install chrome || echo 'Chrome installation failed, but continuing...'"
   },
   "keywords": [
     "discord",

@@ -13,6 +13,13 @@ npm start
 ### Container/Cloud Deployment
 ```bash
 npm install
+node install-chrome-container.js
+node bot.js
+```
+
+### Alternative Container Command
+```bash
+npm install
 npm run container
 ```
 

@@ -227,16 +227,31 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
                 ];
             } else {
                 // Linux paths (container/cloud deployment)
-                const isContainer = process.env.NODE_ENV === 'production' || process.env.CONTAINER_ENV;
+                const isContainer = process.env.NODE_ENV === 'production' || process.env.CONTAINER_ENV || process.cwd().includes('/home/container');
                 const containerCachePath = '/home/container/.cache/puppeteer';
                 
-                chromePaths = [
-                    // Container-specific Puppeteer Chrome paths
-                    ...(isContainer ? [
-                        path.join(containerCachePath, 'chrome', 'linux-121.0.6167.85', 'chrome-linux64', 'chrome'),
-                        path.join(containerCachePath, 'chrome', 'linux-*', 'chrome-linux64', 'chrome')
-                    ] : []),
-                    // Standard Linux Chrome paths
+                chromePaths = [];
+                
+                // Container-specific Puppeteer Chrome paths
+                if (isContainer) {
+                    // Check for various Chrome versions in container cache
+                    const chromeCacheDir = path.join(containerCachePath, 'chrome');
+                    try {
+                        if (fs.existsSync(chromeCacheDir)) {
+                            const chromeVersions = fs.readdirSync(chromeCacheDir);
+                            for (const version of chromeVersions) {
+                                if (version.startsWith('linux-')) {
+                                    chromePaths.push(path.join(chromeCacheDir, version, 'chrome-linux64', 'chrome'));
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.log('⚠️ Could not scan Chrome cache directory');
+                    }
+                }
+                
+                // Add standard Linux Chrome paths
+                chromePaths.push(
                     '/usr/bin/chromium-browser',
                     '/usr/bin/chromium',
                     '/usr/bin/google-chrome-stable',
@@ -244,7 +259,7 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
                     '/snap/bin/chromium',
                     '/usr/local/bin/chromium',
                     '/opt/google/chrome/chrome'
-                ];
+                );
             }
             
             for (const chromePath of chromePaths) {
