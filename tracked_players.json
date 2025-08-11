@@ -1,0 +1,43 @@
+{
+  "ember": {
+    "name": "Ember",
+    "category": "club",
+    "addedBy": "jayreaper",
+    "addedAt": 1754928329871,
+    "reason": ""
+  },
+  "jayreaper": {
+    "name": "Jayreaper",
+    "category": "club",
+    "addedBy": "jayreaper",
+    "addedAt": 1754928491738,
+    "reason": "",
+    "notifications": {
+      "joinAlerts": true,
+      "leaveAlerts": true,
+      "sessionUpdates": true
+    },
+    "servers": [
+      "royalty",
+      "horizon"
+    ],
+    "lastSeen": {
+      "royalty": null,
+      "horizon": null
+    },
+    "sessionData": {
+      "royalty": {
+        "isOnline": false,
+        "joinTime": null,
+        "totalTime": 0,
+        "sessionCount": 0
+      },
+      "horizon": {
+        "isOnline": false,
+        "joinTime": null,
+        "totalTime": 0,
+        "sessionCount": 0
+      }
+    }
+  }
+}
