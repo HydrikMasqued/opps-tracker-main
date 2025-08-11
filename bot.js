@@ -374,23 +374,13 @@ async function extractAndTrackPlayers() {
         // Fallback to Puppeteer if API fails
         let browser;
         try {
-            // Container-optimized Puppeteer configuration
+            // Use the same working configuration as debug script
             const launchOptions = {
                 headless: 'new',
                 args: [
                     '--no-sandbox',
                     '--disable-setuid-sandbox',
-                    '--disable-dev-shm-usage',
-                    '--disable-accelerated-2d-canvas',
-                    '--no-first-run',
-                    '--no-zygote',
-                    '--disable-gpu',
-                    '--disable-web-security',
-                    '--disable-features=VizDisplayCompositor',
-                    '--disable-background-timer-throttling',
-                    '--disable-backgrounding-occluded-windows',
-                    '--disable-renderer-backgrounding',
-                    '--single-process'
+                    '--disable-dev-shm-usage'
                 ]
             };
             
