@@ -59,6 +59,14 @@ let MONITORING_ENABLED = false;
 let playerTracker = {};  // Store player join times and durations
 let monitoringInterval = null;
 
+// Permission checking function
+function hasFullPatchPermission(member) {
+    // Check for "Full Patch" role or Administrator permission
+    const hasFullPatch = member.roles.cache.some(role => role.name === 'Full Patch');
+    const hasAdmin = member.permissions.has(PermissionFlagsBits.Administrator);
+    return hasFullPatch || hasAdmin;
+}
+
 // File to persist player data
 const PLAYER_DATA_FILE = './player_tracking_data.json';
 
@@ -1210,9 +1218,9 @@ client.on('interactionCreate', async interaction => {
 
     try {
         if (commandName === 'track') {
-            // Check admin permissions
-            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-                return await interaction.reply({ content: '❌ You need Administrator permissions to manage tracked players.', ephemeral: true });
+            // Check Full Patch role or admin permissions
+            if (!hasFullPatchPermission(interaction.member)) {
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
             }
 
             const playerName = interaction.options.getString('player');
@@ -1247,9 +1255,9 @@ client.on('interactionCreate', async interaction => {
         }
 
         else if (commandName === 'untrack') {
-            // Check admin permissions
-            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-                return await interaction.reply({ content: '❌ You need Administrator permissions to manage tracked players.', ephemeral: true });
+            // Check Full Patch role or admin permissions
+            if (!hasFullPatchPermission(interaction.member)) {
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
             }
 
             const playerName = interaction.options.getString('player');
@@ -1625,6 +1633,11 @@ client.on('interactionCreate', async interaction => {
         }
 
         else if (commandName === 'royalty') {
+            // Check Full Patch role or admin permissions
+            if (!hasFullPatchPermission(interaction.member)) {
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
+            }
+
             const loadingEmbed = new EmbedBuilder()
                 .setColor('#ffff00')
                 .setTitle('🎯 Extracting Player Names...')
@@ -1632,9 +1645,14 @@ client.on('interactionCreate', async interaction => {
                 .setTimestamp();
 
             await interaction.reply({ embeds: [loadingEmbed] });
+            console.log(`🎮 ${interaction.user.tag} requested /royalty command`);
 
             try {
                 const results = await extractAndTrackPlayers();
+                console.log(`🎮 Extraction completed for ${interaction.user.tag}:`, {
+                    players: results.players?.length || 0,
+                    error: results.error || null
+                });
 
                 if (results.error) {
                     const errorEmbed = new EmbedBuilder()
@@ -1647,7 +1665,7 @@ client.on('interactionCreate', async interaction => {
                     return await interaction.editReply({ embeds: [errorEmbed] });
                 }
 
-                if (results.players.length === 0) {
+                if (!results.players || results.players.length === 0) {
                     const noPlayersEmbed = new EmbedBuilder()
                         .setColor('#ffaa00')
                         .setTitle('⚠️ No Player Names Found')
@@ -1658,18 +1676,23 @@ client.on('interactionCreate', async interaction => {
                 }
 
                 // Success - display found players with tracking info
-                const cleanHostname = results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim();
+                const cleanHostname = results.serverInfo.hostname ? 
+                    results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim() : 
+                    'Royalty RP';
 
                 const embed = new EmbedBuilder()
                     .setColor('#00ff00')
-                    .setTitle('🎮 Online Players')
+                    .setTitle('🎮 Royalty RP Online Players')
                     .setDescription(`**${cleanHostname}**`)
                     .setTimestamp();
+
+                console.log(`🎮 Displaying ${results.players.length} players to ${interaction.user.tag}`);
+                console.log(`🎮 Player names: ${results.players.slice(0, 5).join(', ')}${results.players.length > 5 ? '...' : ''}`);
 
                 // Add player counter
                 embed.addFields({
                     name: '👥 Players Online',
-                    value: `**${results.players.length}** out of **${results.serverInfo.maxClients}** slots`,
+                    value: `**${results.players.length}** out of **${results.serverInfo.maxClients || 'Unknown'}** slots`,
                     inline: false
                 });
 
@@ -1685,11 +1708,13 @@ client.on('interactionCreate', async interaction => {
 
                 const playerList = playerListWithTimes.join('\n');
 
+                console.log(`🎮 Player list length: ${playerList.length} characters`);
+
                 // Handle Discord's character limit
                 if (playerList.length <= 1024) {
                     embed.addFields({
                         name: '📋 Complete Player List (with session times)',
-                        value: playerList,
+                        value: playerList || 'No player names available',
                         inline: false
                     });
                 } else {
@@ -1704,7 +1729,7 @@ client.on('interactionCreate', async interaction => {
                         if (currentChunk.length + playerLine.length > chunkSize) {
                             embed.addFields({
                                 name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
-                                value: currentChunk.trim(),
+                                value: currentChunk.trim() || 'No player names available',
                                 inline: false
                             });
                             currentChunk = playerLine;
@@ -1717,7 +1742,7 @@ client.on('interactionCreate', async interaction => {
                     if (currentChunk.trim()) {
                         embed.addFields({
                             name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
-                            value: currentChunk.trim(),
+                            value: currentChunk.trim() || 'No player names available',
                             inline: false
                         });
                     }
@@ -1730,8 +1755,9 @@ client.on('interactionCreate', async interaction => {
                     inline: true
                 });
 
-                embed.setFooter({ text: `Server ID: ${SERVER_ID} | Enhanced Tracking` });
+                embed.setFooter({ text: `Server ID: ${SERVER_ID} | Enhanced Tracking | ${results.players.length} players found` });
 
+                console.log(`🎮 Sending embed with ${embed.data.fields?.length || 0} fields to ${interaction.user.tag}`);
                 await interaction.editReply({ embeds: [embed] });
 
             } catch (error) {
@@ -1749,6 +1775,11 @@ client.on('interactionCreate', async interaction => {
         }
 
         else if (commandName === 'horizon') {
+            // Check Full Patch role or admin permissions
+            if (!hasFullPatchPermission(interaction.member)) {
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
+            }
+
             const loadingEmbed = new EmbedBuilder()
                 .setColor('#9932cc')
                 .setTitle('🌅 Extracting Horizon Player Names...')
