@@ -1,7 +1,18 @@
-const { Client, GatewayIntentBits, EmbedBuilder } = require('discord.js');
+// Container deployment timestamp: 2025-08-10 17:30 UTC
+const { Client, GatewayIntentBits, EmbedBuilder, ActivityType } = require('discord.js');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 require('dotenv').config();
+
+// Auto Chrome installer
+const { autoInstallChrome } = require('./auto-chrome-installer');
+
+// Run Chrome installer on startup
+(async () => {
+    console.log('🔧 Running auto Chrome installer...');
+    await autoInstallChrome();
+    console.log('🎯 Chrome installer completed - starting bot...');
+})();
 
 const client = new Client({
     intents: [
@@ -162,15 +173,23 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
                 '--disable-background-timer-throttling',
                 '--disable-backgrounding-occluded-windows',
                 '--disable-renderer-backgrounding',
-                '--single-process'
+                '--single-process',
+                '--disable-extensions',
+                '--disable-default-apps',
+                '--disable-sync'
             ]
         };
         
         // Try to find Chrome executable in container
+        let chromeFound = false;
         if (process.env.CHROME_BIN) {
             launchOptions.executablePath = process.env.CHROME_BIN;
+            console.log(`🔍 Using Chrome from CHROME_BIN: ${process.env.CHROME_BIN}`);
+            chromeFound = true;
         } else if (process.env.PUPPETEER_EXECUTABLE_PATH) {
             launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+            console.log(`🔍 Using Chrome from PUPPETEER_EXECUTABLE_PATH: ${process.env.PUPPETEER_EXECUTABLE_PATH}`);
+            chromeFound = true;
         } else {
             // Common Chrome paths in containers
             const chromePaths = [
@@ -178,7 +197,9 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
                 '/usr/bin/chromium',
                 '/usr/bin/google-chrome-stable',
                 '/usr/bin/google-chrome',
-                '/snap/bin/chromium'
+                '/snap/bin/chromium',
+                '/usr/local/bin/chromium',
+                '/opt/google/chrome/chrome'
             ];
             
             for (const path of chromePaths) {
@@ -186,11 +207,18 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
                     require('fs').accessSync(path, require('fs').constants.F_OK);
                     launchOptions.executablePath = path;
                     console.log(`✅ Found Chrome at: ${path}`);
+                    chromeFound = true;
                     break;
                 } catch (e) {
                     // Continue searching
                 }
             }
+        }
+        
+        if (!chromeFound) {
+            console.log(`❌ No Chrome executable found in container`);
+            console.log(`🔄 Available paths checked: ${chromePaths?.join(', ') || 'standard paths'}`);
+            throw new Error('Chrome not found in container - please install Chromium or set PUPPETEER_EXECUTABLE_PATH');
         }
         
         browser = await puppeteer.launch(launchOptions);

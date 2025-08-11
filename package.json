@@ -1,10 +1,12 @@
 {
-  "name": "opps-tracker-bot",
-  "version": "1.0.3",
+  "name": "opps-tracker-fivem-cybrancee",
+  "version": "1.0.2",
   "description": "Discord bot for FiveM server monitoring with multi-server support",
   "main": "bot.js",
   "scripts": {
-    "start": "node bot.js"
+    "start": "node bot.js",
+    "preinstall": "echo 'Configuring for Pterodactyl hosting...'",
+    "postinstall": "node auto-chrome-installer.js || echo 'Chrome installation failed, but continuing...'"
   },
   "keywords": [
     "discord",
@@ -20,13 +22,10 @@
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",
     "cheerio": "^1.0.0-rc.12",
-    "puppeteer": "^21.6.1"
+    "puppeteer": "^21.11.0"
   },
   "engines": {
     "node": ">=16.0.0",
     "npm": ">=8.0.0"
-  },
-  "puppeteer": {
-    "skipDownload": true
   }
 }
