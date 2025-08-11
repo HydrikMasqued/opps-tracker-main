@@ -92,11 +92,24 @@ async function extractPlayersViaAPI(serverId) {
     try {
         const axios = require('axios');
         const response = await axios.get(`https://servers.fivem.net/api/servers/single/${serverId}`, {
-            timeout: 10000,
+            timeout: 15000,
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'application/json, text/plain, */*',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache',
+                'Referer': `https://servers.fivem.net/servers/detail/${serverId}`,
+                'Origin': 'https://servers.fivem.net'
             }
         });
+        
+        // Check if we got HTML instead of JSON (API blocked)
+        if (typeof response.data === 'string' && response.data.includes('<!doctype html>')) {
+            console.log('❌ API returned HTML instead of JSON - likely blocked');
+            throw new Error('API blocked - returning HTML instead of JSON');
+        }
         
         if (response.data && response.data.Data && response.data.Data.players) {
             const players = response.data.Data.players
@@ -157,31 +170,37 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
     // Fallback to Puppeteer if API fails
     let browser;
     try {
-        // Container-optimized Puppeteer configuration
+        // Windows/Linux compatible Puppeteer configuration
+        const os = require('os');
         const launchOptions = {
             headless: 'new',
-            args: [
-                '--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-                '--disable-accelerated-2d-canvas',
-                '--no-first-run',
-                '--no-zygote',
-                '--disable-gpu',
-                '--disable-web-security',
-                '--disable-features=VizDisplayCompositor',
-                '--disable-background-timer-throttling',
-                '--disable-backgrounding-occluded-windows',
-                '--disable-renderer-backgrounding',
-                '--single-process',
-                '--disable-extensions',
-                '--disable-default-apps',
-                '--disable-sync'
-            ]
+            args: os.platform() === 'win32' 
+                ? [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage'
+                ]
+                : [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--no-first-run',
+                    '--no-zygote',
+                    '--disable-gpu',
+                    '--disable-web-security',
+                    '--disable-features=VizDisplayCompositor',
+                    '--disable-background-timer-throttling',
+                    '--disable-backgrounding-occluded-windows',
+                    '--disable-renderer-backgrounding',
+                    '--single-process'
+                ]
         };
         
-        // Try to find Chrome executable in container
+        // Try to find Chrome executable (Windows/Linux compatible)
         let chromeFound = false;
+        
+        // First check environment variables
         if (process.env.CHROME_BIN) {
             launchOptions.executablePath = process.env.CHROME_BIN;
             console.log(`🔍 Using Chrome from CHROME_BIN: ${process.env.CHROME_BIN}`);
@@ -191,22 +210,48 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
             console.log(`🔍 Using Chrome from PUPPETEER_EXECUTABLE_PATH: ${process.env.PUPPETEER_EXECUTABLE_PATH}`);
             chromeFound = true;
         } else {
-            // Common Chrome paths in containers
-            const chromePaths = [
-                '/usr/bin/chromium-browser',
-                '/usr/bin/chromium',
-                '/usr/bin/google-chrome-stable',
-                '/usr/bin/google-chrome',
-                '/snap/bin/chromium',
-                '/usr/local/bin/chromium',
-                '/opt/google/chrome/chrome'
-            ];
+            // Platform-specific Chrome paths
+            const os = require('os');
+            const path = require('path');
             
-            for (const path of chromePaths) {
+            let chromePaths = [];
+            
+            if (os.platform() === 'win32') {
+                // Windows paths (including Puppeteer's downloaded Chrome)
+                const puppeteerCachePath = path.join(__dirname, '.cache', 'puppeteer');
+                chromePaths = [
+                    path.join(puppeteerCachePath, 'chrome', 'win64-121.0.6167.85', 'chrome-win64', 'chrome.exe'),
+                    'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+                    'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+                    path.join(process.env.LOCALAPPDATA || '', 'Google\\Chrome\\Application\\chrome.exe')
+                ];
+            } else {
+                // Linux paths (container/cloud deployment)
+                const isContainer = process.env.NODE_ENV === 'production' || process.env.CONTAINER_ENV;
+                const containerCachePath = '/home/container/.cache/puppeteer';
+                
+                chromePaths = [
+                    // Container-specific Puppeteer Chrome paths
+                    ...(isContainer ? [
+                        path.join(containerCachePath, 'chrome', 'linux-121.0.6167.85', 'chrome-linux64', 'chrome'),
+                        path.join(containerCachePath, 'chrome', 'linux-*', 'chrome-linux64', 'chrome')
+                    ] : []),
+                    // Standard Linux Chrome paths
+                    '/usr/bin/chromium-browser',
+                    '/usr/bin/chromium',
+                    '/usr/bin/google-chrome-stable',
+                    '/usr/bin/google-chrome',
+                    '/snap/bin/chromium',
+                    '/usr/local/bin/chromium',
+                    '/opt/google/chrome/chrome'
+                ];
+            }
+            
+            for (const chromePath of chromePaths) {
                 try {
-                    require('fs').accessSync(path, require('fs').constants.F_OK);
-                    launchOptions.executablePath = path;
-                    console.log(`✅ Found Chrome at: ${path}`);
+                    require('fs').accessSync(chromePath, require('fs').constants.F_OK);
+                    launchOptions.executablePath = chromePath;
+                    console.log(`✅ Found Chrome at: ${chromePath}`);
                     chromeFound = true;
                     break;
                 } catch (e) {
@@ -216,9 +261,17 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
         }
         
         if (!chromeFound) {
-            console.log(`❌ No Chrome executable found in container`);
-            console.log(`🔄 Available paths checked: ${chromePaths?.join(', ') || 'standard paths'}`);
-            throw new Error('Chrome not found in container - please install Chromium or set PUPPETEER_EXECUTABLE_PATH');
+            const platform = require('os').platform();
+            if (platform === 'win32') {
+                // On Windows, let Puppeteer use its bundled Chrome if available
+                console.log('⚠️ Chrome not found in specific paths, letting Puppeteer use bundled Chrome...');
+                // Don't set executablePath, let Puppeteer find it
+            } else {
+                // On Linux, we need Chrome to be explicitly available
+                console.log(`❌ No Chrome executable found on ${platform}`);
+                console.log(`🔄 Checked paths: ${chromePaths?.join(', ') || 'standard paths'}`);
+                throw new Error('Chrome not found - please install Chromium or set PUPPETEER_EXECUTABLE_PATH');
+            }
         }
         
         browser = await puppeteer.launch(launchOptions);

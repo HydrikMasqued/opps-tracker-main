@@ -1,34 +1,20 @@
 const { join } = require('path');
+const os = require('os');
 
 /**
  * @type {import("puppeteer").Configuration}
  */
 module.exports = {
-  // Skip automatic Chrome download
+  // Skip download on cloud servers (Linux), allow on Windows for development
   chrome: {
-    skipDownload: true,
+    skipDownload: os.platform() === 'linux',
   },
   
-  // Set cache directory to local folder to avoid permission issues
-  cacheDirectory: join(__dirname, '.cache', 'puppeteer'),
+  // Set cache directory based on environment
+  cacheDirectory: process.env.NODE_ENV === 'production' || process.env.CONTAINER_ENV
+    ? '/home/container/.cache/puppeteer'  // Container environment
+    : join(__dirname, '.cache', 'puppeteer'), // Local development
   
   // Default launch options for container environment
-  defaultProduct: 'chrome',
-  
-  // Container-optimized settings
-  args: [
-    '--no-sandbox',
-    '--disable-setuid-sandbox',
-    '--disable-dev-shm-usage',
-    '--disable-accelerated-2d-canvas',
-    '--no-first-run',
-    '--no-zygote',
-    '--single-process',
-    '--disable-gpu',
-    '--disable-web-security',
-    '--disable-features=VizDisplayCompositor',
-    '--disable-background-timer-throttling',
-    '--disable-backgrounding-occluded-windows',
-    '--disable-renderer-backgrounding'
-  ]
+  defaultProduct: 'chrome'
 };
