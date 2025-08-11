@@ -277,16 +277,10 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
         
         if (!chromeFound) {
             const platform = require('os').platform();
-            if (platform === 'win32') {
-                // On Windows, let Puppeteer use its bundled Chrome if available
-                console.log('⚠️ Chrome not found in specific paths, letting Puppeteer use bundled Chrome...');
-                // Don't set executablePath, let Puppeteer find it
-            } else {
-                // On Linux, we need Chrome to be explicitly available
-                console.log(`❌ No Chrome executable found on ${platform}`);
-                console.log(`🔄 Checked paths: ${chromePaths?.join(', ') || 'standard paths'}`);
-                throw new Error('Chrome not found - please install Chromium or set PUPPETEER_EXECUTABLE_PATH');
-            }
+            console.log(`⚠️ Chrome not found in specific paths on ${platform}`);
+            console.log('🔄 Letting Puppeteer use its configured/bundled Chrome...');
+            // Don't set executablePath, let Puppeteer find it via configuration
+            // This works for both local (bundled) and cloud (downloaded via .puppeteerrc.cjs)
         }
         
         browser = await puppeteer.launch(launchOptions);

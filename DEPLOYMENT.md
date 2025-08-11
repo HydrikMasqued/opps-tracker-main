@@ -76,21 +76,57 @@ The bot automatically detects the environment and configures Puppeteer according
 
 ## Cloud Platform Specific
 
+### Enhanced Cloud Support (v4.0)
+The bot now includes comprehensive cloud deployment support with:
+- **Automatic Chrome configuration** via `.puppeteerrc.cjs`
+- **Environment-specific cache paths**
+- **Intelligent fallback system** (API → Puppeteer)
+- **Simplified deployment** - no manual Chrome installation needed
+
 ### Pterodactyl Panel
-1. Set startup command to: `npm run container`
-2. Ensure Node.js 16+ is available
-3. Set `CONTAINER_ENV=true` in environment variables
+1. Upload all files including `.puppeteerrc.cjs`
+2. Set startup command to: `node bot.js`
+3. Set environment variables:
+   - `NODE_ENV=production`
+   - `DISCORD_TOKEN=your_token`
+   - `CONTAINER_ENV=true` (optional)
+4. Chrome will be downloaded automatically on first run
 
 ### Docker
 ```dockerfile
-ENV CONTAINER_ENV=true
+FROM node:18-alpine
+
+# Install Chrome dependencies (optional - bot can download Chrome)
+RUN apk add --no-cache chromium nss freetype harfbuzz ca-certificates ttf-freefont
+
+# Set environment
 ENV NODE_ENV=production
-RUN mkdir -p /home/container/.cache/puppeteer
+ENV CONTAINER_ENV=true
+
+WORKDIR /app
+COPY . .
+RUN npm install
+
+CMD ["node", "bot.js"]
 ```
 
 ### Railway/Render/Heroku
-- Set `NODE_ENV=production`
-- The bot will automatically detect cloud environment
+- Set `NODE_ENV=production` in environment variables
+- Upload `.puppeteerrc.cjs` configuration file
+- Chrome will be automatically downloaded and cached
+- No additional buildpacks required
+
+### VPS/Dedicated Server
+```bash
+# Simple deployment
+git clone [your-repo]
+cd discord-bot
+npm install
+node bot.js
+
+# Or install system Chrome (optional)
+sudo apt-get install chromium-browser
+```
 
 ## Commands
 
