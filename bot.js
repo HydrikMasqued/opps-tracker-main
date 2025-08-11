@@ -930,7 +930,7 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
     const serverName = SERVERS[serverKey]?.name || serverKey;
     
     // Add new players or update rejoining players
-    currentPlayers.forEach(player => {
+    for (const player of currentPlayers) {
         if (!tracker[player]) {
             tracker[player] = {
                 joinTime: currentTime,
@@ -946,7 +946,7 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             if (trackedPlayer && LOG_CHANNEL_ID) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
             } else if (LOG_CHANNEL_ID) {
-                logPlayerActivity(player, 'joined', null, serverKey);
+                await logPlayerActivity(player, 'joined', null, serverKey);
             }
         } else if (!tracker[player].isOnline) {
             // Player rejoined after being offline
@@ -962,17 +962,17 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             if (trackedPlayer && LOG_CHANNEL_ID) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
             } else if (LOG_CHANNEL_ID) {
-                logPlayerActivity(player, 'joined', null, serverKey);
+                await logPlayerActivity(player, 'joined', null, serverKey);
             }
         } else {
             // Player is still online, update last seen
             tracker[player].lastSeen = currentTime;
             tracker[player].isOnline = true;
         }
-    });
+    }
     
     // Check for players who left
-    previousPlayers.forEach(player => {
+    for (const player of previousPlayers) {
         if (tracker[player].isOnline && !currentPlayers.includes(player)) {
             // Player left - add session time to total
             const sessionDuration = currentTime - tracker[player].joinTime;
@@ -986,10 +986,10 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             if (trackedPlayer && LOG_CHANNEL_ID) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'left', serverKey, sessionDuration);
             } else if (LOG_CHANNEL_ID) {
-                logPlayerActivity(player, 'left', sessionDuration, serverKey);
+                await logPlayerActivity(player, 'left', sessionDuration, serverKey);
             }
         }
-    });
+    }
 }
 
 // Start monitoring players
