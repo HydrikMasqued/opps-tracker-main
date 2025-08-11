@@ -60,7 +60,8 @@ The bot automatically detects the environment and configures Puppeteer according
 - `DISCORD_TOKEN` - Your Discord bot token
 
 ### Optional
-- `PLAYER_LOG_CHANNEL` - Discord channel ID for player activity logs
+- `ROYALTY_LOG_CHANNEL` - Discord channel ID for Royalty RP activity logs
+- `HORIZON_LOG_CHANNEL` - Discord channel ID for Horizon server activity logs
 - `CONTAINER_ENV=true` - Force container mode
 - `NODE_ENV=production` - Enable production optimizations
 - `CHROME_BIN` - Custom Chrome executable path
@@ -134,17 +135,25 @@ sudo apt-get install chromium-browser
 
 ## Commands
 
+**Note:** This bot now uses **Slash Commands** only. Type `/` in Discord to see all available commands.
+
 ### Player Commands
-- `!players` - Show Royalty RP players with session times
-- `!horizon` - Show Horizon server players  
-- `!durations` - Show current session durations
-- `!names` / `!list` - Same as !players
+- `/royalty` - Show Royalty RP players with session times
+- `/horizon` - Show Horizon server players  
+- `/find <player>` - Search for a tracked player on servers
+- `/search <name>` - Search player database history
+
+### Tracking Commands
+- `/track <player> <category> [reason]` - Add player to tracking list
+- `/untrack <player>` - Remove player from tracking
+- `/tracked` - View all tracked players with detailed info
+- `/categories` - View available tracking categories
 
 ### Admin Commands
-- `!setchannel [ID]` - Set logging channel
-- `!startmonitor` - Start automatic monitoring
-- `!stopmonitor` - Stop automatic monitoring
-- `!help` - Show help message
+- `/setroyalty [channel]` - Set Royalty RP logging channel
+- `/sethorizon [channel]` - Set Horizon logging channel
+- `/startmonitor` - Start automatic monitoring
+- `/stopmonitor` - Stop automatic monitoring
 
 ## Features
 

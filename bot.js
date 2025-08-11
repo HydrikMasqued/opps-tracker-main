@@ -53,7 +53,8 @@ const SERVER_ID = 'pz8m77';
 const SERVER_URL = `https://servers.fivem.net/servers/detail/${SERVER_ID}`;
 
 // Configuration
-let LOG_CHANNEL_ID = process.env.PLAYER_LOG_CHANNEL || '';
+let ROYALTY_LOG_CHANNEL_ID = process.env.ROYALTY_LOG_CHANNEL || '';
+let HORIZON_LOG_CHANNEL_ID = process.env.HORIZON_LOG_CHANNEL || '';
 let MONITORING_ENABLED = false;
 let playerTracker = {};  // Store player join times and durations
 let monitoringInterval = null;
@@ -291,10 +292,12 @@ function getTrackedPlayersByCategory(category) {
 
 // Send enhanced tracking notification with ping
 async function sendTrackedPlayerNotification(playerData, action, serverKey, sessionDuration = null) {
-    if (!LOG_CHANNEL_ID) return;
+    // Get appropriate channel based on server
+    const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+    if (!channelId) return;
     
     try {
-        const channel = client.channels.cache.get(LOG_CHANNEL_ID);
+        const channel = client.channels.cache.get(channelId);
         if (!channel) return;
         
         const category = TRACKING_CATEGORIES[playerData.category];
@@ -853,12 +856,14 @@ async function extractAndTrackPlayers() {
 
 // Log player activity to Discord with server information
 async function logPlayerActivity(playerName, action, duration = null, serverKey = 'royalty') {
-    if (!LOG_CHANNEL_ID) return;
+    // Get appropriate channel based on server
+    const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+    if (!channelId) return;
     
     try {
-        const channel = client.channels.cache.get(LOG_CHANNEL_ID);
+        const channel = client.channels.cache.get(channelId);
         if (!channel) {
-            console.error(`❌ Cannot find log channel with ID: ${LOG_CHANNEL_ID}`);
+            console.error(`❌ Cannot find log channel with ID: ${channelId}`);
             return;
         }
         
@@ -959,9 +964,10 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
-            if (trackedPlayer && LOG_CHANNEL_ID) {
+            const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
-            } else if (LOG_CHANNEL_ID) {
+            } else if (channelId) {
                 await logPlayerActivity(player, 'joined', null, serverKey);
             }
         } else {
@@ -983,9 +989,10 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
-            if (trackedPlayer && LOG_CHANNEL_ID) {
+            const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'left', serverKey, sessionDuration);
-            } else if (LOG_CHANNEL_ID) {
+            } else if (channelId) {
                 await logPlayerActivity(player, 'left', sessionDuration, serverKey);
             }
         }
@@ -1091,11 +1098,19 @@ const commands = [
         .setDescription('Stop automatic player monitoring (Admin only)'),
     
     new SlashCommandBuilder()
-        .setName('setchannel')
-        .setDescription('Set the logging channel (Admin only)')
+        .setName('setroyalty')
+        .setDescription('Set the Royalty RP logging channel (Admin only)')
         .addChannelOption(option =>
             option.setName('channel')
-                .setDescription('Channel for logging (optional - uses current if not specified)')
+                .setDescription('Channel for Royalty RP logs (optional - uses current if not specified)')
+                .setRequired(false)),
+    
+    new SlashCommandBuilder()
+        .setName('sethorizon')
+        .setDescription('Set the Horizon logging channel (Admin only)')
+        .addChannelOption(option =>
+            option.setName('channel')
+                .setDescription('Channel for Horizon logs (optional - uses current if not specified)')
                 .setRequired(false))
 ].map(command => command.toJSON());
 
@@ -1126,16 +1141,24 @@ client.on('ready', async () => {
     loadTrackingNotifications();
     loadPlayerDatabase();
     
-    if (LOG_CHANNEL_ID) {
-        console.log(`📊 Log channel configured: ${LOG_CHANNEL_ID}`);
+    if (ROYALTY_LOG_CHANNEL_ID || HORIZON_LOG_CHANNEL_ID) {
+        console.log(`📊 Log channels configured:`);
+        if (ROYALTY_LOG_CHANNEL_ID) console.log(`   🎭 Royalty RP: ${ROYALTY_LOG_CHANNEL_ID}`);
+        if (HORIZON_LOG_CHANNEL_ID) console.log(`   🌅 Horizon: ${HORIZON_LOG_CHANNEL_ID}`);
     } else {
-        console.log('⚠️ No log channel configured. Use !setchannel to set one.');
+        console.log('⚠️ No log channels configured. Use /setroyalty and /sethorizon to set them.');
     }
     
     console.log(`📍 Loaded ${Object.keys(trackedPlayers).length} tracked players`);
     
     // Register slash commands
     await registerSlashCommands();
+    
+    // Auto-start monitoring if channels are configured
+    if (ROYALTY_LOG_CHANNEL_ID || HORIZON_LOG_CHANNEL_ID) {
+        console.log('🚀 Auto-starting monitoring since log channels are configured...');
+        startMonitoring();
+    }
 });
 
 // Slash command interactions handler
@@ -1219,8 +1242,8 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'tracked') {
             const embed = new EmbedBuilder()
                 .setColor('#0099ff')
-                .setTitle('📍 Tracked Players - Names List')
-                .setDescription('Simple list of all tracked player names')
+                .setTitle('📍 Tracked Players - Detailed List')
+                .setDescription('Complete tracking information for all players')
                 .setTimestamp();
 
             const allPlayers = Object.values(trackedPlayers);
@@ -1229,40 +1252,52 @@ client.on('interactionCreate', async interaction => {
                 return await interaction.reply({ embeds: [embed] });
             }
 
-            // Group players by category and show just names
+            // Group players by category with detailed info
             const categories = ['enemies', 'poi', 'club']; // Enemies first for priority
             for (const categoryKey of categories) {
                 const categoryPlayers = allPlayers.filter(p => p.category === categoryKey);
                 if (categoryPlayers.length === 0) continue;
 
                 const categoryInfo = TRACKING_CATEGORIES[categoryKey];
-                const playerNames = categoryPlayers.map(player => player.name).join(', ');
+                
+                // Create detailed player list with category, reason, and added by info
+                const playerDetails = categoryPlayers.map(player => {
+                    const addedBy = player.addedBy ? player.addedBy.split('#')[0] : 'Unknown';
+                    const addedDate = new Date(player.addedAt).toLocaleDateString();
+                    let detail = `**${player.name}**`;
+                    if (player.reason) {
+                        detail += ` - *${player.reason}*`;
+                    }
+                    detail += ` | Added by ${addedBy} on ${addedDate}`;
+                    return detail;
+                });
+
+                const playerList = playerDetails.join('\n');
 
                 // Handle field length limits
-                if (playerNames.length <= 1024) {
+                if (playerList.length <= 1024) {
                     embed.addFields({
                         name: `${categoryInfo.emoji} ${categoryInfo.name} (${categoryPlayers.length})`,
-                        value: playerNames,
+                        value: playerList,
                         inline: false
                     });
                 } else {
-                    // Split long lists by names, not arbitrary character chunks
-                    const names = categoryPlayers.map(player => player.name);
+                    // Split into chunks if too long
                     let currentChunk = '';
                     let chunkNumber = 1;
 
-                    names.forEach((name, index) => {
-                        const nameWithComma = index === names.length - 1 ? name : name + ', ';
-                        if (currentChunk.length + nameWithComma.length > 900) {
+                    playerDetails.forEach(detail => {
+                        const detailLine = detail + '\n';
+                        if (currentChunk.length + detailLine.length > 900) {
                             embed.addFields({
                                 name: chunkNumber === 1 ? `${categoryInfo.emoji} ${categoryInfo.name} (${categoryPlayers.length})` : `${categoryInfo.name} (continued)`,
                                 value: currentChunk.trim(),
                                 inline: false
                             });
-                            currentChunk = nameWithComma;
+                            currentChunk = detailLine;
                             chunkNumber++;
                         } else {
-                            currentChunk += nameWithComma;
+                            currentChunk += detailLine;
                         }
                     });
 
@@ -1276,7 +1311,7 @@ client.on('interactionCreate', async interaction => {
                 }
             }
 
-            embed.setFooter({ text: `Total: ${allPlayers.length} tracked players | Simple names view` });
+            embed.setFooter({ text: `Total: ${allPlayers.length} tracked players | Detailed view with reasons & contributors` });
             return await interaction.reply({ embeds: [embed] });
         }
 
@@ -1759,31 +1794,59 @@ client.on('interactionCreate', async interaction => {
             return await interaction.reply({ embeds: [embed] });
         }
 
-        else if (commandName === 'setchannel') {
+        else if (commandName === 'setroyalty') {
             // Check admin permissions
             if (!interaction.member.permissions.has('ADMINISTRATOR')) {
-                return await interaction.reply({ content: '❌ You need Administrator permissions to set the log channel.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', ephemeral: true });
             }
 
             const channel = interaction.options.getChannel('channel') || interaction.channel;
             const channelId = channel.id;
-            LOG_CHANNEL_ID = channelId;
+            ROYALTY_LOG_CHANNEL_ID = channelId;
 
             // Update .env file
             const envContent = fs.readFileSync('.env', 'utf8');
-            const newEnvContent = envContent.includes('PLAYER_LOG_CHANNEL=')
-                ? envContent.replace(/PLAYER_LOG_CHANNEL=.*/, `PLAYER_LOG_CHANNEL=${channelId}`)
-                : envContent + `\nPLAYER_LOG_CHANNEL=${channelId}`;
+            const newEnvContent = envContent.includes('ROYALTY_LOG_CHANNEL=')
+                ? envContent.replace(/ROYALTY_LOG_CHANNEL=.*/, `ROYALTY_LOG_CHANNEL=${channelId}`)
+                : envContent + `\nROYALTY_LOG_CHANNEL=${channelId}`;
 
             fs.writeFileSync('.env', newEnvContent);
 
             const embed = new EmbedBuilder()
-                .setColor('#00ff00')
-                .setTitle('✅ Log Channel Set')
-                .setDescription(`Player activity will now be logged to <#${channelId}>`)
+                .setColor('#gold')
+                .setTitle('🎭 Royalty RP Log Channel Set')
+                .setDescription(`Royalty RP player activity will now be logged to \u003c#${channelId}\u003e`)
                 .setTimestamp();
 
-            console.log(`📊 Log channel set to: ${channelId}`);
+            console.log(`🎭 Royalty RP log channel set to: ${channelId}`);
+            return await interaction.reply({ embeds: [embed] });
+        }
+        
+        else if (commandName === 'sethorizon') {
+            // Check admin permissions
+            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+                return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', ephemeral: true });
+            }
+
+            const channel = interaction.options.getChannel('channel') || interaction.channel;
+            const channelId = channel.id;
+            HORIZON_LOG_CHANNEL_ID = channelId;
+
+            // Update .env file
+            const envContent = fs.readFileSync('.env', 'utf8');
+            const newEnvContent = envContent.includes('HORIZON_LOG_CHANNEL=')
+                ? envContent.replace(/HORIZON_LOG_CHANNEL=.*/, `HORIZON_LOG_CHANNEL=${channelId}`)
+                : envContent + `\nHORIZON_LOG_CHANNEL=${channelId}`;
+
+            fs.writeFileSync('.env', newEnvContent);
+
+            const embed = new EmbedBuilder()
+                .setColor('#9932cc')
+                .setTitle('🌅 Horizon Log Channel Set')
+                .setDescription(`Horizon server player activity will now be logged to \u003c#${channelId}\u003e`)
+                .setTimestamp();
+
+            console.log(`🌅 Horizon log channel set to: ${channelId}`);
             return await interaction.reply({ embeds: [embed] });
         }
 
@@ -1819,7 +1882,7 @@ client.on('messageCreate', async (message) => {
                 .addFields(
                     { name: '🔄 How to Use Slash Commands', value: 'Type `/` in Discord and you\'ll see all available commands with descriptions and options.', inline: false },
                     { name: '📍 Main Commands', value: '• `/track` - Add player to tracking\n• `/untrack` - Remove player from tracking\n• `/tracked` - View tracked players list\n• `/find` - Search for tracked player\n• `/search` - Search player database\n• `/players` - Show Royalty RP players\n• `/horizon` - Show Horizon players\n• `/categories` - View tracking categories', inline: false },
-                    { name: '⚙️ Admin Commands', value: '• `/startmonitor` - Start monitoring\n• `/stopmonitor` - Stop monitoring\n• `/setchannel` - Set log channel', inline: false },
+                    { name: '⚙️ Admin Commands', value: '• `/startmonitor` - Start monitoring\n• `/stopmonitor` - Stop monitoring\n• `/setroyalty` - Set Royalty RP log channel\n• `/sethorizon` - Set Horizon log channel', inline: false },
                     { name: '✨ Benefits of Slash Commands', value: '• Built-in help and validation\n• Cleaner interface\n• Auto-complete options\n• Better Discord integration', inline: false }
                 )
                 .setFooter({ text: 'Start typing "/" to see all available commands!' })
