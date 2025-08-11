@@ -1,6 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const puppeteer = require('puppeteer');
 
 /**
  * Chrome Installation Script for Cloud Deployment

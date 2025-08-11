@@ -1,5 +1,5 @@
 // Container deployment timestamp: 2025-08-10 17:30 UTC
-const { Client, GatewayIntentBits, EmbedBuilder, ActivityType, SlashCommandBuilder, REST, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ActivityType, SlashCommandBuilder, REST, Routes, PermissionFlagsBits } = require('discord.js');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 require('dotenv').config();
@@ -612,11 +612,12 @@ async function extractPlayersFromServer(serverKey = 'royalty') {
         });
         
         await page.goto(server.url, { 
-            waitUntil: 'networkidle0',
-            timeout: 60000 
+            waitUntil: 'domcontentloaded', // Faster than networkidle0
+            timeout: 30000 // Reduced timeout
         });
         
-        await page.waitForTimeout(10000);
+        // Reduced wait time
+        await page.waitForTimeout(5000);
         await browser.close();
         
         // Extract player names from API data
@@ -739,11 +740,12 @@ async function extractAndTrackPlayers() {
             });
             
             await page.goto(SERVER_URL, { 
-                waitUntil: 'networkidle0',
-                timeout: 60000 
+                waitUntil: 'domcontentloaded', // Faster than networkidle0
+                timeout: 30000 // Reduced timeout
             });
             
-            await page.waitForTimeout(10000);
+            // Reduced wait time
+            await page.waitForTimeout(5000);
             await browser.close();
             
             // Extract player names from API data
@@ -793,8 +795,8 @@ async function extractAndTrackPlayers() {
                 console.log(`✅ New player joined: ${player}`);
                 
                 // Log to Discord if channel is set
-                if (LOG_CHANNEL_ID) {
-                    logPlayerActivity(player, 'joined');
+                if (ROYALTY_LOG_CHANNEL_ID) {
+                    logPlayerActivity(player, 'joined', null, 'royalty');
                 }
             } else if (!playerTracker[player].isOnline) {
                 // Player rejoined after being offline
@@ -806,8 +808,8 @@ async function extractAndTrackPlayers() {
                 console.log(`🔄 Player rejoined: ${player}`);
                 
                 // Log to Discord if channel is set
-                if (LOG_CHANNEL_ID) {
-                    logPlayerActivity(player, 'joined');
+                if (ROYALTY_LOG_CHANNEL_ID) {
+                    logPlayerActivity(player, 'joined', null, 'royalty');
                 }
             } else {
                 // Player is still online, update last seen
@@ -827,8 +829,8 @@ async function extractAndTrackPlayers() {
                 console.log(`❌ Player left: ${player} (Session: ${formatDuration(sessionDuration)})`);
                 
                 // Log to Discord if channel is set
-                if (LOG_CHANNEL_ID) {
-                    logPlayerActivity(player, 'left', sessionDuration);
+                if (ROYALTY_LOG_CHANNEL_ID) {
+                    logPlayerActivity(player, 'left', sessionDuration, 'royalty');
                 }
             }
         });
@@ -948,9 +950,10 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
-            if (trackedPlayer && LOG_CHANNEL_ID) {
+            const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
-            } else if (LOG_CHANNEL_ID) {
+            } else if (channelId) {
                 await logPlayerActivity(player, 'joined', null, serverKey);
             }
         } else if (!tracker[player].isOnline) {
@@ -1006,24 +1009,54 @@ function startMonitoring() {
     }
     
     MONITORING_ENABLED = true;
-    console.log('🔄 Started enhanced monitoring for both servers (1-minute intervals)');
+    console.log('🔄 Started optimized continuous monitoring (5-second intervals for maximum speed)');
     
-    // Monitor every 1 minute
-    monitoringInterval = setInterval(async () => {
-        if (MONITORING_ENABLED) {
-            await monitorBothServers();
+    // Optimized continuous monitoring with minimal delays
+    const runOptimizedMonitoring = async () => {
+        let consecutiveErrors = 0;
+        let lastSuccessfulCheck = Date.now();
+        
+        while (MONITORING_ENABLED) {
+            const startTime = Date.now();
+            
+            try {
+                await monitorBothServers();
+                consecutiveErrors = 0;
+                lastSuccessfulCheck = Date.now();
+                
+                // Smart delay based on performance
+                const executionTime = Date.now() - startTime;
+                const optimalDelay = Math.max(3000, Math.min(executionTime / 2, 8000)); // 3-8 second range
+                
+                console.log(`⚡ Monitoring cycle completed in ${(executionTime/1000).toFixed(1)}s, next check in ${(optimalDelay/1000).toFixed(1)}s`);
+                await new Promise(resolve => setTimeout(resolve, optimalDelay));
+                
+            } catch (error) {
+                consecutiveErrors++;
+                console.error(`Error during monitoring (${consecutiveErrors} consecutive):`, error.message);
+                
+                // Exponential backoff for errors, but cap at 30 seconds
+                const errorDelay = Math.min(5000 * Math.pow(1.5, consecutiveErrors), 30000);
+                console.log(`⚠️ Waiting ${(errorDelay/1000).toFixed(1)}s before retry...`);
+                await new Promise(resolve => setTimeout(resolve, errorDelay));
+            }
+            
+            // Safety check - if no successful checks for 5 minutes, restart monitoring
+            if (Date.now() - lastSuccessfulCheck > 300000) {
+                console.log('⚠️ No successful checks for 5 minutes, restarting monitoring...');
+                consecutiveErrors = 0;
+                lastSuccessfulCheck = Date.now();
+            }
         }
-    }, 1 * 60 * 1000); // 1 minute
+    };
+    
+    runOptimizedMonitoring();
 }
 
 // Stop monitoring players
 function stopMonitoring() {
-    if (monitoringInterval) {
-        clearInterval(monitoringInterval);
-        monitoringInterval = null;
-    }
     MONITORING_ENABLED = false;
-    console.log('⏹️ Stopped player monitoring');
+    console.log('⏹️ Stopped continuous player monitoring');
 }
 
 // Slash command definitions
@@ -1076,6 +1109,10 @@ const commands = [
             option.setName('name')
                 .setDescription('Partial player name to search for')
                 .setRequired(true)),
+    
+    new SlashCommandBuilder()
+        .setName('database')
+        .setDescription('View all saved usernames with server information'),
     
     new SlashCommandBuilder()
         .setName('royalty')
@@ -1154,10 +1191,14 @@ client.on('ready', async () => {
     // Register slash commands
     await registerSlashCommands();
     
-    // Auto-start monitoring if channels are configured
+    // Auto-start optimized monitoring
     if (ROYALTY_LOG_CHANNEL_ID || HORIZON_LOG_CHANNEL_ID) {
-        console.log('🚀 Auto-starting monitoring since log channels are configured...');
+        console.log('🚀 Auto-starting optimized monitoring with smart intervals since log channels are configured...');
         startMonitoring();
+    } else {
+        console.log('⚠️ No log channels configured, but starting optimized monitoring anyway...');
+        console.log('💡 Use /setroyalty and /sethorizon to set log channels for notifications.');
+        startMonitoring(); // Start monitoring regardless
     }
 });
 
@@ -1170,7 +1211,7 @@ client.on('interactionCreate', async interaction => {
     try {
         if (commandName === 'track') {
             // Check admin permissions
-            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                 return await interaction.reply({ content: '❌ You need Administrator permissions to manage tracked players.', ephemeral: true });
             }
 
@@ -1207,7 +1248,7 @@ client.on('interactionCreate', async interaction => {
 
         else if (commandName === 'untrack') {
             // Check admin permissions
-            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                 return await interaction.reply({ content: '❌ You need Administrator permissions to manage tracked players.', ephemeral: true });
             }
 
@@ -1490,6 +1531,99 @@ client.on('interactionCreate', async interaction => {
             return await interaction.reply({ embeds: [embed] });
         }
 
+        else if (commandName === 'database') {
+            const embed = new EmbedBuilder()
+                .setColor('#0099ff')
+                .setTitle('🗃️ Complete Player Database')
+                .setDescription('All saved usernames with server information')
+                .setTimestamp();
+
+            const allPlayers = Object.values(playerDatabase);
+            if (allPlayers.length === 0) {
+                embed.setDescription('No players found in database.');
+                return await interaction.reply({ embeds: [embed] });
+            }
+
+            // Sort players alphabetically by name
+            allPlayers.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+
+            // Create player list with server info
+            const playerList = allPlayers.map(player => {
+                // Format server brackets
+                let serverBrackets = '';
+                if (player.servers.includes('royalty') && player.servers.includes('horizon')) {
+                    serverBrackets = '[Horizon/Royalty]';
+                } else if (player.servers.includes('horizon')) {
+                    serverBrackets = '[Horizon]';
+                } else if (player.servers.includes('royalty')) {
+                    serverBrackets = '[Royalty]';
+                } else {
+                    // Handle any other servers
+                    const serverNames = player.servers.map(s => {
+                        return s === 'royalty' ? 'Royalty' : s === 'horizon' ? 'Horizon' : s;
+                    });
+                    serverBrackets = `[${serverNames.join('/')}]`;
+                }
+
+                // Check if player is currently tracked
+                const trackedPlayer = isPlayerTracked(player.name);
+                let trackingIndicator = '';
+                if (trackedPlayer) {
+                    const categoryInfo = TRACKING_CATEGORIES[trackedPlayer.category];
+                    trackingIndicator = ` ${categoryInfo.emoji}`;
+                }
+
+                return `${player.name} ${serverBrackets}${trackingIndicator}`;
+            });
+
+            // Handle Discord's character limit by splitting into chunks
+            const chunkSize = 900; // Leave room for embed formatting
+            const chunks = [];
+            let currentChunk = '';
+
+            playerList.forEach(playerLine => {
+                const line = playerLine + '\n';
+                if (currentChunk.length + line.length > chunkSize) {
+                    chunks.push(currentChunk.trim());
+                    currentChunk = line;
+                } else {
+                    currentChunk += line;
+                }
+            });
+            if (currentChunk.trim()) chunks.push(currentChunk.trim());
+
+            // Add fields for each chunk
+            chunks.forEach((chunk, index) => {
+                embed.addFields({
+                    name: index === 0 ? '📋 All Players' : '📋 Players (continued)',
+                    value: chunk,
+                    inline: false
+                });
+            });
+
+            // Add summary info
+            const royaltyCount = allPlayers.filter(p => p.servers.includes('royalty')).length;
+            const horizonCount = allPlayers.filter(p => p.servers.includes('horizon')).length;
+            const bothCount = allPlayers.filter(p => p.servers.includes('royalty') && p.servers.includes('horizon')).length;
+            const trackedCount = allPlayers.filter(p => isPlayerTracked(p.name)).length;
+
+            embed.addFields({
+                name: '📊 Database Statistics',
+                value: `**Total Players:** ${allPlayers.length}\n` +
+                       `**Royalty Only:** ${royaltyCount - bothCount}\n` +
+                       `**Horizon Only:** ${horizonCount - bothCount}\n` +
+                       `**Both Servers:** ${bothCount}\n` +
+                       `**Currently Tracked:** ${trackedCount}`,
+                inline: false
+            });
+
+            embed.setFooter({ 
+                text: `Database contains ${allPlayers.length} unique players | ${trackedCount} tracked | Sorted A-Z` 
+            });
+
+            return await interaction.reply({ embeds: [embed] });
+        }
+
         else if (commandName === 'royalty') {
             const loadingEmbed = new EmbedBuilder()
                 .setColor('#ffff00')
@@ -1762,7 +1896,7 @@ client.on('interactionCreate', async interaction => {
 
         else if (commandName === 'startmonitor') {
             // Check admin permissions
-            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                 return await interaction.reply({ content: '❌ You need Administrator permissions to start monitoring.', ephemeral: true });
             }
 
@@ -1770,8 +1904,13 @@ client.on('interactionCreate', async interaction => {
 
             const embed = new EmbedBuilder()
                 .setColor('#00ff00')
-                .setTitle('🔄 Enhanced Monitoring Started')
-                .setDescription('Player tracking has been started for both Royalty RP and Horizon servers. Players will be monitored every 1 minute.')
+                .setTitle('🔄 Optimized Monitoring Started')
+                .setDescription('Player tracking has been started for both Royalty RP and Horizon servers. Using intelligent 3-8 second intervals for maximum speed and accuracy.')
+                .addFields(
+                    { name: '⚡ Performance', value: 'Smart delays (3-8s) based on server response times', inline: true },
+                    { name: '🔄 Recovery', value: 'Auto-retry with exponential backoff on errors', inline: true },
+                    { name: '🎯 Accuracy', value: 'Immediate detection within seconds of player changes', inline: true }
+                )
                 .setTimestamp();
 
             return await interaction.reply({ embeds: [embed] });
@@ -1779,7 +1918,7 @@ client.on('interactionCreate', async interaction => {
 
         else if (commandName === 'stopmonitor') {
             // Check admin permissions
-            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                 return await interaction.reply({ content: '❌ You need Administrator permissions to stop monitoring.', ephemeral: true });
             }
 
@@ -1796,7 +1935,7 @@ client.on('interactionCreate', async interaction => {
 
         else if (commandName === 'setroyalty') {
             // Check admin permissions
-            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                 return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', ephemeral: true });
             }
 
@@ -1813,7 +1952,7 @@ client.on('interactionCreate', async interaction => {
             fs.writeFileSync('.env', newEnvContent);
 
             const embed = new EmbedBuilder()
-                .setColor('#gold')
+                .setColor('#FFD700')
                 .setTitle('🎭 Royalty RP Log Channel Set')
                 .setDescription(`Royalty RP player activity will now be logged to \u003c#${channelId}\u003e`)
                 .setTimestamp();
@@ -1824,7 +1963,7 @@ client.on('interactionCreate', async interaction => {
         
         else if (commandName === 'sethorizon') {
             // Check admin permissions
-            if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                 return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', ephemeral: true });
             }
 

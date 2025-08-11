@@ -3,7 +3,7 @@
 
 // Track player command - Interactive category selection
 async function handleTrackCommand(message, args) {
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
+    if (!message.member.permissions.has('Administrator')) {
         return message.reply('❌ You need Administrator permissions to manage tracked players.');
     }
     
@@ -100,7 +100,7 @@ async function handleTrackCommand(message, args) {
 
 // Untrack player command
 async function handleUntrackCommand(message, args) {
-    if (!message.member.permissions.has('ADMINISTRATOR')) {
+    if (!message.member.permissions.has('Administrator')) {
         return message.reply('❌ You need Administrator permissions to manage tracked players.');
     }
     

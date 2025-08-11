@@ -135,7 +135,7 @@ client.on('messageCreate', async (message) => {
     
     // Track command
     if (content.startsWith('!track')) {
-        if (!message.member.permissions.has('ADMINISTRATOR')) {
+        if (!message.member.permissions.has('Administrator')) {
             return message.reply('❌ You need Administrator permissions to manage tracked players.');
         }
         

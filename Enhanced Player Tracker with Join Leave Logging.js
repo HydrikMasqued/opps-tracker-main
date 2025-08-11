@@ -397,7 +397,7 @@ client.on('messageCreate', async (message) => {
     
     // Set log channel command
     if (content.startsWith('!setchannel')) {
-        if (!message.member.permissions.has('ADMINISTRATOR')) {
+        if (!message.member.permissions.has('Administrator')) {
             return message.reply('❌ You need Administrator permissions to set the log channel.');
         }
         
@@ -425,7 +425,7 @@ client.on('messageCreate', async (message) => {
     
     // Start monitoring command
     if (content === '!startmonitor') {
-        if (!message.member.permissions.has('ADMINISTRATOR')) {
+        if (!message.member.permissions.has('Administrator')) {
             return message.reply('❌ You need Administrator permissions to start monitoring.');
         }
         
@@ -443,7 +443,7 @@ client.on('messageCreate', async (message) => {
     
     // Stop monitoring command
     if (content === '!stopmonitor') {
-        if (!message.member.permissions.has('ADMINISTRATOR')) {
+        if (!message.member.permissions.has('Administrator')) {
             return message.reply('❌ You need Administrator permissions to stop monitoring.');
         }
         
