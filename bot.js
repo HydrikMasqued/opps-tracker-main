@@ -1540,96 +1540,178 @@ client.on('interactionCreate', async interaction => {
         }
 
         else if (commandName === 'database') {
-            const embed = new EmbedBuilder()
-                .setColor('#0099ff')
-                .setTitle('🗃️ Complete Player Database')
-                .setDescription('All saved usernames with server information')
+            // Check Full Patch role or admin permissions
+            if (!hasFullPatchPermission(interaction.member)) {
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
+            }
+            
+            const loadingEmbed = new EmbedBuilder()
+                .setColor('#ffff00')
+                .setTitle('🗃️ Generating Database File...')
+                .setDescription('Creating downloadable player database file...\n\n*This may take a few seconds*')
                 .setTimestamp();
 
-            const allPlayers = Object.values(playerDatabase);
-            if (allPlayers.length === 0) {
-                embed.setDescription('No players found in database.');
-                return await interaction.reply({ embeds: [embed] });
-            }
+            await interaction.reply({ embeds: [loadingEmbed] });
 
-            // Sort players alphabetically by name
-            allPlayers.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-
-            // Create player list with server info
-            const playerList = allPlayers.map(player => {
-                // Format server brackets
-                let serverBrackets = '';
-                if (player.servers.includes('royalty') && player.servers.includes('horizon')) {
-                    serverBrackets = '[Horizon/Royalty]';
-                } else if (player.servers.includes('horizon')) {
-                    serverBrackets = '[Horizon]';
-                } else if (player.servers.includes('royalty')) {
-                    serverBrackets = '[Royalty]';
-                } else {
-                    // Handle any other servers
-                    const serverNames = player.servers.map(s => {
-                        return s === 'royalty' ? 'Royalty' : s === 'horizon' ? 'Horizon' : s;
-                    });
-                    serverBrackets = `[${serverNames.join('/')}]`;
+            try {
+                const allPlayers = Object.values(playerDatabase);
+                if (allPlayers.length === 0) {
+                    const noDataEmbed = new EmbedBuilder()
+                        .setColor('#ff6b6b')
+                        .setTitle('❌ No Database Found')
+                        .setDescription('No players found in database.')
+                        .setTimestamp();
+                    return await interaction.editReply({ embeds: [noDataEmbed] });
                 }
 
-                // Check if player is currently tracked
-                const trackedPlayer = isPlayerTracked(player.name);
-                let trackingIndicator = '';
-                if (trackedPlayer) {
-                    const categoryInfo = TRACKING_CATEGORIES[trackedPlayer.category];
-                    trackingIndicator = ` ${categoryInfo.emoji}`;
-                }
+                // Sort players alphabetically by name
+                allPlayers.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
-                return `${player.name} ${serverBrackets}${trackingIndicator}`;
-            });
+                // Calculate statistics
+                const royaltyCount = allPlayers.filter(p => p.servers.includes('royalty')).length;
+                const horizonCount = allPlayers.filter(p => p.servers.includes('horizon')).length;
+                const bothCount = allPlayers.filter(p => p.servers.includes('royalty') && p.servers.includes('horizon')).length;
+                const trackedCount = allPlayers.filter(p => isPlayerTracked(p.name)).length;
 
-            // Handle Discord's character limit by splitting into chunks
-            const chunkSize = 900; // Leave room for embed formatting
-            const chunks = [];
-            let currentChunk = '';
+                // Generate file content
+                const timestamp = new Date().toLocaleString();
+                let fileContent = `# OPPS TRACKER - COMPLETE PLAYER DATABASE\n`;
+                fileContent += `# Generated: ${timestamp}\n`;
+                fileContent += `# Discord Bot: OPPS TRACKER\n`;
+                fileContent += `# Total Players: ${allPlayers.length}\n`;
+                fileContent += `#\n`;
+                fileContent += `# DATABASE STATISTICS:\n`;
+                fileContent += `# - Total Players: ${allPlayers.length}\n`;
+                fileContent += `# - Royalty RP Only: ${royaltyCount - bothCount}\n`;
+                fileContent += `# - Horizon Only: ${horizonCount - bothCount}\n`;
+                fileContent += `# - Both Servers: ${bothCount}\n`;
+                fileContent += `# - Currently Tracked: ${trackedCount}\n`;
+                fileContent += `#\n`;
+                fileContent += `# FORMAT: PlayerName [Server(s)] {TrackingStatus} | First Seen | Last Seen | Total Sightings\n`;
+                fileContent += `# ========================================================================================\n\n`;
 
-            playerList.forEach(playerLine => {
-                const line = playerLine + '\n';
-                if (currentChunk.length + line.length > chunkSize) {
-                    chunks.push(currentChunk.trim());
-                    currentChunk = line;
-                } else {
-                    currentChunk += line;
-                }
-            });
-            if (currentChunk.trim()) chunks.push(currentChunk.trim());
+                // Add all players
+                allPlayers.forEach(player => {
+                    const firstSeenDate = new Date(player.firstSeen).toLocaleDateString();
+                    const lastSeenDate = new Date(player.lastSeen).toLocaleDateString();
+                    
+                    // Format server brackets
+                    let serverBrackets = '';
+                    if (player.servers.includes('royalty') && player.servers.includes('horizon')) {
+                        serverBrackets = '[Horizon/Royalty]';
+                    } else if (player.servers.includes('horizon')) {
+                        serverBrackets = '[Horizon]';
+                    } else if (player.servers.includes('royalty')) {
+                        serverBrackets = '[Royalty]';
+                    } else {
+                        const serverNames = player.servers.map(s => {
+                            return s === 'royalty' ? 'Royalty' : s === 'horizon' ? 'Horizon' : s;
+                        });
+                        serverBrackets = `[${serverNames.join('/')}]`;
+                    }
 
-            // Add fields for each chunk
-            chunks.forEach((chunk, index) => {
-                embed.addFields({
-                    name: index === 0 ? '📋 All Players' : '📋 Players (continued)',
-                    value: chunk,
-                    inline: false
+                    // Check if player is currently tracked
+                    const trackedPlayer = isPlayerTracked(player.name);
+                    let trackingStatus = '';
+                    if (trackedPlayer) {
+                        const categoryInfo = TRACKING_CATEGORIES[trackedPlayer.category];
+                        trackingStatus = `{TRACKED: ${categoryInfo.name}}`;
+                    } else {
+                        trackingStatus = '{Not Tracked}';
+                    }
+
+                    fileContent += `${player.name} ${serverBrackets} ${trackingStatus} | First: ${firstSeenDate} | Last: ${lastSeenDate} | Sightings: ${player.totalSightings}\n`;
                 });
-            });
 
-            // Add summary info
-            const royaltyCount = allPlayers.filter(p => p.servers.includes('royalty')).length;
-            const horizonCount = allPlayers.filter(p => p.servers.includes('horizon')).length;
-            const bothCount = allPlayers.filter(p => p.servers.includes('royalty') && p.servers.includes('horizon')).length;
-            const trackedCount = allPlayers.filter(p => isPlayerTracked(p.name)).length;
+                // Add tracking summary at the end
+                fileContent += `\n\n# ========================================================================================\n`;
+                fileContent += `# TRACKED PLAYERS SUMMARY\n`;
+                fileContent += `# ========================================================================================\n\n`;
 
-            embed.addFields({
-                name: '📊 Database Statistics',
-                value: `**Total Players:** ${allPlayers.length}\n` +
-                       `**Royalty Only:** ${royaltyCount - bothCount}\n` +
-                       `**Horizon Only:** ${horizonCount - bothCount}\n` +
-                       `**Both Servers:** ${bothCount}\n` +
-                       `**Currently Tracked:** ${trackedCount}`,
-                inline: false
-            });
+                const trackedPlayersList = Object.values(trackedPlayers);
+                if (trackedPlayersList.length > 0) {
+                    const categories = ['enemies', 'poi', 'club'];
+                    for (const categoryKey of categories) {
+                        const categoryPlayers = trackedPlayersList.filter(p => p.category === categoryKey);
+                        if (categoryPlayers.length === 0) continue;
 
-            embed.setFooter({ 
-                text: `Database contains ${allPlayers.length} unique players | ${trackedCount} tracked | Sorted A-Z` 
-            });
+                        const categoryInfo = TRACKING_CATEGORIES[categoryKey];
+                        fileContent += `## ${categoryInfo.emoji} ${categoryInfo.name.toUpperCase()} (${categoryPlayers.length} players)\n`;
+                        fileContent += `${'-'.repeat(50)}\n`;
 
-            return await interaction.reply({ embeds: [embed] });
+                        categoryPlayers.forEach(player => {
+                            const addedBy = player.addedBy ? player.addedBy.split('#')[0] : 'Unknown';
+                            const addedDate = new Date(player.addedAt).toLocaleDateString();
+                            fileContent += `${player.name}\n`;
+                            if (player.reason) {
+                                fileContent += `  Reason: ${player.reason}\n`;
+                            }
+                            fileContent += `  Added by: ${addedBy} on ${addedDate}\n\n`;
+                        });
+                    }
+                } else {
+                    fileContent += `No players are currently being tracked.\n`;
+                }
+
+                // Write file to disk
+                const fileName = `player_database_${new Date().toISOString().slice(0, 10)}.txt`;
+                const filePath = `./${fileName}`;
+                
+                fs.writeFileSync(filePath, fileContent, 'utf8');
+
+                // Create success embed with file info
+                const successEmbed = new EmbedBuilder()
+                    .setColor('#00ff00')
+                    .setTitle('✅ Database File Generated Successfully!')
+                    .setDescription(`Complete player database has been exported to a text file.`)
+                    .addFields(
+                        { name: '💾 File Name', value: fileName, inline: true },
+                        { name: '📊 Total Players', value: allPlayers.length.toString(), inline: true },
+                        { name: '📝 File Size', value: `${Math.round(fileContent.length / 1024)} KB`, inline: true },
+                        { name: '📁 Content Includes', value: '• Complete player list with server info\n• Player tracking status\n• First/last seen dates\n• Sighting counts\n• Detailed tracking summary', inline: false },
+                        { name: '📄 File Location', value: `The file has been saved in the bot directory: \`${filePath}\``, inline: false }
+                    )
+                    .setFooter({ text: `Generated: ${timestamp} | ${allPlayers.length} players | ${trackedCount} tracked` })
+                    .setTimestamp();
+
+                // Send file as attachment
+                try {
+                    const { AttachmentBuilder } = require('discord.js');
+                    const attachment = new AttachmentBuilder(filePath, { name: fileName });
+
+                    await interaction.editReply({ 
+                        embeds: [successEmbed], 
+                        files: [attachment] 
+                    });
+
+                    console.log(`🗃️ Database file generated and sent: ${fileName} (${allPlayers.length} players)`);
+                    
+                } catch (attachError) {
+                    console.error('Error sending file attachment:', attachError);
+                    
+                    // If attachment fails, at least send the embed with file location info
+                    successEmbed.addFields({
+                        name: '⚠️ File Attachment Error',
+                        value: `Could not attach file to Discord message. The file has been saved locally at:\n\`${filePath}\`\n\nFile size: ${Math.round(fileContent.length / 1024)} KB`,
+                        inline: false
+                    });
+                    
+                    await interaction.editReply({ embeds: [successEmbed] });
+                    console.log(`🗃️ Database file generated but attachment failed: ${fileName} (${allPlayers.length} players)`);
+                }
+
+            } catch (error) {
+                console.error('Error generating database file:', error);
+                
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#ff0000')
+                    .setTitle('❌ Database Generation Error')
+                    .setDescription('An error occurred while generating the database file.')
+                    .addFields({ name: 'Error Details', value: error.message })
+                    .setTimestamp();
+                
+                await interaction.editReply({ embeds: [errorEmbed] });
+            }
         }
 
         else if (commandName === 'royalty') {

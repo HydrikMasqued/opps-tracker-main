@@ -1,0 +1,52 @@
+# OPPS TRACKER - COMPLETE PLAYER DATABASE
+# Generated: 8/12/2025, 3:00:20 PM
+# Discord Bot: OPPS TRACKER
+# Total Players: 287
+#
+# DATABASE STATISTICS:
+# - Total Players: 287
+# - Royalty RP Only: 180
+# - Horizon Only: 45
+# - Both Servers: 62
+# - Currently Tracked: 5
+#
+# FORMAT: PlayerName [Server(s)] {TrackingStatus} | First Seen | Last Seen | Total Sightings
+# ========================================================================================
+
+ExamplePlayer1 [Horizon/Royalty] {TRACKED: Enemies} | First: 8/10/2025 | Last: 8/12/2025 | Sightings: 15
+ExamplePlayer2 [Royalty] {Not Tracked} | First: 8/11/2025 | Last: 8/12/2025 | Sightings: 8
+ExamplePlayer3 [Horizon] {TRACKED: People of Interest} | First: 8/9/2025 | Last: 8/12/2025 | Sightings: 22
+ExamplePlayer4 [Horizon/Royalty] {Not Tracked} | First: 8/8/2025 | Last: 8/11/2025 | Sightings: 42
+ExamplePlayer5 [Royalty] {TRACKED: Club Members & Associates} | First: 8/12/2025 | Last: 8/12/2025 | Sightings: 1
+
+... (continues with all 287 players)
+
+
+# ========================================================================================
+# TRACKED PLAYERS SUMMARY
+# ========================================================================================
+
+## ⚔️ ENEMIES (2 players)
+--------------------------------------------------
+ExamplePlayer1
+  Reason: Hostile behavior in previous encounters
+  Added by: JohnDoe on 8/10/2025
+
+BadGuy
+  Reason: Known griefer, avoid at all costs
+  Added by: AdminUser on 8/9/2025
+
+## 📍 PEOPLE OF INTEREST (2 players)
+--------------------------------------------------
+ExamplePlayer3
+  Added by: Moderator on 8/9/2025
+
+SuspiciousPlayer
+  Reason: Acting strange, needs monitoring
+  Added by: JohnDoe on 8/11/2025
+
+## 🏢 CLUB MEMBERS & ASSOCIATES (1 players)
+--------------------------------------------------
+ExamplePlayer5
+  Reason: New recruit, probationary period
+  Added by: Officer on 8/12/2025
