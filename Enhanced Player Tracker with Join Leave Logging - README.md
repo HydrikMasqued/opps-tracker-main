@@ -14,9 +14,12 @@ This is the complete, fully-featured FiveM server player tracking bot with compr
 ### ✅ **Advanced Tracking System**
 - **Persistent Data Storage**: Maintains player history across bot restarts
 - **101+ Player Database**: Successfully tracking extensive player base
-- **Real-time Monitoring**: 5-minute automatic intervals
+- **Real-time Monitoring**: 3-8 second optimized intervals
 - **Session Counting**: Tracks multiple sessions per player
 - **Total Time Tracking**: Accumulates total playtime across sessions
+- **🕵️ Private Tracking**: Discrete monitoring with DM-only notifications
+- **Dual Server Support**: Monitors both Royalty RP and Horizon servers
+- **Enhanced Player Categories**: POI, Enemies, Club Members classification
 
 ### ✅ **Discord Integration**
 - **Professional Embeds**: Clean, formatted Discord notifications
@@ -32,14 +35,37 @@ This is the complete, fully-featured FiveM server player tracking bot with compr
 
 ## 📋 Bot Commands
 
-### **👥 Player Commands**
+### **🆕 Modern Slash Commands** (Current)
+
+#### **👥 Player & Database Commands**
+- `/royalty` - Get current Royalty RP player list with session times
+- `/horizon` - Get current Horizon server player list
+- `/database` - Export complete player database with tracking info
+- `/search [name]` - Search player database history
+- `/find [player]` - Search for tracked player on both servers
+
+#### **📍 Enhanced Tracking Commands**
+- `/track [player] [category] [reason]` - Add player to tracking (POI/Enemies/Club)
+- `/untrack [player]` - Remove player from tracking
+- `/tracked` - View all tracked players with detailed info
+- `/categories` - View available tracking categories
+
+#### **🕵️ Private Tracking Commands** (Owner Only)
+- `/privatetrack [player] [reason]` - Add player to private tracking (DM notifications)
+- `/unprivatetrack [player]` - Remove player from private tracking
+
+#### **⚙️ Admin Commands** (Administrator Only)
+- `/startmonitor` - Start optimized monitoring (3-8 second intervals)
+- `/stopmonitor` - Stop automatic monitoring
+- `/setroyalty [channel]` - Set Royalty RP logging channel
+- `/sethorizon [channel]` - Set Horizon logging channel
+
+### **⚠️ Legacy Commands** (Deprecated)
 - `!players` - Show current players with live session times
 - `!names` / `!list` - Same as !players
 - `!durations` / `!times` - Show current session durations only
-
-### **⚙️ Admin Commands** (Requires Administrator permissions)
 - `!setchannel [ID]` - Set Discord logging channel
-- `!startmonitor` - Start automatic 5-minute monitoring
+- `!startmonitor` - Start automatic monitoring
 - `!stopmonitor` - Stop automatic monitoring
 - `!help` - Show command help
 
@@ -159,10 +185,35 @@ This represents the **complete evolution** of the FiveM player tracking bot:
 2. **Enhanced to**: Accurate filtering and UI cleanup  
 3. **Advanced to**: Session duration tracking
 4. **Completed with**: Full join/leave Discord logging
+5. **Modernized to**: Slash commands with enhanced features
+6. **Perfected with**: Private tracking and dual-server support
 
-## 📅 Created
-- **Date**: August 1, 2025, 9:07 PM
-- **Status**: **FULLY OPERATIONAL** - Complete feature set achieved!
-- **Version**: Enhanced Player Tracker v4.0
+## 🆕 Latest Updates (v5.0)
 
-This backup represents the **pinnacle** of FiveM server player tracking - providing comprehensive monitoring, accurate logging, and professional Discord integration with extreme reliability and precision.
+### **🕵️ Private Tracking System** (August 18, 2025)
+- **Owner-exclusive commands**: `/privatetrack` and `/unprivatetrack`
+- **Discrete monitoring**: Private players hidden from public lists
+- **DM notifications**: Purple-colored private notifications via direct message
+- **Complete privacy**: No public visibility of privately tracked players
+
+### **🎯 Enhanced Tracking Features**
+- **Player categorization**: Enemies (⚔️), People of Interest (📍), Club Members (🏢)
+- **Reason tracking**: Add context for why players are being monitored
+- **Rich notifications**: Category-specific alerts with @here pings
+- **Search functionality**: Find tracked players across servers
+
+### **⚡ Performance Optimizations**
+- **Smart intervals**: Dynamic 3-8 second monitoring based on performance
+- **Dual server support**: Simultaneous Royalty RP and Horizon monitoring
+- **Database integration**: Complete player history with search capabilities
+- **Error resilience**: Advanced error recovery with exponential backoff
+
+## 📅 Version History
+- **v1.0**: Basic player extraction (August 1, 2025)
+- **v2.0**: Join/leave logging with session tracking
+- **v3.0**: Enhanced UI and persistent storage
+- **v4.0**: Discord slash commands integration
+- **v5.0**: Private tracking and dual-server support (August 18, 2025)
+- **Status**: **PRODUCTION READY** - All features operational!
+
+This represents the **ultimate** FiveM server monitoring solution - combining public tracking, private surveillance, comprehensive logging, and professional Discord integration with military-grade reliability and precision.
