@@ -106,7 +106,27 @@ async function refreshCommands() {
                 .addChannelOption(option =>
                     option.setName('channel')
                         .setDescription('Channel for Horizon logs (optional - uses current if not specified)')
-                        .setRequired(false))
+                        .setRequired(false)),
+            
+            new SlashCommandBuilder()
+                .setName('privatetrack')
+                .setDescription('Add a player to private tracking (Owner only)')
+                .addStringOption(option =>
+                    option.setName('player')
+                        .setDescription('Player name to privately track')
+                        .setRequired(true))
+                .addStringOption(option =>
+                    option.setName('reason')
+                        .setDescription('Reason for private tracking (optional)')
+                        .setRequired(false)),
+            
+            new SlashCommandBuilder()
+                .setName('unprivatetrack')
+                .setDescription('Remove a player from private tracking (Owner only)')
+                .addStringOption(option =>
+                    option.setName('player')
+                        .setDescription('Player name to remove from private tracking')
+                        .setRequired(true))
         ].map(command => command.toJSON());
         
         await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });

@@ -101,6 +101,11 @@ let trackedPlayers = {};
 let trackingNotifications = {};
 let horizonPlayerTracker = {};  // Separate tracking for Horizon server
 
+// Private tracking storage (hidden from regular commands)
+let privateTrackedPlayers = {};
+const PRIVATE_TRACKED_PLAYERS_FILE = './private_tracked_players.json';
+const PRIVATE_TRACKING_OWNER = '181143017619587073'; // jayreaper's Discord ID
+
 // Player database for name history
 let playerDatabase = {};
 const PLAYER_DATABASE_FILE = './player_database.json';
@@ -236,6 +241,29 @@ function loadTrackingNotifications() {
     }
 }
 
+// Load private tracked players data
+function loadPrivateTrackedPlayers() {
+    try {
+        if (fs.existsSync(PRIVATE_TRACKED_PLAYERS_FILE)) {
+            const data = fs.readFileSync(PRIVATE_TRACKED_PLAYERS_FILE, 'utf8');
+            privateTrackedPlayers = JSON.parse(data);
+            console.log(`🕵️ Loaded ${Object.keys(privateTrackedPlayers).length} privately tracked players`);
+        }
+    } catch (error) {
+        console.error('Error loading private tracked players:', error);
+        privateTrackedPlayers = {};
+    }
+}
+
+// Save private tracked players data
+function savePrivateTrackedPlayers() {
+    try {
+        fs.writeFileSync(PRIVATE_TRACKED_PLAYERS_FILE, JSON.stringify(privateTrackedPlayers, null, 2));
+    } catch (error) {
+        console.error('Error saving private tracked players:', error);
+    }
+}
+
 // Save tracking notifications data
 function saveTrackingNotifications() {
     try {
@@ -296,6 +324,98 @@ function isPlayerTracked(playerName) {
 // Get tracked players by category
 function getTrackedPlayersByCategory(category) {
     return Object.values(trackedPlayers).filter(player => player.category === category);
+}
+
+// Add a player to private tracking (hidden from regular commands)
+function addPrivateTrackedPlayer(playerName, reason = '') {
+    const cleanName = playerName.trim();
+    const trackingId = cleanName.toLowerCase();
+    
+    privateTrackedPlayers[trackingId] = {
+        name: cleanName,
+        addedAt: Date.now(),
+        reason: reason,
+        servers: ['royalty', 'horizon'], // Track on both servers by default
+        lastSeen: {
+            royalty: null,
+            horizon: null
+        },
+        sessionData: {
+            royalty: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 },
+            horizon: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 }
+        }
+    };
+    
+    savePrivateTrackedPlayers();
+    return privateTrackedPlayers[trackingId];
+}
+
+// Remove a player from private tracking
+function removePrivateTrackedPlayer(playerName) {
+    const trackingId = playerName.toLowerCase().trim();
+    if (privateTrackedPlayers[trackingId]) {
+        delete privateTrackedPlayers[trackingId];
+        savePrivateTrackedPlayers();
+        return true;
+    }
+    return false;
+}
+
+// Check if a player is being privately tracked
+function isPlayerPrivatelyTracked(playerName) {
+    const trackingId = playerName.toLowerCase().trim();
+    return privateTrackedPlayers[trackingId] || null;
+}
+
+// Send private tracking notification via DM to the specified user
+async function sendPrivateTrackingNotification(playerData, action, serverKey, sessionDuration = null) {
+    try {
+        const user = await client.users.fetch(PRIVATE_TRACKING_OWNER);
+        if (!user) {
+            console.log('❌ Could not find private tracking owner user');
+            return;
+        }
+        
+        const serverName = SERVERS[serverKey]?.name || serverKey;
+        
+        // Get total time for this player
+        const tracker = serverKey === 'royalty' ? playerTracker : horizonPlayerTracker;
+        const totalTime = tracker[playerData.name]?.totalTime || 0;
+        
+        const embed = new EmbedBuilder()
+            .setTimestamp()
+            .setColor('#800080'); // Purple color for private tracking
+        
+        if (action === 'joined') {
+            embed.setTitle(`🕵️ Private Track - Player Joined`)
+                .setDescription(`**${playerData.name}** joined **${serverName}**`)
+                .addFields(
+                    { name: 'Server', value: serverName, inline: true },
+                    { name: 'Total Time', value: formatDuration(totalTime), inline: true },
+                    { name: 'Time', value: new Date().toLocaleString(), inline: true }
+                );
+                
+            if (playerData.reason) {
+                embed.addFields({ name: 'Tracking Reason', value: playerData.reason, inline: false });
+            }
+        } else if (action === 'left') {
+            const newTotalTime = totalTime + (sessionDuration || 0);
+            embed.setTitle(`🕵️ Private Track - Player Left`)
+                .setDescription(`**${playerData.name}** left **${serverName}**`)
+                .addFields(
+                    { name: 'Server', value: serverName, inline: true },
+                    { name: 'Session Duration', value: formatDuration(sessionDuration), inline: true },
+                    { name: 'Total Time', value: formatDuration(newTotalTime), inline: true },
+                    { name: 'Time', value: new Date().toLocaleString(), inline: true }
+                );
+        }
+        
+        await user.send({ embeds: [embed] });
+        console.log(`🕵️ Private tracking notification sent for ${playerData.name} (${action})`);
+        
+    } catch (error) {
+        console.error('Error sending private tracking notification:', error);
+    }
 }
 
 // Send enhanced tracking notification with ping
@@ -958,11 +1078,18 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
+            const privatelyTrackedPlayer = isPlayerPrivatelyTracked(player);
             const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            
             if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
             } else if (channelId) {
                 await logPlayerActivity(player, 'joined', null, serverKey);
+            }
+            
+            // Send private tracking notification if player is privately tracked
+            if (privatelyTrackedPlayer) {
+                await sendPrivateTrackingNotification(privatelyTrackedPlayer, 'joined', serverKey);
             }
         } else if (!tracker[player].isOnline) {
             // Player rejoined after being offline
@@ -975,11 +1102,18 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
+            const privatelyTrackedPlayer = isPlayerPrivatelyTracked(player);
             const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            
             if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
             } else if (channelId) {
                 await logPlayerActivity(player, 'joined', null, serverKey);
+            }
+            
+            // Send private tracking notification if player is privately tracked
+            if (privatelyTrackedPlayer) {
+                await sendPrivateTrackingNotification(privatelyTrackedPlayer, 'joined', serverKey);
             }
         } else {
             // Player is still online, update last seen
@@ -1000,11 +1134,18 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
+            const privatelyTrackedPlayer = isPlayerPrivatelyTracked(player);
             const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            
             if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'left', serverKey, sessionDuration);
             } else if (channelId) {
                 await logPlayerActivity(player, 'left', sessionDuration, serverKey);
+            }
+            
+            // Send private tracking notification if player is privately tracked
+            if (privatelyTrackedPlayer) {
+                await sendPrivateTrackingNotification(privatelyTrackedPlayer, 'left', serverKey, sessionDuration);
             }
         }
     }
@@ -1156,6 +1297,19 @@ const commands = [
         .addChannelOption(option =>
             option.setName('channel')
                 .setDescription('Channel for Horizon logs (optional - uses current if not specified)')
+                .setRequired(false)),
+    
+    // PRIVATE TRACKING COMMAND (HIDDEN FROM HELP)
+    new SlashCommandBuilder()
+        .setName('privatetrack')
+        .setDescription('Privately track a player (DMs only to owner)')
+        .addStringOption(option =>
+            option.setName('player')
+                .setDescription('Player name to privately track')
+                .setRequired(true))
+        .addStringOption(option =>
+            option.setName('reason')
+                .setDescription('Reason for private tracking (optional)')
                 .setRequired(false))
 ].map(command => command.toJSON());
 
@@ -1185,6 +1339,7 @@ client.on('ready', async () => {
     loadTrackedPlayers();
     loadTrackingNotifications();
     loadPlayerDatabase();
+    loadPrivateTrackedPlayers();
     
     if (ROYALTY_LOG_CHANNEL_ID || HORIZON_LOG_CHANNEL_ID) {
         console.log(`📊 Log channels configured:`);
@@ -2100,6 +2255,97 @@ client.on('interactionCreate', async interaction => {
 
             console.log(`🌅 Horizon log channel set to: ${channelId}`);
             return await interaction.reply({ embeds: [embed] });
+        }
+
+        else if (commandName === 'privatetrack') {
+            // Only allow the specific user to use this command
+            if (interaction.user.id !== PRIVATE_TRACKING_OWNER) {
+                return await interaction.reply({ content: '❌ Access denied.', ephemeral: true });
+            }
+
+            const playerName = interaction.options.getString('player');
+            const reason = interaction.options.getString('reason') || '';
+
+            // Check if already privately tracked
+            const existingPrivatePlayer = isPlayerPrivatelyTracked(playerName);
+            if (existingPrivatePlayer) {
+                return await interaction.reply({ content: `❌ **${playerName}** is already being privately tracked.`, ephemeral: true });
+            }
+
+            // Check if already in regular tracking
+            const regularTrackedPlayer = isPlayerTracked(playerName);
+            if (regularTrackedPlayer) {
+                return await interaction.reply({ content: `❌ **${playerName}** is already being tracked in the regular system. Private tracking is for discrete monitoring only.`, ephemeral: true });
+            }
+
+            const privatePlayer = addPrivateTrackedPlayer(playerName, reason);
+
+            const embed = new EmbedBuilder()
+                .setColor('#800080')
+                .setTitle('🕵️ Player Added to Private Tracking')
+                .setDescription(`**${privatePlayer.name}** is now being privately tracked`)
+                .addFields(
+                    { name: 'Notification Method', value: 'Direct Messages Only', inline: true },
+                    { name: 'Servers', value: 'Royalty RP & Horizon', inline: true },
+                    { name: 'Added', value: new Date().toLocaleString(), inline: true }
+                );
+
+            if (reason) {
+                embed.addFields({ name: 'Reason', value: reason, inline: false });
+            }
+
+            embed.addFields({ 
+                name: '⚠️ Privacy Notice', 
+                value: 'This tracking is private and will not appear in any public lists or commands. You will receive DM notifications when this player joins or leaves servers.', 
+                inline: false 
+            });
+
+            console.log(`🕵️ Private tracking added: ${privatePlayer.name} (reason: ${reason || 'none'})`);
+            return await interaction.reply({ embeds: [embed], ephemeral: true });
+        }
+
+        else if (commandName === 'unprivatetrack') {
+            // Only allow the specific user to use this command
+            if (interaction.user.id !== PRIVATE_TRACKING_OWNER) {
+                return await interaction.reply({ content: '❌ Access denied.', ephemeral: true });
+            }
+
+            const playerName = interaction.options.getString('player');
+
+            // Check if player is privately tracked
+            const privatePlayer = isPlayerPrivatelyTracked(playerName);
+            if (!privatePlayer) {
+                return await interaction.reply({ content: `❌ **${playerName}** is not currently being privately tracked.`, ephemeral: true });
+            }
+
+            // Remove from private tracking
+            const removed = removePrivateTrackedPlayer(playerName);
+            if (!removed) {
+                return await interaction.reply({ content: `❌ Failed to remove **${playerName}** from private tracking.`, ephemeral: true });
+            }
+
+            const embed = new EmbedBuilder()
+                .setColor('#800080')
+                .setTitle('🕵️ Player Removed from Private Tracking')
+                .setDescription(`**${privatePlayer.name}** is no longer being privately tracked`)
+                .addFields(
+                    { name: 'Previously Tracked Since', value: new Date(privatePlayer.addedAt).toLocaleString(), inline: true },
+                    { name: 'Servers', value: 'Royalty RP & Horizon', inline: true },
+                    { name: 'Removed', value: new Date().toLocaleString(), inline: true }
+                );
+
+            if (privatePlayer.reason) {
+                embed.addFields({ name: 'Previous Tracking Reason', value: privatePlayer.reason, inline: false });
+            }
+
+            embed.addFields({ 
+                name: '✅ Privacy Notice', 
+                value: 'Private tracking has been stopped for this player. You will no longer receive DM notifications for their activity.', 
+                inline: false 
+            });
+
+            console.log(`🕵️ Private tracking removed: ${privatePlayer.name}`);
+            return await interaction.reply({ embeds: [embed], ephemeral: true });
         }
 
     } catch (error) {
