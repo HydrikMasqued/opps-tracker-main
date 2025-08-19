@@ -2257,96 +2257,6 @@ client.on('interactionCreate', async interaction => {
             return await interaction.reply({ embeds: [embed] });
         }
 
-        else if (commandName === 'privatetrack') {
-            // Only allow the specific user to use this command
-            if (interaction.user.id !== PRIVATE_TRACKING_OWNER) {
-                return await interaction.reply({ content: '❌ Access denied.', ephemeral: true });
-            }
-
-            const playerName = interaction.options.getString('player');
-            const reason = interaction.options.getString('reason') || '';
-
-            // Check if already privately tracked
-            const existingPrivatePlayer = isPlayerPrivatelyTracked(playerName);
-            if (existingPrivatePlayer) {
-                return await interaction.reply({ content: `❌ **${playerName}** is already being privately tracked.`, ephemeral: true });
-            }
-
-            // Check if already in regular tracking
-            const regularTrackedPlayer = isPlayerTracked(playerName);
-            if (regularTrackedPlayer) {
-                return await interaction.reply({ content: `❌ **${playerName}** is already being tracked in the regular system. Private tracking is for discrete monitoring only.`, ephemeral: true });
-            }
-
-            const privatePlayer = addPrivateTrackedPlayer(playerName, reason);
-
-            const embed = new EmbedBuilder()
-                .setColor('#800080')
-                .setTitle('🕵️ Player Added to Private Tracking')
-                .setDescription(`**${privatePlayer.name}** is now being privately tracked`)
-                .addFields(
-                    { name: 'Notification Method', value: 'Direct Messages Only', inline: true },
-                    { name: 'Servers', value: 'Royalty RP & Horizon', inline: true },
-                    { name: 'Added', value: new Date().toLocaleString(), inline: true }
-                );
-
-            if (reason) {
-                embed.addFields({ name: 'Reason', value: reason, inline: false });
-            }
-
-            embed.addFields({ 
-                name: '⚠️ Privacy Notice', 
-                value: 'This tracking is private and will not appear in any public lists or commands. You will receive DM notifications when this player joins or leaves servers.', 
-                inline: false 
-            });
-
-            console.log(`🕵️ Private tracking added: ${privatePlayer.name} (reason: ${reason || 'none'})`);
-            return await interaction.reply({ embeds: [embed], ephemeral: true });
-        }
-
-        else if (commandName === 'unprivatetrack') {
-            // Only allow the specific user to use this command
-            if (interaction.user.id !== PRIVATE_TRACKING_OWNER) {
-                return await interaction.reply({ content: '❌ Access denied.', ephemeral: true });
-            }
-
-            const playerName = interaction.options.getString('player');
-
-            // Check if player is privately tracked
-            const privatePlayer = isPlayerPrivatelyTracked(playerName);
-            if (!privatePlayer) {
-                return await interaction.reply({ content: `❌ **${playerName}** is not currently being privately tracked.`, ephemeral: true });
-            }
-
-            // Remove from private tracking
-            const removed = removePrivateTrackedPlayer(playerName);
-            if (!removed) {
-                return await interaction.reply({ content: `❌ Failed to remove **${playerName}** from private tracking.`, ephemeral: true });
-            }
-
-            const embed = new EmbedBuilder()
-                .setColor('#800080')
-                .setTitle('🕵️ Player Removed from Private Tracking')
-                .setDescription(`**${privatePlayer.name}** is no longer being privately tracked`)
-                .addFields(
-                    { name: 'Previously Tracked Since', value: new Date(privatePlayer.addedAt).toLocaleString(), inline: true },
-                    { name: 'Servers', value: 'Royalty RP & Horizon', inline: true },
-                    { name: 'Removed', value: new Date().toLocaleString(), inline: true }
-                );
-
-            if (privatePlayer.reason) {
-                embed.addFields({ name: 'Previous Tracking Reason', value: privatePlayer.reason, inline: false });
-            }
-
-            embed.addFields({ 
-                name: '✅ Privacy Notice', 
-                value: 'Private tracking has been stopped for this player. You will no longer receive DM notifications for their activity.', 
-                inline: false 
-            });
-
-            console.log(`🕵️ Private tracking removed: ${privatePlayer.name}`);
-            return await interaction.reply({ embeds: [embed], ephemeral: true });
-        }
 
     } catch (error) {
         console.error('Error handling slash command:', error);
@@ -2364,13 +2274,128 @@ client.on('interactionCreate', async interaction => {
 client.on('messageCreate', async (message) => {
     if (message.author.bot) return;
     
-    const content = message.content.toLowerCase();
+    const content = message.content.trim();
     
-    // Only respond to slash command references to guide users
-    if (content.includes('!')) {
-        // Check if user is trying to use old commands
+    // Handle private tracking commands (owner only)
+    if (content.startsWith('!privatetrack') || content.startsWith('!unprivatetrack')) {
+        // Only allow the specific user to use these commands
+        if (message.author.id !== PRIVATE_TRACKING_OWNER) {
+            return message.react('❌'); // Just react with X for non-owners
+        }
+        
+        if (content.startsWith('!privatetrack')) {
+            const args = content.split(' ').slice(1);
+            if (args.length === 0) {
+                return message.reply('❌ **Usage:** `!privatetrack <PlayerName> [reason]`');
+            }
+            
+            const playerName = args[0];
+            const reason = args.slice(1).join(' ') || '';
+            
+            try {
+                // Check if already privately tracked
+                const existingPrivatePlayer = isPlayerPrivatelyTracked(playerName);
+                if (existingPrivatePlayer) {
+                    return message.reply(`❌ **${playerName}** is already being privately tracked.`);
+                }
+                
+                // Check if already in regular tracking
+                const regularTrackedPlayer = isPlayerTracked(playerName);
+                if (regularTrackedPlayer) {
+                    return message.reply(`❌ **${playerName}** is already being tracked in the regular system. Private tracking is for discrete monitoring only.`);
+                }
+                
+                const privatePlayer = addPrivateTrackedPlayer(playerName, reason);
+                
+                const embed = new EmbedBuilder()
+                    .setColor('#800080')
+                    .setTitle('🕵️ Player Added to Private Tracking')
+                    .setDescription(`**${privatePlayer.name}** is now being privately tracked`)
+                    .addFields(
+                        { name: 'Notification Method', value: 'Direct Messages Only', inline: true },
+                        { name: 'Servers', value: 'Royalty RP & Horizon', inline: true },
+                        { name: 'Added', value: new Date().toLocaleString(), inline: true }
+                    );
+                
+                if (reason) {
+                    embed.addFields({ name: 'Reason', value: reason, inline: false });
+                }
+                
+                embed.addFields({ 
+                    name: '⚠️ Privacy Notice', 
+                    value: 'This tracking is private and will not appear in any public lists or commands. You will receive DM notifications when this player joins or leaves servers.', 
+                    inline: false 
+                });
+                
+                console.log(`🕵️ Private tracking added: ${privatePlayer.name} (reason: ${reason || 'none'})`);
+                message.react('✅');
+                return message.reply({ embeds: [embed] });
+                
+            } catch (error) {
+                console.error('Error in !privatetrack command:', error);
+                return message.reply('❌ An error occurred while adding private tracking.');
+            }
+        }
+        
+        else if (content.startsWith('!unprivatetrack')) {
+            const args = content.split(' ').slice(1);
+            if (args.length === 0) {
+                return message.reply('❌ **Usage:** `!unprivatetrack <PlayerName>`');
+            }
+            
+            const playerName = args[0];
+            
+            try {
+                // Check if player is privately tracked
+                const privatePlayer = isPlayerPrivatelyTracked(playerName);
+                if (!privatePlayer) {
+                    return message.reply(`❌ **${playerName}** is not currently being privately tracked.`);
+                }
+                
+                // Remove from private tracking
+                const removed = removePrivateTrackedPlayer(playerName);
+                if (!removed) {
+                    return message.reply(`❌ Failed to remove **${playerName}** from private tracking.`);
+                }
+                
+                const embed = new EmbedBuilder()
+                    .setColor('#800080')
+                    .setTitle('🕵️ Player Removed from Private Tracking')
+                    .setDescription(`**${privatePlayer.name}** is no longer being privately tracked`)
+                    .addFields(
+                        { name: 'Previously Tracked Since', value: new Date(privatePlayer.addedAt).toLocaleString(), inline: true },
+                        { name: 'Servers', value: 'Royalty RP & Horizon', inline: true },
+                        { name: 'Removed', value: new Date().toLocaleString(), inline: true }
+                    );
+                
+                if (privatePlayer.reason) {
+                    embed.addFields({ name: 'Previous Tracking Reason', value: privatePlayer.reason, inline: false });
+                }
+                
+                embed.addFields({ 
+                    name: '✅ Privacy Notice', 
+                    value: 'Private tracking has been stopped for this player. You will no longer receive DM notifications for their activity.', 
+                    inline: false 
+                });
+                
+                console.log(`🕵️ Private tracking removed: ${privatePlayer.name}`);
+                message.react('✅');
+                return message.reply({ embeds: [embed] });
+                
+            } catch (error) {
+                console.error('Error in !unprivatetrack command:', error);
+                return message.reply('❌ An error occurred while removing private tracking.');
+            }
+        }
+        
+        return; // Exit early for private tracking commands
+    }
+    
+    // Only respond to slash command references to guide users for other commands
+    if (content.toLowerCase().includes('!')) {
+        // Check if user is trying to use old commands (exclude private tracking commands)
         const oldCommands = ['!track', '!untrack', '!tracked', '!find', '!search', '!players', '!horizon', '!categories', '!startmonitor', '!stopmonitor', '!setchannel', '!help'];
-        const usedOldCommand = oldCommands.some(cmd => content.startsWith(cmd));
+        const usedOldCommand = oldCommands.some(cmd => content.toLowerCase().startsWith(cmd));
         
         if (usedOldCommand) {
             const embed = new EmbedBuilder()
