@@ -1,0 +1,333 @@
+# OPPS TRACKER - COMPLETE PLAYER DATABASE
+# Generated: 12/08/2025, 16:06:23
+# Discord Bot: OPPS TRACKER
+# Total Players: 293
+#
+# DATABASE STATISTICS:
+# - Total Players: 293
+# - Royalty RP Only: 193
+# - Horizon Only: 97
+# - Both Servers: 3
+# - Currently Tracked: 4
+#
+# FORMAT: PlayerName [Server(s)] {TrackingStatus} | First Seen | Last Seen | Total Sightings
+# ========================================================================================
+
+:) [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 168
+. [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 490
+✞ 𝔾𝕠𝕠𝕟 [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 122
+❍ Sins [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 39
+123 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+Ace Sicario [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 219
+Adam [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+Adam Anderson [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 172
+Anne [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+anuyffxi [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 53
+aperson [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 163
+ashle [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 13
+Astrong410 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 155
+Ataraxia [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 12
+Autumniant [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 190
+awild [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 28
+babylexi098 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 196
+Baracus [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+Barb In Finance [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 159
+beardedsavage [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+Big justice [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 41
+BigBird [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 128
+Bigtree97 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 166
+Blax [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 51
+BlueOnyxGaming [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 334
+bonk [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+Borgir [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+Bravochick [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 153
+brayp [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+bryce [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 207
+Brydo [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 3
+Busch [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 304
+Cadizie [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 351
+callmeb0t [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 40
+Casper [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+Castle [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 183
+catch [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 1
+CBtheNewB [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+Cho The Sticky [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+cjjjj [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+Cleetus [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 146
+Clicksy [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 45
+codex9723 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 13
+CodyDxD [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+conne [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+Cpt_Punk [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 168
+Creamysquid [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+Dadbodgaming23 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 158
+DADDY NIKITA [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 78
+David [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 13
+David1993 [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Dawz [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 167
+DeadmanBlake09 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 13
+Dell Dekker [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+Diablo [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 336
+diana [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 204
+DokvHxpnotic [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 168
+Domanik平和 [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 90
+Dr.Stick [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 18
+Dreflex [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 168
+dsblueeyes2216 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 199
+DuckDuckGoose [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 168
+DW [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 158
+Elevat3dd [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 26
+Ember [Horizon] {TRACKED: Club Members & Associates} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 172
+Emerald [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 190
+Ems96 [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+EnergieNB [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+Eric Streetglide [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 355
+Ericilius [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+EVILDUNCEPUPPY [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 177
+ex [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+eyesofisaiah [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 34
+Falsire [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+FatalErr0rTTV [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 245
+Fi5hyV [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 45
+FireFusionCoil [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 168
+Fizzgig [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 11
+fkoff [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 314
+Flyer [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Foxx [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 192
+Freckles [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Fresh [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+Freyja [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+Gengirl210 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 337
+GetOffMyToast [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 123
+ggwp [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+Ghillie [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 122
+Ghostie [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 214
+Ghostofthepast [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 351
+ghstnz [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 93
+Giga [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 362
+Giggles [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+Gilou [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 192
+Ginjitski [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 148
+Gninsterke [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 137
+GoNannerz [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+greggo1410 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+H3ntaiPro [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 21
+Hachet [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 171
+halam [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 63
+HammeredPanda [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 5
+HashSlingingSlasher [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 158
+HazT. [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 93
+Hector [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 64
+hendo4gaming [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 196
+Hex: Headpats [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 51
+High Im Nimrod [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 366
+HomeWrecker [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 21
+HONEY PACK [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+hungry [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+HunterZozo_TTV [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 31
+i [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 164
+I Z O [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+IFeelnumbOfficial_YT [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 261
+imRealMaDDoG [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+Its_MrBandit [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 197
+Itsnathan_18 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 170
+ItsReaperXD [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 353
+itssjess [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+ITzFatbluntz221 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 205
+Jack Montagne [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 24
+Jarrell [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 21
+Jayreaper [Horizon] {TRACKED: Club Members & Associates} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 51
+JD135I [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 4
+Jeffrey Turk [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 350
+𝕁𝕖𝕝𝕝𝕪𝔹𝕖𝕒𝕟  ✌︎︎ [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Jermaine [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+Jessieleex [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 204
+JJ [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 78
+John P. | 1936 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 181
+JohnTheMedic [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 20
+Jordy [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+josh2000gamer [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 24
+joyful hell [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 172
+JuiceFroot [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+JumperMonkey [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 207
+Kai Rosen [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 18
+Kaori [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+kappaa [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+KB [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 278
+kensonic [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 28
+keroppieee [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 12
+King [Horizon/Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 201
+KiwiSteph [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+Konaki [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Kylel [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 172
+Larry Buble [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 366
+lastnamemac [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 190
+LaurajaneG [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 337
+leam1 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 89
+Leiahna [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+Leisha [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 7
+Lewis [Horizon] {TRACKED: People of Interest} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 189
+lilla my [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 176
+Linsea [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+LM [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Lorin [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Luv.Bean [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 193
+Lyxoria [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+macdaddy085236 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+MadDog [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+Mafie [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 366
+Major ERP [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+MamaScopezttv [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+McTripled [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+Mendez ツ [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 194
+Mentally ill [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+Michael [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 207
+Mimi Rosen [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 14
+Misspockets [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+mizzzchief [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+Mobes12 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 138
+Molly [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 13
+MR GOOSE 1 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 184
+Mr. Maggu [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 158
+MrFinsGaming [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+MrOwlplay [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+Myabsi [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 128
+Nastyass HoneyBadger [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Nebula [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 195
+Nightwing [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 156
+Nonki [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 181
+NotAMallCop [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 21
+notMateo [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+notNatasha [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 358
+Nova [Horizon/Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 535
+NOXQUSE [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 78
+number 1 gooner [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 151
+one30two50 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+Ophelia Oak [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 5
+OPP DROPPER [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+Peyagero TTV [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+PI Joe Mama [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 283
+Pizza Pizza [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+Plummer [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+Pointyy [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 26
+poiso [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 36
+Pop [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 184
+PotCheck_ [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+PROUDGATOR [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+purpu [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+quinnyrfc1988 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 194
+Ray [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 38
+Red Candy GT [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+Redd/Mark  [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 64
+Reign [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Remice [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 199
+Reqqu [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 207
+Rev [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 285
+Riley Morgan [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+Rose [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 177
+RsBrizz [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 350
+Rushyyy [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 13
+RustySpoon [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 207
+𝓼⸸ S [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+S7 Duncan [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 182
+SaggyNewtSack [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+Salem [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+sam [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 63
+SANTOxPRENDE [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 50
+Satans Finest Klown [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 22
+SavageTactician [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+SBH_Hassan [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+SeanAird [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Seanbian [Horizon/Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 100
+Semora [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 10
+Senra [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 169
+Serenity [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 8
+Serpent [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+shakeykev [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Sharkbait [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 160
+Shmuel [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 8
+Shytez [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 130
+Silver Back Gorilla [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+slde [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 204
+SMOKZY [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 319
+snail [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 11
+Speciality [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 129
+SpeedQBJunkie [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 21
+SquiiigZ [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 154
+Stealthy [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 168
+Steph [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 63
+Steven [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+Studmuffin307 [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 32
+styx [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+Succubus Queen [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+sugo [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 8
+Supaykunapa hawanpi [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 133
+suprac [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 151
+SweetZ [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 168
+swizz [Horizon] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+Swizzy [Horizon] {TRACKED: People of Interest} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 159
+T-Rex [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+T3RR3NC3 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 9
+T9ze_ [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 188
+The Fourth Turkey [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 194
+TheLostAssassinx [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 145
+Thrifty Sam The Salsa Man [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+TimmyT [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+TiqqleMyFeet [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 13
+Tito [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 1
+tony romo [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+toxic.gamer [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 336
+𝒯𝑜𝓍𝒾𝓃𝒶 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+tragic [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 366
+TTV BigBlock340 [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 202
+Tyler [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 200
+Ugly  [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 21
+Unruly Gentleman [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 358
+User [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+Utente [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 207
+vap0r [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 184
+Vegas Sun Devil [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+Vicci [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 20
+Viking_Ghostie [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 236
+Viral [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 83
+VLIEK [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 359
+white velvet [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 115
+Window Licker [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 144
+wombat [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 4
+Ws [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 6
+x o x o [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+XIII [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 180
+xsami [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 12/08/2025 | Sightings: 351
+XWOLFGODDESS03X [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 174
+YSL Lutzy [Horizon] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 144
+YSL Unc_Hesi [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 199
+ZelTheViking [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 23
+Zylo [Royalty] {Not Tracked} | First: 11/08/2025 | Last: 11/08/2025 | Sightings: 191
+エージ [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 159
+乂 rhys [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 132
+乇ﾒﾉﾚ⸸Ꮢ𐍅 [Royalty] {Not Tracked} | First: 12/08/2025 | Last: 12/08/2025 | Sightings: 1
+
+
+# ========================================================================================
+# TRACKED PLAYERS SUMMARY
+# ========================================================================================
+
+## 📍 PEOPLE OF INTEREST (3 players)
+--------------------------------------------------
+Swizzy
+  Added by: jayreaper on 11/08/2025
+
+Lewis
+  Added by: jayreaper on 11/08/2025
+
+SS
+  Added by: jayreaper on 11/08/2025
+
+## 🏢 CLUB MEMBERS & ASSOCIATES (2 players)
+--------------------------------------------------
+Ember
+  Added by: jayreaper on 11/08/2025
+
+Jayreaper
+  Added by: jayreaper on 11/08/2025
+
