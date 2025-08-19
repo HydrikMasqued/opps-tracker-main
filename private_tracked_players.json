@@ -26,33 +26,6 @@
       }
     }
   },
-  "silver": {
-    "name": "Silver",
-    "addedAt": 1755560815212,
-    "reason": "",
-    "servers": [
-      "royalty",
-      "horizon"
-    ],
-    "lastSeen": {
-      "royalty": null,
-      "horizon": null
-    },
-    "sessionData": {
-      "royalty": {
-        "isOnline": false,
-        "joinTime": null,
-        "totalTime": 0,
-        "sessionCount": 0
-      },
-      "horizon": {
-        "isOnline": false,
-        "joinTime": null,
-        "totalTime": 0,
-        "sessionCount": 0
-      }
-    }
-  },
   "pleon": {
     "name": "pleon",
     "addedAt": 1755560844338,

@@ -2,11 +2,20 @@
   "123": {
     "name": "123",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 651
+  },
+  "132": {
+    "name": "132",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
   },
   "rustyspoon": {
     "name": "RustySpoon",
@@ -20,47 +29,47 @@
   "ember": {
     "name": "Ember",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754931439718,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 13
+    "totalSightings": 184
   },
   "joyful hell": {
     "name": "joyful hell",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754931439718,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 13
+    "totalSightings": 184
   },
   "mafie": {
     "name": "Mafie",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 207
+    "totalSightings": 378
   },
   "codex9723": {
     "name": "codex9723",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754931439718,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 13
+    "totalSightings": 46
   },
   ".": {
     "name": ".",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 331
+    "totalSightings": 1026
   },
   "swizzy": {
     "name": "Swizzy",
@@ -74,29 +83,29 @@
   "pi joe mama": {
     "name": "PI Joe Mama",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 193
+    "totalSightings": 295
   },
   "hector": {
     "name": "Hector",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 64
+    "totalSightings": 519
   },
   "larry buble": {
     "name": "Larry Buble",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 207
+    "totalSightings": 833
   },
   "deadmanblake09": {
     "name": "DeadmanBlake09",
@@ -110,47 +119,47 @@
   "high im nimrod": {
     "name": "High Im Nimrod",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 207
+    "totalSightings": 378
   },
   "tragic": {
     "name": "tragic",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 207
+    "totalSightings": 378
   },
   "redd/mark": {
     "name": "Redd/Mark ",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754929685860,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 3
+    "totalSightings": 450
   },
   "utente": {
     "name": "Utente",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564538904,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 207
+    "totalSightings": 622
   },
   "luv.bean": {
     "name": "Luv.Bean",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 193
+    "totalSightings": 648
   },
   "rushyyy": {
     "name": "Rushyyy",
@@ -164,47 +173,47 @@
   "jumpermonkey": {
     "name": "JumperMonkey",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 207
+    "totalSightings": 662
   },
   "rev": {
     "name": "Rev",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 207
+    "totalSightings": 752
   },
   "blueonyxgaming": {
     "name": "BlueOnyxGaming",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941035685,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 175
+    "totalSightings": 346
   },
   "adam anderson": {
     "name": "Adam Anderson",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754931439718,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 13
+    "totalSightings": 639
   },
   "ashle": {
     "name": "ashle",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754931439718,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 13
+    "totalSightings": 466
   },
   "bryce": {
     "name": "bryce",
@@ -236,38 +245,38 @@
   "xiii": {
     "name": "XIII",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754939673056,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 180
+    "totalSightings": 635
   },
   "reqqu": {
     "name": "Reqqu",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 207
+    "totalSightings": 662
   },
   "pop": {
     "name": "Pop",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754939673056,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 184
+    "totalSightings": 516
   },
   "kylel": {
     "name": "Kylel",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754931439718,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 13
+    "totalSightings": 184
   },
   "pointyy": {
     "name": "Pointyy",
@@ -281,11 +290,11 @@
   "its_mrbandit": {
     "name": "Its_MrBandit",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 197
+    "totalSightings": 652
   },
   "michael": {
     "name": "Michael",
@@ -299,38 +308,38 @@
   "molly": {
     "name": "Molly",
     "firstSeen": 1754929590882,
-    "lastSeen": 1754931439718,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 13
+    "totalSightings": 173
   },
   "itzfatbluntz221": {
     "name": "ITzFatbluntz221",
     "firstSeen": 1754929685860,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 205
+    "totalSightings": 660
   },
   "window licker": {
     "name": "Window Licker",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755010765149,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 9
+    "totalSightings": 144
   },
   "salem": {
     "name": "Salem",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 651
   },
   "ericilius": {
     "name": "Ericilius",
@@ -344,11 +353,11 @@
   "castle": {
     "name": "Castle",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 24
+    "totalSightings": 646
   },
   "pizza pizza": {
     "name": "Pizza Pizza",
@@ -362,38 +371,38 @@
   "dawz": {
     "name": "Dawz",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754938340930,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 35
+    "totalSightings": 179
   },
   "duckduckgoose": {
     "name": "DuckDuckGoose",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 9
+    "totalSightings": 180
   },
   "dell dekker": {
     "name": "Dell Dekker",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 651
   },
   "gonannerz": {
     "name": "GoNannerz",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 371
   },
   "aperson": {
     "name": "aperson",
@@ -407,11 +416,11 @@
   "conne": {
     "name": "conne",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755560508781,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 372
   },
   "maddog": {
     "name": "MadDog",
@@ -425,11 +434,11 @@
   "gengirl210": {
     "name": "Gengirl210",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 178
+    "totalSightings": 800
   },
   "hashslingingslasher": {
     "name": "HashSlingingSlasher",
@@ -443,20 +452,20 @@
   "mrowlplay": {
     "name": "MrOwlplay",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 371
   },
   "cho the sticky": {
     "name": "Cho The Sticky",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 651
   },
   "hungry": {
     "name": "hungry",
@@ -470,29 +479,29 @@
   "tyler": {
     "name": "Tyler",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 651
   },
   "hex: headpats": {
     "name": "Hex: Headpats",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754938101155,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 27
+    "totalSightings": 514
   },
   "toxic.gamer": {
     "name": "toxic.gamer",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754939673055,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 177
+    "totalSightings": 348
   },
   "kiwisteph": {
     "name": "KiwiSteph",
@@ -506,20 +515,20 @@
   "ttv bigblock340": {
     "name": "TTV BigBlock340",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 214
   },
   "vliek": {
     "name": "VLIEK",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 371
   },
   "ggwp": {
     "name": "ggwp",
@@ -533,11 +542,11 @@
   "cpt_punk": {
     "name": "Cpt_Punk",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 9
+    "totalSightings": 631
   },
   "cjjjj": {
     "name": "cjjjj",
@@ -551,20 +560,20 @@
   "t9ze_": {
     "name": "T9ze_",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
-    "servers": [
-      "royalty"
-    ],
-    "totalSightings": 32
-  },
-  "jermaine": {
-    "name": "Jermaine",
-    "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
     "totalSightings": 200
+  },
+  "jermaine": {
+    "name": "Jermaine",
+    "firstSeen": 1754929732317,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 371
   },
   "leiahna": {
     "name": "Leiahna",
@@ -578,11 +587,11 @@
   "josh2000gamer": {
     "name": "josh2000gamer",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 24
+    "totalSightings": 475
   },
   "codydxd": {
     "name": "CodyDxD",
@@ -596,84 +605,84 @@
   "hammeredpanda": {
     "name": "HammeredPanda",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931320012,
+    "lastSeen": 1755562718038,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 5
+    "totalSightings": 124
   },
   "rose": {
     "name": "Rose",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754939673055,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 177
+    "totalSightings": 628
   },
   "ghostofthepast": {
     "name": "Ghostofthepast",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 192
+    "totalSightings": 615
   },
   "cadizie": {
     "name": "Cadizie",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 192
+    "totalSightings": 363
   },
   "dokvhxpnotic": {
     "name": "DokvHxpnotic",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 9
+    "totalSightings": 180
   },
   "nova": {
     "name": "Nova",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty",
       "horizon"
     ],
-    "totalSightings": 376
+    "totalSightings": 547
   },
   "riley morgan": {
     "name": "Riley Morgan",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 822
   },
   "macdaddy085236": {
     "name": "macdaddy085236",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564152773,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 710
   },
   "eric streetglide": {
     "name": "Eric Streetglide",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 196
+    "totalSightings": 367
   },
   "succubus queen": {
     "name": "Succubus Queen",
@@ -687,11 +696,11 @@
   "xsami": {
     "name": "xsami",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755563752211,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 192
+    "totalSightings": 666
   },
   "peyagero ttv": {
     "name": "Peyagero TTV",
@@ -705,11 +714,11 @@
   "sweetz": {
     "name": "SweetZ",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 9
+    "totalSightings": 180
   },
   "seanbian": {
     "name": "Seanbian",
@@ -733,65 +742,66 @@
   "dreflex": {
     "name": "Dreflex",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755564281826,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 9
+    "totalSightings": 545
   },
   "notmateo": {
     "name": "notMateo",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755563623695,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 650
   },
   "stealthy": {
     "name": "Stealthy",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755564887353,
     "servers": [
-      "royalty"
+      "royalty",
+      "horizon"
     ],
-    "totalSightings": 9
+    "totalSightings": 621
   },
   "sharkbait": {
     "name": "Sharkbait",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754929732317,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 1
+    "totalSightings": 623
   },
   "smokzy": {
     "name": "SMOKZY",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 160
+    "totalSightings": 782
   },
   "creamysquid": {
     "name": "Creamysquid",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754929732317,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 1
+    "totalSightings": 452
   },
   "bravochick": {
     "name": "Bravochick",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754937982206,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 31
+    "totalSightings": 616
   },
   "baracus": {
     "name": "Baracus",
@@ -814,38 +824,38 @@
   "plummer": {
     "name": "Plummer",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 822
   },
   "vap0r": {
     "name": "vap0r",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755560508781,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 185
+  },
+  "styx": {
+    "name": "styx",
+    "firstSeen": 1754929732317,
+    "lastSeen": 1755563027853,
     "servers": [
       "royalty"
     ],
     "totalSightings": 184
   },
-  "styx": {
-    "name": "styx",
-    "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
-    "servers": [
-      "royalty"
-    ],
-    "totalSightings": 9
-  },
   "t3rr3nc3": {
     "name": "T3RR3NC3",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755560508781,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 9
+    "totalSightings": 10
   },
   "opp dropper": {
     "name": "OPP DROPPER",
@@ -859,11 +869,11 @@
   "kb": {
     "name": "KB",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 290
   },
   "itssjess": {
     "name": "itssjess",
@@ -886,11 +896,11 @@
   "foxx": {
     "name": "Foxx",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 192
+    "totalSightings": 580
   },
   "sbh_hassan": {
     "name": "SBH_Hassan",
@@ -904,20 +914,20 @@
   "hendo4gaming": {
     "name": "hendo4gaming",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 196
+    "totalSightings": 647
   },
   "laurajaneg": {
     "name": "LaurajaneG",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755563492172,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 192
+    "totalSightings": 606
   },
   "gilou": {
     "name": "Gilou",
@@ -940,11 +950,11 @@
   "fkoff": {
     "name": "fkoff",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 192
+    "totalSightings": 326
   },
   "gninsterke": {
     "name": "Gninsterke",
@@ -967,29 +977,29 @@
   "fatalerr0rttv": {
     "name": "FatalErr0rTTV",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941020960,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 179
+    "totalSightings": 708
   },
   "casper": {
     "name": "Casper",
     "firstSeen": 1754929732317,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 200
+    "totalSightings": 755
   },
   "studmuffin307": {
     "name": "Studmuffin307",
     "firstSeen": 1754931171420,
-    "lastSeen": 1754937983211,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 32
+    "totalSightings": 487
   },
   "jayreaper": {
     "name": "Jayreaper",
@@ -1003,39 +1013,39 @@
   "diana": {
     "name": "diana",
     "firstSeen": 1754931171420,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 204
+    "totalSightings": 659
   },
   "giga": {
     "name": "Giga",
     "firstSeen": 1754931171420,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 204
+    "totalSightings": 374
   },
   "king": {
     "name": "King",
     "firstSeen": 1754931171420,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "horizon",
       "royalty"
     ],
-    "totalSightings": 201
+    "totalSightings": 652
   },
   "slde": {
     "name": "slde",
     "firstSeen": 1754931171420,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 204
+    "totalSightings": 376
   },
   "clicksy": {
     "name": "Clicksy",
@@ -1049,20 +1059,20 @@
   "jessieleex": {
     "name": "Jessieleex",
     "firstSeen": 1754931171420,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 204
+    "totalSightings": 659
   },
   "unruly gentleman": {
     "name": "Unruly Gentleman",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 199
+    "totalSightings": 370
   },
   "jd135i": {
     "name": "JD135I",
@@ -1076,20 +1086,20 @@
   "mendez ツ": {
     "name": "Mendez ツ",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 35
+    "totalSightings": 657
   },
   "serenity": {
     "name": "Serenity",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 8
+    "totalSightings": 459
   },
   "shmuel": {
     "name": "Shmuel",
@@ -1103,20 +1113,20 @@
   "ysl unc_hesi": {
     "name": "YSL Unc_Hesi",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 199
+    "totalSightings": 634
   },
   "hunterzozo_ttv": {
     "name": "HunterZozo_TTV",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 31
+    "totalSightings": 482
   },
   "nebula": {
     "name": "Nebula",
@@ -1139,29 +1149,29 @@
   "shytez": {
     "name": "Shytez",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 8
+    "totalSightings": 142
   },
   "sugo": {
     "name": "sugo",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754931439717,
+    "lastSeen": 1755564675713,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 8
+    "totalSightings": 441
   },
   "remice": {
     "name": "Remice",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 199
+    "totalSightings": 650
   },
   "dsblueeyes2216": {
     "name": "dsblueeyes2216",
@@ -1175,11 +1185,11 @@
   "notnatasha": {
     "name": "notNatasha",
     "firstSeen": 1754931258999,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755563623695,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 199
+    "totalSightings": 649
   },
   "misspockets": {
     "name": "Misspockets",
@@ -1193,11 +1203,11 @@
   "adam": {
     "name": "Adam",
     "firstSeen": 1754931259878,
-    "lastSeen": 1754931439718,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 9
+    "totalSightings": 464
   },
   "leisha": {
     "name": "Leisha",
@@ -1211,38 +1221,38 @@
   "getoffmytoast": {
     "name": "GetOffMyToast",
     "firstSeen": 1754931259878,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 123
+    "totalSightings": 578
   },
   "lewis": {
     "name": "Lewis",
     "firstSeen": 1754931379937,
-    "lastSeen": 1754941414432,
-    "servers": [
-      "horizon"
-    ],
-    "totalSightings": 189
-  },
-  "mizzzchief": {
-    "name": "mizzzchief",
-    "firstSeen": 1754937148567,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755560801735,
     "servers": [
       "horizon"
     ],
     "totalSightings": 194
   },
-  "emerald": {
-    "name": "Emerald",
+  "mizzzchief": {
+    "name": "mizzzchief",
     "firstSeen": 1754937148567,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 190
+    "totalSightings": 647
+  },
+  "emerald": {
+    "name": "Emerald",
+    "firstSeen": 1754937148567,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 645
   },
   "fresh": {
     "name": "Fresh",
@@ -1274,11 +1284,11 @@
   "babylexi098": {
     "name": "babylexi098",
     "firstSeen": 1754937148567,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 194
+    "totalSightings": 663
   },
   "bonk": {
     "name": "bonk",
@@ -1292,11 +1302,11 @@
   "hachet": {
     "name": "Hachet",
     "firstSeen": 1754937148567,
-    "lastSeen": 1754939673056,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 171
+    "totalSightings": 626
   },
   "satans finest klown": {
     "name": "Satans Finest Klown",
@@ -1310,11 +1320,11 @@
   "itsreaperxd": {
     "name": "ItsReaperXD",
     "firstSeen": 1754937148567,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 194
+    "totalSightings": 820
   },
   "cbthenewb": {
     "name": "CBtheNewB",
@@ -1337,11 +1347,11 @@
   "speciality": {
     "name": "Speciality",
     "firstSeen": 1754937148567,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 129
+    "totalSightings": 584
   },
   "steven": {
     "name": "Steven",
@@ -1373,11 +1383,11 @@
   "xwolfgoddess03x": {
     "name": "XWOLFGODDESS03X",
     "firstSeen": 1754937148567,
-    "lastSeen": 1754941035685,
+    "lastSeen": 1755564218255,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 174
+    "totalSightings": 531
   },
   "i": {
     "name": "i",
@@ -1418,11 +1428,11 @@
   "quinnyrfc1988": {
     "name": "quinnyrfc1988",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755009618949,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 191
+    "totalSightings": 194
   },
   "lyxoria": {
     "name": "Lyxoria",
@@ -1445,20 +1455,20 @@
   "ifeelnumbofficial_yt": {
     "name": "IFeelnumbOfficial_YT",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754939196951,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 102
+    "totalSightings": 279
   },
   "honey pack": {
     "name": "HONEY PACK",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 191
+    "totalSightings": 642
   },
   "callmeb0t": {
     "name": "callmeb0t",
@@ -1481,11 +1491,11 @@
   "mctripled": {
     "name": "McTripled",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 191
+    "totalSightings": 642
   },
   "potcheck_": {
     "name": "PotCheck_",
@@ -1499,11 +1509,11 @@
   "mobes12": {
     "name": "Mobes12",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754939516112,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 138
+    "totalSightings": 589
   },
   "timmyt": {
     "name": "TimmyT",
@@ -1526,11 +1536,11 @@
   "kaori": {
     "name": "Kaori",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 191
+    "totalSightings": 642
   },
   "one30two50": {
     "name": "one30two50",
@@ -1580,20 +1590,20 @@
   "jeffrey turk": {
     "name": "Jeffrey Turk",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 191
+    "totalSightings": 813
   },
   "zylo": {
     "name": "Zylo",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755561369591,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 191
+    "totalSightings": 258
   },
   "mimi rosen": {
     "name": "Mimi Rosen",
@@ -1616,29 +1626,29 @@
   "blax": {
     "name": "Blax",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754937741407,
+    "lastSeen": 1755009865036,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 14
+    "totalSightings": 51
   },
   "rsbrizz": {
     "name": "RsBrizz",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 191
+    "totalSightings": 362
   },
   "x o x o": {
     "name": "x o x o",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 191
+    "totalSightings": 642
   },
   ":)": {
     "name": ":)",
@@ -1652,11 +1662,11 @@
   "supaykunapa hawanpi": {
     "name": "Supaykunapa hawanpi",
     "firstSeen": 1754937177685,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564740058,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 133
+    "totalSightings": 578
   },
   "fizzgig": {
     "name": "Fizzgig",
@@ -1679,11 +1689,11 @@
   "ghostie": {
     "name": "Ghostie",
     "firstSeen": 1754937500611,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755011239348,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 190
+    "totalSightings": 226
   },
   "autumniant": {
     "name": "Autumniant",
@@ -1706,20 +1716,20 @@
   "keroppieee": {
     "name": "keroppieee",
     "firstSeen": 1754937620576,
-    "lastSeen": 1754937927398,
+    "lastSeen": 1755564472636,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 12
+    "totalSightings": 415
   },
   "mr goose 1": {
     "name": "MR GOOSE 1",
     "firstSeen": 1754937680459,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564741895,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 184
+    "totalSightings": 633
   },
   "nonki": {
     "name": "Nonki",
@@ -1733,20 +1743,20 @@
   "white velvet": {
     "name": "white velvet",
     "firstSeen": 1754937680829,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 115
+    "totalSightings": 566
   },
   "diablo": {
     "name": "Diablo",
     "firstSeen": 1754937800079,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 177
+    "totalSightings": 348
   },
   "elevat3dd": {
     "name": "Elevat3dd",
@@ -1760,29 +1770,29 @@
   "evilduncepuppy": {
     "name": "EVILDUNCEPUPPY",
     "firstSeen": 1754937800079,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 177
+    "totalSightings": 628
   },
   "busch": {
     "name": "Busch",
     "firstSeen": 1754937800079,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755010765149,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 169
+    "totalSightings": 304
   },
   "senra": {
     "name": "Senra",
     "firstSeen": 1754937800079,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 169
+    "totalSightings": 620
   },
   "ginjitski": {
     "name": "Ginjitski",
@@ -1814,20 +1824,20 @@
   "barb in finance": {
     "name": "Barb In Finance",
     "firstSeen": 1754938160124,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 159
+    "totalSightings": 610
   },
   "ws": {
     "name": "Ws",
     "firstSeen": 1754938232820,
-    "lastSeen": 1754938340930,
+    "lastSeen": 1755564472635,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 6
+    "totalSightings": 338
   },
   "bigtree97": {
     "name": "Bigtree97",
@@ -1841,11 +1851,11 @@
   "astrong410": {
     "name": "Astrong410",
     "firstSeen": 1754938511243,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564664642,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 155
+    "totalSightings": 590
   },
   "dr.stick": {
     "name": "Dr.Stick",
@@ -1859,11 +1869,11 @@
   "myabsi": {
     "name": "Myabsi",
     "firstSeen": 1754938780009,
-    "lastSeen": 1754939673055,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 128
+    "totalSightings": 579
   },
   "number 1 gooner": {
     "name": "number 1 gooner",
@@ -1913,11 +1923,11 @@
   "ace sicario": {
     "name": "Ace Sicario",
     "firstSeen": 1754939047549,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 60
+    "totalSightings": 231
   },
   "viral": {
     "name": "Viral",
@@ -1940,38 +1950,38 @@
   "leam1": {
     "name": "leam1",
     "firstSeen": 1754939329784,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755563752211,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 89
+    "totalSightings": 392
   },
   "viking_ghostie": {
     "name": "Viking_Ghostie",
     "firstSeen": 1754939392225,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 77
+    "totalSightings": 703
   },
   "sam": {
     "name": "sam",
     "firstSeen": 1754939462739,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 63
+    "totalSightings": 383
   },
   "halam": {
     "name": "halam",
     "firstSeen": 1754939462739,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 63
+    "totalSightings": 514
   },
   "steph": {
     "name": "Steph",
@@ -1985,29 +1995,29 @@
   "anuyffxi": {
     "name": "anuyffxi",
     "firstSeen": 1754939527786,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 53
+    "totalSightings": 504
   },
   "anne": {
     "name": "Anne",
     "firstSeen": 1754940999201,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 23
+    "totalSightings": 464
   },
   "s7 duncan": {
     "name": "S7 Duncan",
     "firstSeen": 1754940999201,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 23
+    "totalSightings": 194
   },
   "beardedsavage": {
     "name": "beardedsavage",
@@ -2030,20 +2040,20 @@
   "linsea": {
     "name": "Linsea",
     "firstSeen": 1754940999201,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 23
+    "totalSightings": 205
   },
   "dadbodgaming23": {
     "name": "Dadbodgaming23",
     "firstSeen": 1754940999201,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755010765149,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 23
+    "totalSightings": 158
   },
   "ex": {
     "name": "ex",
@@ -2084,29 +2094,29 @@
   "giggles": {
     "name": "Giggles",
     "firstSeen": 1754940999201,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 23
+    "totalSightings": 474
   },
   "mentally ill": {
     "name": "Mentally ill",
     "firstSeen": 1754941000040,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 23
+    "totalSightings": 478
   },
   "freyja": {
     "name": "Freyja",
     "firstSeen": 1754941000040,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 23
+    "totalSightings": 478
   },
   "borgir": {
     "name": "Borgir",
@@ -2120,11 +2130,11 @@
   "thelostassassinx": {
     "name": "TheLostAssassinx",
     "firstSeen": 1754941000040,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 23
+    "totalSightings": 612
   },
   "greggo1410": {
     "name": "greggo1410",
@@ -2147,29 +2157,29 @@
   "johnthemedic": {
     "name": "JohnTheMedic",
     "firstSeen": 1754941310846,
-    "lastSeen": 1754941414432,
+    "lastSeen": 1755564887355,
     "servers": [
       "horizon"
     ],
-    "totalSightings": 20
+    "totalSightings": 475
   },
   "snail": {
     "name": "snail",
     "firstSeen": 1754941311191,
-    "lastSeen": 1754941362865,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 11
+    "totalSightings": 126
   },
   "jarrell": {
     "name": "Jarrell",
     "firstSeen": 1754941311191,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 21
+    "totalSightings": 471
   },
   "notamallcop": {
     "name": "NotAMallCop",
@@ -2201,29 +2211,29 @@
   "h3ntaipro": {
     "name": "H3ntaiPro",
     "firstSeen": 1754941311191,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 21
+    "totalSightings": 472
   },
   "speedqbjunkie": {
     "name": "SpeedQBJunkie",
     "firstSeen": 1754941311191,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755564887353,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 21
+    "totalSightings": 472
   },
   "fi5hyv": {
     "name": "Fi5hyV",
     "firstSeen": 1754941311191,
-    "lastSeen": 1754941414431,
+    "lastSeen": 1755011239347,
     "servers": [
       "royalty"
     ],
-    "totalSightings": 21
+    "totalSightings": 57
   },
   "semora": {
     "name": "Semora",
@@ -2233,5 +2243,2957 @@
       "royalty"
     ],
     "totalSightings": 10
+  },
+  "❍ sins": {
+    "name": "❍ Sins",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 51
+  },
+  "𝓼⸸ s": {
+    "name": "𝓼⸸ S",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "ghstnz": {
+    "name": "ghstnz",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 544
+  },
+  "i z o": {
+    "name": "I Z O",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "mrfinsgaming": {
+    "name": "MrFinsGaming",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "ems96": {
+    "name": "Ems96",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755562457194,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 244
+  },
+  "lorin": {
+    "name": "Lorin",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "エージ": {
+    "name": "エージ",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 622
+  },
+  "seanaird": {
+    "name": "SeanAird",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "major erp": {
+    "name": "Major ERP",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "proudgator": {
+    "name": "PROUDGATOR",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "乇ﾒﾉﾚ⸸ꮢ𐍅": {
+    "name": "乇ﾒﾉﾚ⸸Ꮢ𐍅",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755009365581,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 1
+  },
+  "𝕁𝕖𝕝𝕝𝕪𝔹𝕖𝕒𝕟  ✌︎︎": {
+    "name": "𝕁𝕖𝕝𝕝𝕪𝔹𝕖𝕒𝕟  ✌︎︎",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "catch": {
+    "name": "catch",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 452
+  },
+  "mamascopezttv": {
+    "name": "MamaScopezttv",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 622
+  },
+  "freckles": {
+    "name": "Freckles",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 622
+  },
+  "nastyass honeybadger": {
+    "name": "Nastyass HoneyBadger",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "reign": {
+    "name": "Reign",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 549
+  },
+  "brayp": {
+    "name": "brayp",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "falsire": {
+    "name": "Falsire",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755562588634,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 201
+  },
+  "tony romo": {
+    "name": "tony romo",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "jordy": {
+    "name": "Jordy",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 171
+  },
+  "brydo": {
+    "name": "Brydo",
+    "firstSeen": 1755009365581,
+    "lastSeen": 1755009618949,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 3
+  },
+  "lm": {
+    "name": "LM",
+    "firstSeen": 1755009365663,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 626
+  },
+  "shakeykev": {
+    "name": "shakeykev",
+    "firstSeen": 1755009365663,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 171
+  },
+  "konaki": {
+    "name": "Konaki",
+    "firstSeen": 1755009365663,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 171
+  },
+  "flyer": {
+    "name": "Flyer",
+    "firstSeen": 1755009365663,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 171
+  },
+  "swizz": {
+    "name": "swizz",
+    "firstSeen": 1755009365663,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 171
+  },
+  "david1993": {
+    "name": "David1993",
+    "firstSeen": 1755009365663,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 171
+  },
+  "cleetus": {
+    "name": "Cleetus",
+    "firstSeen": 1755009546322,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 158
+  },
+  "mr. maggu": {
+    "name": "Mr. Maggu",
+    "firstSeen": 1755009546322,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 170
+  },
+  "poiso": {
+    "name": "poiso",
+    "firstSeen": 1755009546352,
+    "lastSeen": 1755009865036,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 36
+  },
+  "dw": {
+    "name": "DW",
+    "firstSeen": 1755009546352,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 170
+  },
+  "nightwing": {
+    "name": "Nightwing",
+    "firstSeen": 1755009701563,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 168
+  },
+  "eyesofisaiah": {
+    "name": "eyesofisaiah",
+    "firstSeen": 1755009701707,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 86
+  },
+  "daddy nikita": {
+    "name": "DADDY NIKITA",
+    "firstSeen": 1755009764156,
+    "lastSeen": 1755010545325,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 78
+  },
+  "乂 rhys": {
+    "name": "乂 rhys",
+    "firstSeen": 1755009824392,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 144
+  },
+  "✞ 𝔾𝕠𝕠𝕟": {
+    "name": "✞ 𝔾𝕠𝕠𝕟",
+    "firstSeen": 1755010181640,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 585
+  },
+  "ghillie": {
+    "name": "Ghillie",
+    "firstSeen": 1755010181700,
+    "lastSeen": 1755011239348,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 134
+  },
+  "ataraxia": {
+    "name": "Ataraxia",
+    "firstSeen": 1755010427661,
+    "lastSeen": 1755010479251,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 12
+  },
+  "domanik平和": {
+    "name": "Domanik平和",
+    "firstSeen": 1755010427661,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 102
+  },
+  "noxquse": {
+    "name": "NOXQUSE",
+    "firstSeen": 1755010489064,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 90
+  },
+  "jj": {
+    "name": "JJ",
+    "firstSeen": 1755010489064,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 90
+  },
+  "awild": {
+    "name": "awild",
+    "firstSeen": 1755010754264,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 495
+  },
+  "jack montagne": {
+    "name": "Jack Montagne",
+    "firstSeen": 1755011045763,
+    "lastSeen": 1755564152773,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 377
+  },
+  "reidarg": {
+    "name": "reidarG",
+    "firstSeen": 1755011237871,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 2
+  },
+  "nalderstorm": {
+    "name": "NalderStorm",
+    "firstSeen": 1755011237871,
+    "lastSeen": 1755563164507,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 201
+  },
+  "silver": {
+    "name": "Silver",
+    "firstSeen": 1755011237871,
+    "lastSeen": 1755011239347,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 2
+  },
+  "sweetecko": {
+    "name": "SweetEcko",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "wubz": {
+    "name": "Wubz",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "jahski": {
+    "name": "JAHSKI",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "daemon": {
+    "name": "Daemon",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "popcornmaster60": {
+    "name": "Popcornmaster60",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "carl.": {
+    "name": "Carl.",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755562457196,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 75
+  },
+  "dylwi": {
+    "name": "Dylwi",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755560945549,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 25
+  },
+  "pandalad": {
+    "name": "Pandalad",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "(hl-d) pvt. niceguy": {
+    "name": "(HL-D) Pvt. NiceGuy",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "bluekazooie": {
+    "name": "Bluekazooie",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755561369593,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 69
+  },
+  "ladyyneptune": {
+    "name": "LadyyNeptune",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "abewa": {
+    "name": "Abewa",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "joeyb": {
+    "name": "JoeyB",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "gm titanoflife": {
+    "name": "GM TitanOfLife",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 431
+  },
+  "srt4": {
+    "name": "SRT4",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "gnoztic": {
+    "name": "GNOZTIC",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "viipy": {
+    "name": "ViiPY",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "deevect": {
+    "name": "DeeVect",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "adstevens46": {
+    "name": "adstevens46",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "kryz": {
+    "name": "KRYZ",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "westibels": {
+    "name": "westibels",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755561369593,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 69
+  },
+  "justrez": {
+    "name": "JustRez",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "tommy chong": {
+    "name": "Tommy Chong",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "sirbeardsalot": {
+    "name": "SirBeardsAlot",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "j 21247": {
+    "name": "J 21247",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755561369593,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 69
+  },
+  "kylelivingstone123": {
+    "name": "kylelivingstone123",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "proofy": {
+    "name": "Proofy",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "bluntz32": {
+    "name": "Bluntz32",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "blackcat": {
+    "name": "Blackcat",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "[h°m] pyricggz": {
+    "name": "[H°M] PyricGGz",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "rob_dibble": {
+    "name": "Rob_Dibble",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "barney": {
+    "name": "Barney",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "itsnotalley :)": {
+    "name": "ItsNotAlley :)",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "bomper": {
+    "name": "Bomper",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "hoezay": {
+    "name": "HoeZay",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "rhylzyne": {
+    "name": "Rhylzyne",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "imalildamp": {
+    "name": "ImALilDamp",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "bkowa": {
+    "name": "bkowa",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "pyrexfish1": {
+    "name": "Pyrexfish1",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755561346151,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 65
+  },
+  "theo": {
+    "name": "Theo",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "meep": {
+    "name": "Meep",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "mynx": {
+    "name": "Mynx",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "hoppe": {
+    "name": "hoppe",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755563237172,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 215
+  },
+  "hologram": {
+    "name": "holograM",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "ahhhh": {
+    "name": "ahhhh",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "mayo": {
+    "name": "mayo",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "metsaa": {
+    "name": "Metsaa",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755563882337,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 329
+  },
+  "natty": {
+    "name": "Natty",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "killerkings1111": {
+    "name": "Killerkings1111",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "ryan jones": {
+    "name": "Ryan Jones",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "karnage": {
+    "name": "Karnage",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "impulse": {
+    "name": "Impulse",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "litleh": {
+    "name": "LitLEh",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "detergenttester": {
+    "name": "DetergentTester",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 454
+  },
+  "thehappycanuck": {
+    "name": "TheHappyCanuck",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 431
+  },
+  "goofy gooner": {
+    "name": "goofy gooner",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "crime": {
+    "name": "Crime",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "adefiledsoul": {
+    "name": "aDefiledSoul",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "roverboy21": {
+    "name": "roverboy21",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "jaz": {
+    "name": "Jaz",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "blackvipergt": {
+    "name": "BlackViperGT",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 445
+  },
+  "pegasismcmaster": {
+    "name": "pegasismcmaster",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "selkiemoon": {
+    "name": "selkiemoon",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755561346151,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 65
+  },
+  "jodice": {
+    "name": "Jodice",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "elena": {
+    "name": "Elena",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "9ine": {
+    "name": "9ine",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564152774,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 345
+  },
+  "deathlever": {
+    "name": "DeathLever",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "pepreal": {
+    "name": "Pepreal",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "dabrit": {
+    "name": "DABRIT",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "chuckdeuce": {
+    "name": "Chuckdeuce",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "shadow": {
+    "name": "SHADOW",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755563688987,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 295
+  },
+  "gracie banks": {
+    "name": "Gracie Banks",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "bbl krunky": {
+    "name": "BBL Krunky",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "void": {
+    "name": "VOID",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755563688987,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 295
+  },
+  "treyh": {
+    "name": "treyh",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755563623697,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 283
+  },
+  "big ceo": {
+    "name": "BIG CEO",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755561369593,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 69
+  },
+  "mr. swiss": {
+    "name": "Mr. Swiss",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 433
+  },
+  "redthedev": {
+    "name": "redthedev",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "satanicdisorder": {
+    "name": "SatanicDisorder",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755563882337,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 329
+  },
+  "seipher.x": {
+    "name": "seipher.x",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "standingwhilepooping": {
+    "name": "StandingWhilePooping",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "clr_walnutz": {
+    "name": "CLR_Walnutz",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "gio": {
+    "name": "Gio",
+    "firstSeen": 1755560347433,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 455
+  },
+  "tnfd": {
+    "name": "TnFD",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 447
+  },
+  "☠ dragon lotus ☠": {
+    "name": "☠ Dragon Lotus ☠",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "starkstraitos": {
+    "name": "Starkstraitos",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "kaleb": {
+    "name": "kaleb",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "tehluhhmossroc": {
+    "name": "tehluhhmossroc",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "semibanana": {
+    "name": "SemiBanana",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563164507,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 199
+  },
+  "kenny": {
+    "name": "kenny",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "lizzydutton": {
+    "name": "LizzyDutton",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "liquidscopez": {
+    "name": "LiquidScopez",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "-smokey-": {
+    "name": "-Smokey-",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "lynx": {
+    "name": "Lynx",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755561369591,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 67
+  },
+  "leon._.": {
+    "name": "Leon._.",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "k1ngz": {
+    "name": "K1NGZ",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755562457194,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 73
+  },
+  "swiftly ez": {
+    "name": "Swiftly Ez",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "tweakdafreak": {
+    "name": "TweakDaFreak",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "syx": {
+    "name": "syx",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "cards": {
+    "name": "cards",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "chris41397": {
+    "name": "Chris41397",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "policemanvibe/kick": {
+    "name": "PolicemanVibe/Kick",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "six": {
+    "name": "Six",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "beatrix": {
+    "name": "Beatrix",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "rippp": {
+    "name": "rippp",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563164507,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 199
+  },
+  "godspeed_1510": {
+    "name": "Godspeed_1510",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "milk": {
+    "name": "MILK",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "canoodles": {
+    "name": "Canoodles",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "hampter™": {
+    "name": "Hampter™",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "noxxxc | ttv": {
+    "name": "Noxxxc | TTV",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "tedsgaming5": {
+    "name": "TedsGaming5",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755561369591,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 67
+  },
+  "ralof garvey": {
+    "name": "Ralof Garvey",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "yeah baby": {
+    "name": "yeah baby",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "nelly peterson": {
+    "name": "Nelly Peterson",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "mrsriverqueen": {
+    "name": "MrsRiverQueen",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "dasmokebender": {
+    "name": "dasmokebender",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "mr himothy": {
+    "name": "Mr Himothy",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 439
+  },
+  "bubbabear": {
+    "name": "BubbaBear",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "chainsawgirl": {
+    "name": "chainsawgirl",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563302733,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 223
+  },
+  "leicester11": {
+    "name": "leicester11",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "reap3r": {
+    "name": "Reap3r",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "iskyangel": {
+    "name": "iSkyAngel",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "dreamitsiri": {
+    "name": "DreamItSiri",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564344995,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 377
+  },
+  "lovesosa": {
+    "name": "lovesosa",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755561346146,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 63
+  },
+  "hart": {
+    "name": "Hart",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "jaxon hayes": {
+    "name": "Jaxon Hayes",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "munk": {
+    "name": "Munk",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 417
+  },
+  "gatturner": {
+    "name": "GatTurner",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "bacon": {
+    "name": "Bacon",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563492172,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 257
+  },
+  "tony mcnugget": {
+    "name": "Tony McNugget",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "mg": {
+    "name": "MG",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "duffchaser": {
+    "name": "duffchaser",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "chev": {
+    "name": "chev",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 405
+  },
+  "hardshot": {
+    "name": "HardShot",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "ace": {
+    "name": "Ace",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "twatski": {
+    "name": "twatski",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 433
+  },
+  "mweh9": {
+    "name": "mweh9",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "dreamydream": {
+    "name": "DreamyDream",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755561280558,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 51
+  },
+  "mchale": {
+    "name": "McHale",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "mellow9x": {
+    "name": "Mellow9x",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "sadnuts": {
+    "name": "sadnuts ",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 415
+  },
+  "pleon": {
+    "name": "pleon",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 419
+  },
+  "lostalllogic": {
+    "name": "LostAllLogic",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "pullout philosopher": {
+    "name": "pullout philosopher",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "bob ross": {
+    "name": "Bob Ross",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "0sweet": {
+    "name": "0sweet",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "jeff myers": {
+    "name": "Jeff Myers",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "nikkinix": {
+    "name": "NikkiNix",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "alt7_beazy": {
+    "name": "ALT7_Beazy",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "bosch": {
+    "name": "Bosch",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "dora da destroya": {
+    "name": "Dora Da Destroya",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "mona bona": {
+    "name": "mona bona",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "phil maboi": {
+    "name": "Phil Maboi",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564675713,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 417
+  },
+  "scar": {
+    "name": "Scar",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "ryanm": {
+    "name": "ryanm",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "okamio": {
+    "name": "Okamio",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "jaxson donell": {
+    "name": "Jaxson Donell",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 387
+  },
+  "rapid.hearts": {
+    "name": "Rapid.Hearts",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "lazleon": {
+    "name": "LazLeoN",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "lady garga": {
+    "name": "lady garga",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "tunafesh": {
+    "name": "TunaFesh",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "envy_sinister429": {
+    "name": "Envy_Sinister429",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "fish nchips": {
+    "name": "Fish Nchips",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "frigidglass": {
+    "name": "FrigidGlass",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "bella signora": {
+    "name": "Bella signora",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "jason sands": {
+    "name": "Jason Sands",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "miu miu": {
+    "name": "miu miu",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "hammond872": {
+    "name": "hammond872",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "saint": {
+    "name": "saint",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "hi5": {
+    "name": "Hi5",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "s7duncan": {
+    "name": "S7Duncan",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "atomicor": {
+    "name": "Atomicor",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "jessypan": {
+    "name": "JessyPan",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563237170,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 211
+  },
+  "jose mourinho": {
+    "name": "jose mourinho",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "wumbo": {
+    "name": "wumbo",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "jervon": {
+    "name": "jervon",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "sage": {
+    "name": "sage",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564344995,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 369
+  },
+  "cherrymoon": {
+    "name": "CherryMoon",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "daddysprincess": {
+    "name": "DaddysPrincess",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "daddy": {
+    "name": "Daddy",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "vibez": {
+    "name": "vibez",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "ttv decendingtohell": {
+    "name": "TTV DecendingToHell",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "spaz": {
+    "name": "Spaz",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "2x2x": {
+    "name": "2x2x",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "drip": {
+    "name": "Drip",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "cjett": {
+    "name": "CJEtt",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "oaky": {
+    "name": "Oaky",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "toolmatic": {
+    "name": "ToolMatic",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "eevee": {
+    "name": "eevee",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563882336,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 325
+  },
+  "greylight": {
+    "name": "Greylight",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "vibethreat": {
+    "name": "VibeThreat",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 427
+  },
+  "heroooo": {
+    "name": "Heroooo",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "5kylander": {
+    "name": "5kylander",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "goose": {
+    "name": "Goose",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "yungtrashcan": {
+    "name": "YungTrashcan",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "nytepanda": {
+    "name": "NytePanda",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "uness": {
+    "name": "Uness",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563907076,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 329
+  },
+  "erroll": {
+    "name": "Erroll",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 439
+  },
+  "architectnation": {
+    "name": "ArchitectNATION",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "glazing (.) (.)": {
+    "name": "Glazing (.) (.)",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "nerdy": {
+    "name": "nerdy",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563752211,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 303
+  },
+  "priv": {
+    "name": "Priv",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "melo": {
+    "name": "Melo",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564740058,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 445
+  },
+  "stev9": {
+    "name": "Stev9",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "costa": {
+    "name": "Costa",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755563164507,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 199
+  },
+  "aarons": {
+    "name": "aarons",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755561034882,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 39
+  },
+  "awty": {
+    "name": "Awty",
+    "firstSeen": 1755560508781,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 451
+  },
+  "amberp1010": {
+    "name": "amberp1010",
+    "firstSeen": 1755560508817,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 453
+  },
+  "redneckcyborg": {
+    "name": "RedneckCyborg",
+    "firstSeen": 1755560695943,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 450
+  },
+  "troy_af": {
+    "name": "troy_af",
+    "firstSeen": 1755560695943,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 420
+  },
+  "dani love": {
+    "name": "Dani Love",
+    "firstSeen": 1755560695943,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 450
+  },
+  "goble": {
+    "name": "goble",
+    "firstSeen": 1755560695943,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 450
+  },
+  "isnaaps": {
+    "name": "iSnaaps",
+    "firstSeen": 1755560695982,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 452
+  },
+  "anything": {
+    "name": "Anything",
+    "firstSeen": 1755560816963,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 448
+  },
+  "i'm just a giiiirl": {
+    "name": "I'm just a giiiirl",
+    "firstSeen": 1755560816988,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 450
+  },
+  "jae": {
+    "name": "Jae",
+    "firstSeen": 1755560956462,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 428
+  },
+  "taradicof": {
+    "name": "Taradicof",
+    "firstSeen": 1755560956462,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 428
+  },
+  "asus": {
+    "name": "ASUS",
+    "firstSeen": 1755561020548,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 416
+  },
+  "ryker \"hangman\" steele": {
+    "name": "Ryker \"Hangman\" Steele",
+    "firstSeen": 1755561225087,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 414
+  },
+  "nuwa": {
+    "name": "Nuwa",
+    "firstSeen": 1755561290932,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 400
+  },
+  "mccre": {
+    "name": "mccre",
+    "firstSeen": 1755562405549,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 386
+  },
+  "❤ lemon ❤": {
+    "name": "❤ Lemon ❤",
+    "firstSeen": 1755562405549,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 386
+  },
+  "lleke": {
+    "name": "lleke",
+    "firstSeen": 1755562405549,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 386
+  },
+  "monica": {
+    "name": "monica",
+    "firstSeen": 1755562405549,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 366
+  },
+  "mrclutch": {
+    "name": "MrClutch",
+    "firstSeen": 1755562405549,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 386
+  },
+  "abraid": {
+    "name": "Abraid",
+    "firstSeen": 1755562405549,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 386
+  },
+  "kagami": {
+    "name": "Kagami",
+    "firstSeen": 1755562405549,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 386
+  },
+  "hooligan": {
+    "name": "Hooligan",
+    "firstSeen": 1755562405609,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 384
+  },
+  "bronx": {
+    "name": "Bronx",
+    "firstSeen": 1755562405609,
+    "lastSeen": 1755564740058,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 378
+  },
+  "goochie": {
+    "name": "Goochie",
+    "firstSeen": 1755562405609,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 384
+  },
+  "saucy_amiri1": {
+    "name": "Saucy_Amiri1",
+    "firstSeen": 1755562405609,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 384
+  },
+  "|sith|": {
+    "name": "|SITH|",
+    "firstSeen": 1755562405609,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 384
+  },
+  "wafflez": {
+    "name": "Wafflez",
+    "firstSeen": 1755562405609,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 384
+  },
+  "turbo": {
+    "name": "turbo",
+    "firstSeen": 1755562534622,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 368
+  },
+  "wheels065": {
+    "name": "Wheels065",
+    "firstSeen": 1755562598922,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 356
+  },
+  "al3xso": {
+    "name": "Al3xso",
+    "firstSeen": 1755562662787,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 344
+  },
+  "bozo": {
+    "name": "Bozo",
+    "firstSeen": 1755562662787,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 344
+  },
+  "hangryhufflepuff": {
+    "name": "Hangryhufflepuff",
+    "firstSeen": 1755562728450,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 332
+  },
+  "squaredseal61": {
+    "name": "SquaredSeal61",
+    "firstSeen": 1755562793897,
+    "lastSeen": 1755563428410,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 114
+  },
+  "hempsalot": {
+    "name": "hempsalot",
+    "firstSeen": 1755562985748,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 262
+  },
+  "james": {
+    "name": "James",
+    "firstSeen": 1755562985748,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 284
+  },
+  "007": {
+    "name": "007",
+    "firstSeen": 1755563048686,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 276
+  },
+  "lala": {
+    "name": "Lala",
+    "firstSeen": 1755563174687,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 252
+  },
+  "carl peaches": {
+    "name": "Carl Peaches",
+    "firstSeen": 1755563174687,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 252
+  },
+  "xtwiztids0ulzx": {
+    "name": "xTWIZTIDS0ULZx",
+    "firstSeen": 1755563247757,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 206
+  },
+  "cdr": {
+    "name": "CDR",
+    "firstSeen": 1755563247757,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 240
+  },
+  "kick@elchippyy": {
+    "name": "KICK@ELCHIPPYY",
+    "firstSeen": 1755563313117,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 228
+  },
+  "tupapib3ast": {
+    "name": "TuPapiB3ast",
+    "firstSeen": 1755563313117,
+    "lastSeen": 1755564610758,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 136
+  },
+  "joey": {
+    "name": "Joey",
+    "firstSeen": 1755563375399,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 218
+  },
+  "shevect": {
+    "name": "SheVect",
+    "firstSeen": 1755563438783,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 206
+  },
+  "rayus": {
+    "name": "Rayus",
+    "firstSeen": 1755563438783,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 206
+  },
+  "norton": {
+    "name": "Norton",
+    "firstSeen": 1755563502297,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 194
+  },
+  "commander kilroy": {
+    "name": "Commander Kilroy",
+    "firstSeen": 1755563502297,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 194
+  },
+  "drake": {
+    "name": "Drake",
+    "firstSeen": 1755563502500,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 194
+  },
+  "suedi": {
+    "name": "SUEDI",
+    "firstSeen": 1755563567653,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 182
+  },
+  "dingdongdingles": {
+    "name": "DingDongDIngles",
+    "firstSeen": 1755563567653,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 182
+  },
+  "iron sheep": {
+    "name": "Iron Sheep",
+    "firstSeen": 1755563762503,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 148
+  },
+  "mkseltz": {
+    "name": "MKSeltz",
+    "firstSeen": 1755563762503,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 148
+  },
+  "mslollygagttv": {
+    "name": "MsLollyGagTTV",
+    "firstSeen": 1755563762503,
+    "lastSeen": 1755564152773,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 38
+  },
+  "thepinkpresident": {
+    "name": "ThePinkPresident",
+    "firstSeen": 1755563826345,
+    "lastSeen": 1755563882337,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 12
+  },
+  "antisocial": {
+    "name": "antisocial",
+    "firstSeen": 1755563893481,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 126
+  },
+  "willc": {
+    "name": "willc",
+    "firstSeen": 1755563893481,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 126
+  },
+  "sachi": {
+    "name": "sachi",
+    "firstSeen": 1755564099143,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 86
+  },
+  "floof": {
+    "name": "floof",
+    "firstSeen": 1755564099143,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 122
+  },
+  "reddglare": {
+    "name": "REDDGLARE",
+    "firstSeen": 1755564099201,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 122
+  },
+  "neko": {
+    "name": "Neko",
+    "firstSeen": 1755564228241,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 98
+  },
+  "domok": {
+    "name": "domok",
+    "firstSeen": 1755564228241,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 98
+  },
+  "nem0": {
+    "name": "Nem0",
+    "firstSeen": 1755564292009,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 86
+  },
+  "dahay": {
+    "name": "dahay",
+    "firstSeen": 1755564549640,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 40
+  },
+  "bobby bill": {
+    "name": "Bobby Bill",
+    "firstSeen": 1755564549640,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 40
+  },
+  "lexi$": {
+    "name": "Lexi$",
+    "firstSeen": 1755564549707,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 42
+  },
+  "mechanical_doctor": {
+    "name": "Mechanical_Doctor",
+    "firstSeen": 1755564610682,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 32
+  },
+  "florp": {
+    "name": "florp",
+    "firstSeen": 1755564621498,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 30
+  },
+  "fullrequirements": {
+    "name": "Fullrequirements",
+    "firstSeen": 1755564687035,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 18
+  },
+  "phill": {
+    "name": "phill",
+    "firstSeen": 1755564740057,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 8
+  },
+  "los": {
+    "name": "Los",
+    "firstSeen": 1755564855969,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 6
+  },
+  "simp": {
+    "name": "simp",
+    "firstSeen": 1755564855969,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 6
+  },
+  "viper": {
+    "name": "Viper",
+    "firstSeen": 1755564855969,
+    "lastSeen": 1755564887353,
+    "servers": [
+      "royalty"
+    ],
+    "totalSightings": 6
+  },
+  "vae": {
+    "name": "vae",
+    "firstSeen": 1755564855997,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 6
+  },
+  "goryfrog63424": {
+    "name": "GoryFrog63424",
+    "firstSeen": 1755564855997,
+    "lastSeen": 1755564887355,
+    "servers": [
+      "horizon"
+    ],
+    "totalSightings": 6
   }
 }
