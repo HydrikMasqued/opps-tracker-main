@@ -2277,7 +2277,7 @@ client.on('messageCreate', async (message) => {
     const content = message.content.trim();
     
     // Handle private tracking commands (owner only)
-    if (content.startsWith('!privatetrack') || content.startsWith('!unprivatetrack')) {
+    if (content.startsWith('!privatetrack') || content.startsWith('!unprivatetrack') || content.startsWith('!privatetracklist') || content.startsWith('!restart')) {
         // Only allow the specific user to use these commands
         if (message.author.id !== PRIVATE_TRACKING_OWNER) {
             return message.react('❌'); // Just react with X for non-owners
@@ -2385,6 +2385,135 @@ client.on('messageCreate', async (message) => {
             } catch (error) {
                 console.error('Error in !unprivatetrack command:', error);
                 return message.reply('❌ An error occurred while removing private tracking.');
+            }
+        }
+        
+        else if (content.startsWith('!privatetracklist')) {
+            try {
+                const privatelyTrackedCount = Object.keys(privateTrackedPlayers).length;
+                
+                if (privatelyTrackedCount === 0) {
+                    const embed = new EmbedBuilder()
+                        .setColor('#800080')
+                        .setTitle('🕵️ Private Tracking List')
+                        .setDescription('No players are currently being privately tracked.')
+                        .addFields({ 
+                            name: '💡 Add Private Tracking', 
+                            value: 'Use `!privatetrack <PlayerName> [reason]` to start tracking a player privately.', 
+                            inline: false 
+                        })
+                        .setTimestamp();
+                    
+                    return message.reply({ embeds: [embed] });
+                }
+                
+                const embed = new EmbedBuilder()
+                    .setColor('#800080')
+                    .setTitle('🕵️ Private Tracking List')
+                    .setDescription(`Currently tracking **${privatelyTrackedCount}** player${privatelyTrackedCount !== 1 ? 's' : ''} privately`);
+                
+                const playerEntries = [];
+                for (const [playerId, player] of Object.entries(privateTrackedPlayers)) {
+                    const addedDate = new Date(player.addedAt).toLocaleDateString();
+                    const reason = player.reason ? ` (${player.reason})` : '';
+                    playerEntries.push(`• **${player.name}** - Added ${addedDate}${reason}`);
+                }
+                
+                // Split into chunks if too many players
+                const chunkSize = 10;
+                const chunks = [];
+                for (let i = 0; i < playerEntries.length; i += chunkSize) {
+                    chunks.push(playerEntries.slice(i, i + chunkSize));
+                }
+                
+                if (chunks.length === 1) {
+                    embed.addFields({ 
+                        name: 'Privately Tracked Players', 
+                        value: chunks[0].join('\n'), 
+                        inline: false 
+                    });
+                } else {
+                    chunks.forEach((chunk, index) => {
+                        embed.addFields({
+                            name: index === 0 ? 'Privately Tracked Players' : '\u200b', // Invisible character for continuation
+                            value: chunk.join('\n'),
+                            inline: false
+                        });
+                    });
+                }
+                
+                embed.addFields(
+                    { name: 'Servers Monitored', value: 'Royalty RP & Horizon', inline: true },
+                    { name: 'Notification Method', value: 'Direct Messages Only', inline: true },
+                    { name: '⚠️ Privacy Notice', value: 'This list is private and only visible to you. Use `!unprivatetrack <PlayerName>` to remove players.', inline: false }
+                );
+                
+                embed.setTimestamp();
+                
+                console.log(`🕵️ Private tracking list requested by owner`);
+                message.react('✅');
+                return message.reply({ embeds: [embed] });
+                
+            } catch (error) {
+                console.error('Error in !privatetracklist command:', error);
+                return message.reply('❌ An error occurred while fetching the private tracking list.');
+            }
+        }
+        
+        else if (content.startsWith('!restart')) {
+            try {
+                const embed = new EmbedBuilder()
+                    .setColor('#ff6b35')
+                    .setTitle('🔄 Bot Restart Initiated')
+                    .setDescription('The bot is restarting... This may take a few moments.')
+                    .addFields(
+                        { name: 'Status', value: '🔄 Shutting down gracefully...', inline: true },
+                        { name: 'Data Safety', value: '💾 All data will be saved', inline: true },
+                        { name: 'Expected Downtime', value: '⏱️ ~10-30 seconds', inline: true }
+                    )
+                    .addFields({
+                        name: '📋 Restart Process',
+                        value: '1. Save all tracking data\n2. Stop monitoring processes\n3. Close Discord connection\n4. Restart application\n5. Reconnect to Discord\n6. Resume monitoring',
+                        inline: false
+                    })
+                    .setTimestamp();
+                
+                console.log(`🔄 Bot restart initiated by owner (${message.author.tag})`);
+                message.react('✅');
+                await message.reply({ embeds: [embed] });
+                
+                // Give the message time to send before restarting
+                setTimeout(async () => {
+                    console.log('🔄 Beginning graceful restart...');
+                    
+                    // Save all data before restart
+                    console.log('💾 Saving player data...');
+                    savePlayerData();
+                    console.log('💾 Saving tracked players...');
+                    saveTrackedPlayers();
+                    console.log('💾 Saving private tracked players...');
+                    savePrivateTrackedPlayers();
+                    console.log('💾 Saving tracking notifications...');
+                    saveTrackingNotifications();
+                    console.log('💾 Saving player database...');
+                    savePlayerDatabase();
+                    
+                    // Stop monitoring
+                    console.log('⏹️ Stopping monitoring...');
+                    stopMonitoring();
+                    
+                    // Close Discord connection
+                    console.log('🔌 Closing Discord connection...');
+                    client.destroy();
+                    
+                    // Exit process - the process manager (like PM2, nodemon, or system service) should restart it
+                    console.log('🔄 Exiting for restart...');
+                    process.exit(0);
+                }, 2000); // 2 second delay
+                
+            } catch (error) {
+                console.error('Error in !restart command:', error);
+                return message.reply('❌ An error occurred while initiating restart.');
             }
         }
         
