@@ -1,5 +1,5 @@
 // Container deployment timestamp: 2025-08-10 17:30 UTC
-const { Client, GatewayIntentBits, EmbedBuilder, ActivityType, SlashCommandBuilder, REST, Routes, PermissionFlagsBits } = require('discord.js');
+const { Client, GatewayIntentBits, EmbedBuilder, ActivityType, SlashCommandBuilder, REST, Routes, PermissionFlagsBits, MessageFlags } = require('discord.js');
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 require('dotenv').config();
@@ -59,11 +59,55 @@ let MONITORING_ENABLED = false;
 let playerTracker = {};  // Store player join times and durations
 let monitoringInterval = null;
 
+// Safe interaction response helpers
+async function safeReply(interaction, options) {
+    try {
+        if (interaction.deferred) {
+            return await interaction.editReply(options);
+        } else {
+            return await interaction.reply(options);
+        }
+    } catch (error) {
+        console.error('Error sending interaction reply:', error);
+        // Try to send a simple error message if possible
+        try {
+            if (!interaction.replied && !interaction.deferred) {
+                await interaction.reply({ content: 'An error occurred while processing your request.', flags: MessageFlags.Ephemeral });
+            }
+        } catch (secondError) {
+            console.error('Failed to send error message to user:', secondError);
+        }
+    }
+}
+
+async function safeDefer(interaction) {
+    try {
+        return await interaction.deferReply();
+    } catch (error) {
+        console.error('Error deferring interaction:', error);
+        throw error;
+    }
+}
+
+async function safeEditReply(interaction, options) {
+    try {
+        return await interaction.editReply(options);
+    } catch (error) {
+        console.error('Error editing interaction reply:', error);
+        // Don't throw - just log the error
+    }
+}
+
 // Permission checking function
 function hasFullPatchPermission(member) {
+    // Check if member exists (null when used in DMs)
+    if (!member) {
+        return false;
+    }
+    
     // Check for "Full Patch" role or Administrator permission
-    const hasFullPatch = member.roles.cache.some(role => role.name === 'Full Patch');
-    const hasAdmin = member.permissions.has(PermissionFlagsBits.Administrator);
+    const hasFullPatch = member.roles?.cache?.some(role => role.name === 'Full Patch') || false;
+    const hasAdmin = member.permissions?.has(PermissionFlagsBits.Administrator) || false;
     return hasFullPatch || hasAdmin;
 }
 
@@ -1375,7 +1419,7 @@ client.on('interactionCreate', async interaction => {
         if (commandName === 'track') {
             // Check Full Patch role or admin permissions
             if (!hasFullPatchPermission(interaction.member)) {
-                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', flags: MessageFlags.Ephemeral });
             }
 
             const playerName = interaction.options.getString('player');
@@ -1385,7 +1429,7 @@ client.on('interactionCreate', async interaction => {
             const existingPlayer = isPlayerTracked(playerName);
             if (existingPlayer) {
                 const categoryInfo = TRACKING_CATEGORIES[existingPlayer.category];
-                return await interaction.reply({ content: `❌ **${playerName}** is already being tracked as ${categoryInfo.emoji} ${categoryInfo.name}`, ephemeral: true });
+                return await interaction.reply({ content: `❌ **${playerName}** is already being tracked as ${categoryInfo.emoji} ${categoryInfo.name}`, flags: MessageFlags.Ephemeral });
             }
 
             const trackedPlayer = addTrackedPlayer(playerName, category, interaction.user.tag, reason);
@@ -1412,14 +1456,14 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'untrack') {
             // Check Full Patch role or admin permissions
             if (!hasFullPatchPermission(interaction.member)) {
-                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', flags: MessageFlags.Ephemeral });
             }
 
             const playerName = interaction.options.getString('player');
             const existingPlayer = isPlayerTracked(playerName);
 
             if (!existingPlayer) {
-                return await interaction.reply({ content: `❌ **${playerName}** is not currently being tracked.`, ephemeral: true });
+                return await interaction.reply({ content: `❌ **${playerName}** is not currently being tracked.`, flags: MessageFlags.Ephemeral });
             }
 
             const categoryInfo = TRACKING_CATEGORIES[existingPlayer.category];
@@ -1439,7 +1483,7 @@ client.on('interactionCreate', async interaction => {
                 console.log(`📍 Player untracked: ${existingPlayer.name} by ${interaction.user.tag}`);
                 return await interaction.reply({ embeds: [embed] });
             } else {
-                return await interaction.reply({ content: '❌ Failed to remove player from tracking.', ephemeral: true });
+                return await interaction.reply({ content: '❌ Failed to remove player from tracking.', flags: MessageFlags.Ephemeral });
             }
         }
 
@@ -1524,8 +1568,11 @@ client.on('interactionCreate', async interaction => {
             const trackedPlayer = isPlayerTracked(searchPlayer);
 
             if (!trackedPlayer) {
-                return await interaction.reply({ content: `❌ **${searchPlayer}** is not in the tracking list.\nUse \`/track\` to start tracking them.`, ephemeral: true });
+                return await interaction.reply({ content: `❌ **${searchPlayer}** is not in the tracking list.\nUse \`/track\` to start tracking them.`, flags: MessageFlags.Ephemeral });
             }
+
+            // Defer the interaction immediately for long-running command
+            await interaction.deferReply();
 
             const loadingEmbed = new EmbedBuilder()
                 .setColor('#ffff00')
@@ -1533,7 +1580,7 @@ client.on('interactionCreate', async interaction => {
                 .setDescription(`Looking for **${trackedPlayer.name}** on both servers...\n\n*This may take 30-60 seconds*`)
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [loadingEmbed] });
+            await interaction.editReply({ embeds: [loadingEmbed] });
 
             try {
                 // Check both servers
@@ -1697,8 +1744,11 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'database') {
             // Check Full Patch role or admin permissions
             if (!hasFullPatchPermission(interaction.member)) {
-                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', flags: MessageFlags.Ephemeral });
             }
+            
+            // Defer the interaction immediately for long-running command
+            await interaction.deferReply();
             
             const loadingEmbed = new EmbedBuilder()
                 .setColor('#ffff00')
@@ -1706,7 +1756,7 @@ client.on('interactionCreate', async interaction => {
                 .setDescription('Creating downloadable player database file...\n\n*This may take a few seconds*')
                 .setTimestamp();
 
-            await interaction.reply({ embeds: [loadingEmbed] });
+            await interaction.editReply({ embeds: [loadingEmbed] });
 
             try {
                 const allPlayers = Object.values(playerDatabase);
@@ -1872,7 +1922,7 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'royalty') {
             // Check Full Patch role or admin permissions
             if (!hasFullPatchPermission(interaction.member)) {
-                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', flags: MessageFlags.Ephemeral });
             }
 
             const loadingEmbed = new EmbedBuilder()
@@ -2014,7 +2064,7 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'horizon') {
             // Check Full Patch role or admin permissions
             if (!hasFullPatchPermission(interaction.member)) {
-                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', flags: MessageFlags.Ephemeral });
             }
 
             const loadingEmbed = new EmbedBuilder()
@@ -2165,7 +2215,7 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'startmonitor') {
             // Check admin permissions
             if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-                return await interaction.reply({ content: '❌ You need Administrator permissions to start monitoring.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need Administrator permissions to start monitoring.', flags: MessageFlags.Ephemeral });
             }
 
             startMonitoring();
@@ -2187,7 +2237,7 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'stopmonitor') {
             // Check admin permissions
             if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-                return await interaction.reply({ content: '❌ You need Administrator permissions to stop monitoring.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need Administrator permissions to stop monitoring.', flags: MessageFlags.Ephemeral });
             }
 
             stopMonitoring();
@@ -2204,7 +2254,7 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'setroyalty') {
             // Check admin permissions
             if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-                return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', flags: MessageFlags.Ephemeral });
             }
 
             const channel = interaction.options.getChannel('channel') || interaction.channel;
@@ -2232,7 +2282,7 @@ client.on('interactionCreate', async interaction => {
         else if (commandName === 'sethorizon') {
             // Check admin permissions
             if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-                return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', ephemeral: true });
+                return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', flags: MessageFlags.Ephemeral });
             }
 
             const channel = interaction.options.getChannel('channel') || interaction.channel;
@@ -2261,7 +2311,7 @@ client.on('interactionCreate', async interaction => {
     } catch (error) {
         console.error('Error handling slash command:', error);
         
-        const errorMessage = { content: 'There was an error while executing this command!', ephemeral: true };
+        const errorMessage = { content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral };
         
         if (interaction.deferred) {
             await interaction.editReply(errorMessage);
