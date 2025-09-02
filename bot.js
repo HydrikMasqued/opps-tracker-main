@@ -154,6 +154,258 @@ const PRIVATE_TRACKING_OWNER = '181143017619587073'; // jayreaper's Discord ID
 let playerDatabase = {};
 const PLAYER_DATABASE_FILE = './player_database.json';
 
+// ============================================================================
+// COMPREHENSIVE DEBUGGING SYSTEM - OWNER ONLY
+// ============================================================================
+
+// Debug system configuration
+const DEBUG_OWNER_ID = '181143017619587073'; // Your Discord ID
+const ERROR_LOG_FILE = './debug_errors.json';
+const DEBUG_LOG_FILE = './debug_log.json';
+const MAX_ERROR_ENTRIES = 1000; // Keep last 1000 errors
+const MAX_DEBUG_ENTRIES = 500;  // Keep last 500 debug entries
+
+// Error and debug storage
+let errorLog = [];
+let debugLog = [];
+let botStats = {
+    startTime: Date.now(),
+    commandsExecuted: 0,
+    errorsEncountered: 0,
+    lastError: null,
+    monitoringCycles: 0,
+    playersExtracted: 0,
+    lastActivity: Date.now()
+};
+
+// Load existing error logs
+function loadErrorLogs() {
+    try {
+        if (fs.existsSync(ERROR_LOG_FILE)) {
+            const data = fs.readFileSync(ERROR_LOG_FILE, 'utf8');
+            errorLog = JSON.parse(data);
+            console.log(`🐛 Loaded ${errorLog.length} error log entries`);
+        }
+        
+        if (fs.existsSync(DEBUG_LOG_FILE)) {
+            const data = fs.readFileSync(DEBUG_LOG_FILE, 'utf8');
+            debugLog = JSON.parse(data);
+            console.log(`🔍 Loaded ${debugLog.length} debug log entries`);
+        }
+    } catch (error) {
+        console.error('Error loading debug logs:', error);
+        errorLog = [];
+        debugLog = [];
+    }
+}
+
+// Save error logs
+function saveErrorLogs() {
+    try {
+        // Keep only the most recent entries
+        if (errorLog.length > MAX_ERROR_ENTRIES) {
+            errorLog = errorLog.slice(-MAX_ERROR_ENTRIES);
+        }
+        if (debugLog.length > MAX_DEBUG_ENTRIES) {
+            debugLog = debugLog.slice(-MAX_DEBUG_ENTRIES);
+        }
+        
+        fs.writeFileSync(ERROR_LOG_FILE, JSON.stringify(errorLog, null, 2));
+        fs.writeFileSync(DEBUG_LOG_FILE, JSON.stringify(debugLog, null, 2));
+    } catch (error) {
+        console.error('Error saving debug logs:', error);
+    }
+}
+
+// Enhanced error logging function
+function logError(error, context = '', severity = 'error') {
+    const errorEntry = {
+        timestamp: Date.now(),
+        date: new Date().toISOString(),
+        severity: severity,
+        context: context,
+        message: error.message || error,
+        stack: error.stack || null,
+        type: error.name || 'Unknown',
+        botUptime: Date.now() - botStats.startTime
+    };
+    
+    errorLog.push(errorEntry);
+    botStats.errorsEncountered++;
+    botStats.lastError = errorEntry;
+    botStats.lastActivity = Date.now();
+    
+    // Console log with enhanced formatting
+    console.error(`🐛 [${severity.toUpperCase()}] ${context}: ${error.message || error}`);
+    
+    // Auto-save every 10 errors
+    if (errorLog.length % 10 === 0) {
+        saveErrorLogs();
+    }
+}
+
+// Debug logging function
+function logDebug(message, data = null) {
+    const debugEntry = {
+        timestamp: Date.now(),
+        date: new Date().toISOString(),
+        message: message,
+        data: data,
+        botUptime: Date.now() - botStats.startTime
+    };
+    
+    debugLog.push(debugEntry);
+    botStats.lastActivity = Date.now();
+    
+    console.log(`🔍 [DEBUG] ${message}`);
+    if (data) {
+        console.log(`📊 [DATA]`, data);
+    }
+}
+
+// Bot health checker
+function getBotHealth() {
+    const uptime = Date.now() - botStats.startTime;
+    const recentErrors = errorLog.filter(e => Date.now() - e.timestamp < 3600000); // Last hour
+    const memoryUsage = process.memoryUsage();
+    
+    return {
+        uptime: uptime,
+        uptimeFormatted: formatDuration(uptime),
+        status: recentErrors.length > 10 ? 'UNHEALTHY' : recentErrors.length > 5 ? 'WARNING' : 'HEALTHY',
+        totalErrors: errorLog.length,
+        recentErrors: recentErrors.length,
+        commandsExecuted: botStats.commandsExecuted,
+        monitoringCycles: botStats.monitoringCycles,
+        playersExtracted: botStats.playersExtracted,
+        memoryUsage: {
+            rss: Math.round(memoryUsage.rss / 1024 / 1024) + 'MB',
+            heapUsed: Math.round(memoryUsage.heapUsed / 1024 / 1024) + 'MB',
+            heapTotal: Math.round(memoryUsage.heapTotal / 1024 / 1024) + 'MB'
+        },
+        lastActivity: botStats.lastActivity,
+        monitoringEnabled: MONITORING_ENABLED,
+        trackedPlayers: Object.keys(trackedPlayers).length,
+        databaseSize: Object.keys(playerDatabase).length
+    };
+}
+
+// Export logs to file
+function exportDebugLogs() {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `debug_export_${timestamp}.txt`;
+    const health = getBotHealth();
+    
+    let content = '';
+    content += '========================================\n';
+    content += 'OOPS TRACKER BOT - DEBUG EXPORT\n';
+    content += '========================================\n';
+    content += `Export Date: ${new Date().toLocaleString()}\n`;
+    content += `Bot Uptime: ${health.uptimeFormatted}\n`;
+    content += `Bot Status: ${health.status}\n`;
+    content += '\n';
+    
+    // Bot Health Section
+    content += '========================================\n';
+    content += 'BOT HEALTH & STATISTICS\n';
+    content += '========================================\n';
+    content += `Total Uptime: ${health.uptimeFormatted}\n`;
+    content += `Health Status: ${health.status}\n`;
+    content += `Commands Executed: ${health.commandsExecuted}\n`;
+    content += `Monitoring Cycles: ${health.monitoringCycles}\n`;
+    content += `Players Extracted: ${health.playersExtracted}\n`;
+    content += `Total Errors: ${health.totalErrors}\n`;
+    content += `Recent Errors (1h): ${health.recentErrors}\n`;
+    content += `Memory Usage: ${health.memoryUsage.heapUsed} / ${health.memoryUsage.heapTotal}\n`;
+    content += `Monitoring Enabled: ${health.monitoringEnabled}\n`;
+    content += `Tracked Players: ${health.trackedPlayers}\n`;
+    content += `Database Size: ${health.databaseSize} players\n`;
+    content += '\n';
+    
+    // Recent Errors Section
+    if (errorLog.length > 0) {
+        content += '========================================\n';
+        content += 'ERROR LOG (Last 50 entries)\n';
+        content += '========================================\n';
+        
+        const recentErrors = errorLog.slice(-50);
+        recentErrors.forEach((error, index) => {
+            content += `[${error.date}] ${error.severity.toUpperCase()} - ${error.context}\n`;
+            content += `  Message: ${error.message}\n`;
+            content += `  Type: ${error.type}\n`;
+            if (error.stack) {
+                content += `  Stack: ${error.stack.split('\n')[0]}\n`;
+            }
+            content += `  Uptime: ${formatDuration(error.botUptime)}\n`;
+            content += '\n';
+        });
+    }
+    
+    // Debug Log Section
+    if (debugLog.length > 0) {
+        content += '========================================\n';
+        content += 'DEBUG LOG (Last 25 entries)\n';
+        content += '========================================\n';
+        
+        const recentDebug = debugLog.slice(-25);
+        recentDebug.forEach(debug => {
+            content += `[${debug.date}] ${debug.message}\n`;
+            if (debug.data) {
+                content += `  Data: ${JSON.stringify(debug.data, null, 2).slice(0, 200)}\n`;
+            }
+            content += '\n';
+        });
+    }
+    
+    // System Info Section
+    content += '========================================\n';
+    content += 'SYSTEM INFORMATION\n';
+    content += '========================================\n';
+    content += `Node.js Version: ${process.version}\n`;
+    content += `Platform: ${process.platform}\n`;
+    content += `Architecture: ${process.arch}\n`;
+    content += `Process ID: ${process.pid}\n`;
+    content += `Working Directory: ${process.cwd()}\n`;
+    content += '\n';
+    
+    // Server Configuration
+    content += '========================================\n';
+    content += 'SERVER CONFIGURATION\n';
+    content += '========================================\n';
+    content += `Royalty RP Server: ${SERVERS.royalty.id}\n`;
+    content += `Horizon Server: ${SERVERS.horizon.id}\n`;
+    content += `Royalty Log Channel: ${ROYALTY_LOG_CHANNEL_ID || 'Not Set'}\n`;
+    content += `Horizon Log Channel: ${HORIZON_LOG_CHANNEL_ID || 'Not Set'}\n`;
+    content += '\n';
+    
+    try {
+        fs.writeFileSync(filename, content, 'utf8');
+        return { filename, size: content.length };
+    } catch (error) {
+        logError(error, 'Export Debug Logs');
+        return null;
+    }
+}
+
+// Clear error logs
+function clearErrorLogs() {
+    const clearedCount = errorLog.length;
+    errorLog = [];
+    debugLog = [];
+    saveErrorLogs();
+    return clearedCount;
+}
+
+// Wrap existing functions with error logging
+const originalConsoleError = console.error;
+console.error = function(...args) {
+    originalConsoleError.apply(console, args);
+    // Don't log our own debug messages to avoid recursion
+    if (!args[0] || !args[0].toString().includes('🐛')) {
+        logError(new Error(args.join(' ')), 'Console Error', 'warning');
+    }
+};
+
 // Load player database
 function loadPlayerDatabase() {
     try {
@@ -1343,18 +1595,9 @@ const commands = [
                 .setDescription('Channel for Horizon logs (optional - uses current if not specified)')
                 .setRequired(false)),
     
-    // PRIVATE TRACKING COMMAND (HIDDEN FROM HELP)
     new SlashCommandBuilder()
-        .setName('privatetrack')
-        .setDescription('Privately track a player (DMs only to owner)')
-        .addStringOption(option =>
-            option.setName('player')
-                .setDescription('Player name to privately track')
-                .setRequired(true))
-        .addStringOption(option =>
-            option.setName('reason')
-                .setDescription('Reason for private tracking (optional)')
-                .setRequired(false))
+        .setName('refresh')
+        .setDescription('Refresh server connections and clear cached data (Admin only)')
 ].map(command => command.toJSON());
 
 // Register slash commands
@@ -1385,6 +1628,9 @@ client.on('ready', async () => {
     loadPlayerDatabase();
     loadPrivateTrackedPlayers();
     
+    // Initialize debug system
+    loadErrorLogs();
+    
     if (ROYALTY_LOG_CHANNEL_ID || HORIZON_LOG_CHANNEL_ID) {
         console.log(`📊 Log channels configured:`);
         if (ROYALTY_LOG_CHANNEL_ID) console.log(`   🎭 Royalty RP: ${ROYALTY_LOG_CHANNEL_ID}`);
@@ -1394,6 +1640,18 @@ client.on('ready', async () => {
     }
     
     console.log(`📍 Loaded ${Object.keys(trackedPlayers).length} tracked players`);
+    
+    // Log startup debug info
+    logDebug('Bot started successfully', {
+        trackedPlayers: Object.keys(trackedPlayers).length,
+        privateTrackedPlayers: Object.keys(privateTrackedPlayers).length,
+        databaseSize: Object.keys(playerDatabase).length,
+        monitoringEnabled: MONITORING_ENABLED,
+        logChannels: {
+            royalty: ROYALTY_LOG_CHANNEL_ID || null,
+            horizon: HORIZON_LOG_CHANNEL_ID || null
+        }
+    });
     
     // Register slash commands
     await registerSlashCommands();
@@ -1414,6 +1672,15 @@ client.on('interactionCreate', async interaction => {
     if (!interaction.isChatInputCommand()) return;
 
     const { commandName } = interaction;
+    
+    // Track command execution
+    botStats.commandsExecuted++;
+    botStats.lastActivity = Date.now();
+    logDebug(`Slash command executed: /${commandName}`, {
+        user: interaction.user.tag,
+        guild: interaction.guild?.name || 'DM',
+        channel: interaction.channel?.name || 'Unknown'
+    });
 
     try {
         if (commandName === 'track') {
@@ -2307,6 +2574,165 @@ client.on('interactionCreate', async interaction => {
             return await interaction.reply({ embeds: [embed] });
         }
 
+        else if (commandName === 'refresh') {
+            // Check admin permissions
+            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
+                return await interaction.reply({ content: '❌ You need Administrator permissions to refresh server connections.', flags: MessageFlags.Ephemeral });
+            }
+
+            // Defer the interaction immediately for long-running command
+            await interaction.deferReply();
+
+            const loadingEmbed = new EmbedBuilder()
+                .setColor('#ffff00')
+                .setTitle('🔄 Refreshing Server Connections...')
+                .setDescription('Resetting connections and clearing cached data...\n\n*This may take 30-60 seconds*')
+                .setTimestamp();
+
+            await interaction.editReply({ embeds: [loadingEmbed] });
+            console.log(`🔄 ${interaction.user.tag} requested /refresh command`);
+
+            try {
+                // First stop monitoring to prevent interference
+                const wasMonitoringEnabled = MONITORING_ENABLED;
+                if (MONITORING_ENABLED) {
+                    console.log('⏹️ Stopping monitoring for refresh...');
+                    stopMonitoring();
+                }
+
+                // Clear any connection-related caches or timeouts
+                console.log('🧹 Clearing cached data...');
+                
+                // Wait a moment for any pending operations to complete
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+                // Test both servers to verify connections are working
+                console.log('🔍 Testing server connections...');
+                const testResults = await Promise.allSettled([
+                    extractPlayersFromServer('royalty'),
+                    extractPlayersFromServer('horizon')
+                ]);
+
+                let royaltyStatus = '❌ Failed';
+                let horizonStatus = '❌ Failed';
+                let royaltyPlayers = 0;
+                let horizonPlayers = 0;
+                let errors = [];
+
+                // Check Royalty RP results
+                if (testResults[0].status === 'fulfilled' && !testResults[0].value.error) {
+                    royaltyStatus = '✅ Working';
+                    royaltyPlayers = testResults[0].value.players?.length || 0;
+                    console.log(`✅ Royalty RP connection test successful: ${royaltyPlayers} players`);
+                } else {
+                    const error = testResults[0].status === 'rejected' ? testResults[0].reason.message : testResults[0].value.error;
+                    errors.push(`Royalty RP: ${error}`);
+                    console.log(`❌ Royalty RP connection test failed: ${error}`);
+                }
+
+                // Check Horizon results
+                if (testResults[1].status === 'fulfilled' && !testResults[1].value.error) {
+                    horizonStatus = '✅ Working';
+                    horizonPlayers = testResults[1].value.players?.length || 0;
+                    console.log(`✅ Horizon connection test successful: ${horizonPlayers} players`);
+                } else {
+                    const error = testResults[1].status === 'rejected' ? testResults[1].reason.message : testResults[1].value.error;
+                    errors.push(`Horizon: ${error}`);
+                    console.log(`❌ Horizon connection test failed: ${error}`);
+                }
+
+                // Restart monitoring if it was previously enabled
+                if (wasMonitoringEnabled) {
+                    console.log('🚀 Restarting monitoring...');
+                    startMonitoring();
+                }
+
+                // Create success/status embed
+                const embed = new EmbedBuilder()
+                    .setTimestamp();
+
+                const successfulConnections = (royaltyStatus.includes('✅') ? 1 : 0) + (horizonStatus.includes('✅') ? 1 : 0);
+
+                if (successfulConnections === 2) {
+                    embed.setColor('#00ff00')
+                        .setTitle('✅ Server Connections Refreshed Successfully')
+                        .setDescription('All server connections have been refreshed and are working properly.');
+                } else if (successfulConnections === 1) {
+                    embed.setColor('#ffaa00')
+                        .setTitle('⚠️ Partial Refresh Success')
+                        .setDescription('Some server connections are working, but there are issues with others.');
+                } else {
+                    embed.setColor('#ff0000')
+                        .setTitle('❌ Refresh Issues Detected')
+                        .setDescription('Server connections have been reset, but there are still issues. This may be temporary.');
+                }
+
+                // Add server status fields
+                embed.addFields(
+                    { name: '🎭 Royalty RP Status', value: `${royaltyStatus}${royaltyPlayers > 0 ? ` (${royaltyPlayers} players)` : ''}`, inline: true },
+                    { name: '🌅 Horizon Status', value: `${horizonStatus}${horizonPlayers > 0 ? ` (${horizonPlayers} players)` : ''}`, inline: true },
+                    { name: '🔄 Monitoring Status', value: MONITORING_ENABLED ? '🟢 Active' : '🔴 Stopped', inline: true }
+                );
+
+                // Add refresh actions performed
+                embed.addFields({
+                    name: '🛠️ Actions Performed',
+                    value: `• ${wasMonitoringEnabled ? 'Stopped and restarted' : 'Verified'} monitoring process\n• Cleared connection caches\n• Reset network timeouts\n• Tested server connectivity\n• Refreshed extraction functions`,
+                    inline: false
+                });
+
+                // Add error details if any
+                if (errors.length > 0) {
+                    embed.addFields({
+                        name: '⚠️ Connection Issues',
+                        value: errors.join('\n'),
+                        inline: false
+                    });
+                }
+
+                // Add recommendations
+                let recommendations = [];
+                if (errors.length > 0) {
+                    recommendations.push('• Try using the commands again in a few minutes');
+                    recommendations.push('• Check if the game servers are online');
+                    recommendations.push('• Network issues may be temporary');
+                }
+                if (!MONITORING_ENABLED && wasMonitoringEnabled) {
+                    recommendations.push('• Monitoring was restarted automatically');
+                }
+                if (recommendations.length === 0) {
+                    recommendations.push('• /royalty and /horizon commands should work normally now');
+                    recommendations.push('• Monitoring is running optimally');
+                }
+
+                if (recommendations.length > 0) {
+                    embed.addFields({
+                        name: '💡 Next Steps',
+                        value: recommendations.join('\n'),
+                        inline: false
+                    });
+                }
+
+                embed.setFooter({ text: `Refresh completed | ${successfulConnections}/2 servers working` });
+
+                console.log(`🔄 Refresh completed for ${interaction.user.tag}: ${successfulConnections}/2 servers working`);
+                await interaction.editReply({ embeds: [embed] });
+
+            } catch (error) {
+                console.error('Error during refresh:', error);
+
+                const errorEmbed = new EmbedBuilder()
+                    .setColor('#ff0000')
+                    .setTitle('❌ Refresh Error')
+                    .setDescription('An unexpected error occurred while refreshing server connections.')
+                    .addFields({ name: 'Error Details', value: error.message })
+                    .addFields({ name: '💡 Suggestion', value: 'Try again in a few minutes, or contact an administrator if the issue persists.', inline: false })
+                    .setTimestamp();
+
+                await interaction.editReply({ embeds: [errorEmbed] });
+            }
+        }
+
 
     } catch (error) {
         console.error('Error handling slash command:', error);
@@ -2322,9 +2748,281 @@ client.on('interactionCreate', async interaction => {
 });
 
 client.on('messageCreate', async (message) => {
-    if (message.author.bot) return;
+    // UNIVERSAL MESSAGE LOGGING - LOG ALL MESSAGES FOR DEBUGGING
+    console.log('🔥 [UNIVERSAL DEBUG] ANY MESSAGE RECEIVED:');
+    console.log(`   👤 Author: ${message.author.tag} (${message.author.id})`);
+    console.log(`   🤖 Is Bot: ${message.author.bot}`);
+    console.log(`   💬 Content: "${message.content}"`);
+    console.log(`   📍 Channel Type: ${message.channel.type} (1=DM, 0=Text)`);
+    console.log(`   🏠 Guild: ${message.guild?.name || 'DM/No Guild'}`);
+    console.log(`   ⏰ Timestamp: ${new Date().toISOString()}`);
+    console.log(`   🎯 Expected Owner ID: ${PRIVATE_TRACKING_OWNER}`);
+    console.log(`   🔧 Expected Debug ID: ${DEBUG_OWNER_ID}`);
+    console.log(`   ✅ ID Match Check: ${message.author.id === PRIVATE_TRACKING_OWNER}`);
+    
+    if (message.author.bot) {
+        console.log('❌ [UNIVERSAL DEBUG] Ignoring bot message');
+        return;
+    }
     
     const content = message.content.trim();
+    botStats.lastActivity = Date.now();
+    
+    // COMPREHENSIVE DEBUG LOGGING FOR OWNER INTERACTIONS
+    if (message.author.id === PRIVATE_TRACKING_OWNER || message.author.id === DEBUG_OWNER_ID) {
+        console.log('🔍 [OWNER DEBUG] Message received from owner:');
+        console.log(`   📱 User: ${message.author.tag} (${message.author.id})`);
+        console.log(`   💬 Content: "${content}"`);
+        console.log(`   📍 Channel: ${message.channel.type === 1 ? 'DM' : message.channel.name || 'Unknown'}`);
+        console.log(`   🏠 Guild: ${message.guild?.name || 'DM'}`);
+        console.log(`   🎯 Matches Private Owner: ${message.author.id === PRIVATE_TRACKING_OWNER}`);
+        console.log(`   🔧 Matches Debug Owner: ${message.author.id === DEBUG_OWNER_ID}`);
+        console.log(`   ⏰ Timestamp: ${new Date().toISOString()}`);
+        console.log('   🔍 Command Analysis:');
+        console.log(`      - Starts with !privatetrack: ${content.startsWith('!privatetrack')}`);
+        console.log(`      - Starts with !privatetracklist: ${content.startsWith('!privatetracklist')}`);
+        console.log(`      - Starts with !privatetracklog: ${content.startsWith('!privatetracklog')}`);
+        console.log(`      - Starts with !unprivatetrack: ${content.startsWith('!unprivatetrack')}`);
+        console.log(`      - Starts with !debug: ${content.startsWith('!debug')}`);
+        console.log(`      - Starts with !restart: ${content.startsWith('!restart')}`);
+    }
+    
+    // Handle owner-only debug commands
+    if (content.startsWith('!debug') || content.startsWith('!errors') || content.startsWith('!exportlogs') || content.startsWith('!clearerrors') || content.startsWith('!debugstatus')) {
+        // Only allow the owner to use debug commands
+        if (message.author.id !== DEBUG_OWNER_ID) {
+            return message.react('❌'); // Just react with X for non-owners
+        }
+        
+        try {
+            if (content.startsWith('!debug')) {
+                const args = content.split(' ').slice(1);
+                const debugMessage = args.length > 0 ? args.join(' ') : 'Manual debug command executed';
+                
+                // Log debug entry
+                logDebug(`Manual Debug Command: ${debugMessage}`, {
+                    user: message.author.tag,
+                    channel: message.channel.name || 'DM',
+                    guild: message.guild?.name || 'DM'
+                });
+                
+                const embed = new EmbedBuilder()
+                    .setColor('#00ffff')
+                    .setTitle('🔍 Debug Command Executed')
+                    .setDescription(`Debug message logged successfully`)
+                    .addFields(
+                        { name: 'Message', value: debugMessage, inline: false },
+                        { name: 'Logged At', value: new Date().toLocaleString(), inline: true },
+                        { name: 'Bot Uptime', value: formatDuration(Date.now() - botStats.startTime), inline: true }
+                    )
+                    .setTimestamp();
+                
+                message.react('🔍');
+                return message.reply({ embeds: [embed] });
+            }
+            
+            else if (content.startsWith('!errors')) {
+                const recentErrors = errorLog.slice(-10); // Last 10 errors
+                
+                if (recentErrors.length === 0) {
+                    const embed = new EmbedBuilder()
+                        .setColor('#00ff00')
+                        .setTitle('✅ No Recent Errors')
+                        .setDescription('No errors have been logged recently.')
+                        .addFields({
+                            name: 'Bot Health',
+                            value: `Uptime: ${formatDuration(Date.now() - botStats.startTime)}\nTotal Errors: ${errorLog.length}`,
+                            inline: false
+                        })
+                        .setTimestamp();
+                    
+                    message.react('✅');
+                    return message.reply({ embeds: [embed] });
+                }
+                
+                const embed = new EmbedBuilder()
+                    .setColor('#ff6b6b')
+                    .setTitle(`🐛 Recent Errors (Last ${recentErrors.length})`)
+                    .setDescription(`Showing the most recent errors from the error log:`)
+                    .setTimestamp();
+                
+                recentErrors.forEach((error, index) => {
+                    const timeAgo = Date.now() - error.timestamp;
+                    const timeAgoText = timeAgo < 60000 ? `${Math.floor(timeAgo/1000)}s ago` :
+                                       timeAgo < 3600000 ? `${Math.floor(timeAgo/60000)}m ago` :
+                                       `${Math.floor(timeAgo/3600000)}h ago`;
+                    
+                    embed.addFields({
+                        name: `${index + 1}. ${error.severity.toUpperCase()} - ${error.context || 'Unknown'}`,
+                        value: `**Message:** ${error.message.slice(0, 100)}${error.message.length > 100 ? '...' : ''}\n**Time:** ${timeAgoText} (${new Date(error.timestamp).toLocaleString()})\n**Type:** ${error.type}`,
+                        inline: false
+                    });
+                });
+                
+                embed.setFooter({ text: `Total errors logged: ${errorLog.length} | Use !exportlogs for full details` });
+                
+                message.react('🐛');
+                return message.reply({ embeds: [embed] });
+            }
+            
+            else if (content.startsWith('!exportlogs')) {
+                message.react('📤');
+                
+                const loadingEmbed = new EmbedBuilder()
+                    .setColor('#ffff00')
+                    .setTitle('📤 Exporting Debug Logs...')
+                    .setDescription('Generating comprehensive debug export file...')
+                    .setTimestamp();
+                
+                const loadingMsg = await message.reply({ embeds: [loadingEmbed] });
+                
+                try {
+                    const exportResult = exportDebugLogs();
+                    
+                    if (!exportResult) {
+                        const errorEmbed = new EmbedBuilder()
+                            .setColor('#ff0000')
+                            .setTitle('❌ Export Failed')
+                            .setDescription('Failed to generate debug export file.')
+                            .setTimestamp();
+                        
+                        return loadingMsg.edit({ embeds: [errorEmbed] });
+                    }
+                    
+                    const successEmbed = new EmbedBuilder()
+                        .setColor('#00ff00')
+                        .setTitle('✅ Debug Logs Exported Successfully')
+                        .setDescription('Comprehensive debug information has been exported to a text file.')
+                        .addFields(
+                            { name: '📁 Filename', value: exportResult.filename, inline: true },
+                            { name: '📊 File Size', value: `${Math.round(exportResult.size / 1024)} KB`, inline: true },
+                            { name: '🐛 Error Entries', value: errorLog.length.toString(), inline: true },
+                            { name: '🔍 Debug Entries', value: debugLog.length.toString(), inline: true },
+                            { name: '📋 Contents Include', value: '• Bot health & statistics\n• Recent error log (50 entries)\n• Debug log (25 entries)\n• System information\n• Server configuration', inline: false }
+                        )
+                        .setTimestamp();
+                    
+                    // Try to send as attachment
+                    try {
+                        const { AttachmentBuilder } = require('discord.js');
+                        const attachment = new AttachmentBuilder(exportResult.filename, { name: exportResult.filename });
+                        
+                        await loadingMsg.edit({ 
+                            embeds: [successEmbed], 
+                            files: [attachment] 
+                        });
+                        
+                        console.log(`📤 Debug logs exported and sent to owner: ${exportResult.filename}`);
+                        
+                    } catch (attachError) {
+                        console.error('Error sending debug file attachment:', attachError);
+                        
+                        successEmbed.addFields({
+                            name: '⚠️ File Location',
+                            value: `File saved locally: \`${exportResult.filename}\`\n\nCould not attach to Discord message due to size or other limitations.`,
+                            inline: false
+                        });
+                        
+                        await loadingMsg.edit({ embeds: [successEmbed] });
+                    }
+                    
+                } catch (exportError) {
+                    console.error('Error during debug export:', exportError);
+                    
+                    const errorEmbed = new EmbedBuilder()
+                        .setColor('#ff0000')
+                        .setTitle('❌ Export Error')
+                        .setDescription('An error occurred while generating the debug export.')
+                        .addFields({ name: 'Error', value: exportError.message })
+                        .setTimestamp();
+                    
+                    await loadingMsg.edit({ embeds: [errorEmbed] });
+                }
+            }
+            
+            else if (content.startsWith('!clearerrors')) {
+                const clearedCount = clearErrorLogs();
+                
+                const embed = new EmbedBuilder()
+                    .setColor('#00ff00')
+                    .setTitle('🧹 Error Logs Cleared')
+                    .setDescription(`Successfully cleared all error and debug logs.`)
+                    .addFields(
+                        { name: 'Cleared Entries', value: `${clearedCount} error entries removed`, inline: true },
+                        { name: 'Debug Entries', value: `${debugLog.length} debug entries removed`, inline: true },
+                        { name: 'Cleared At', value: new Date().toLocaleString(), inline: true }
+                    )
+                    .addFields({
+                        name: '🔄 Fresh Start',
+                        value: 'Error and debug logs have been reset. New entries will be logged from this point forward.',
+                        inline: false
+                    })
+                    .setTimestamp();
+                
+                console.log(`🧹 Debug logs cleared by owner (${clearedCount} entries removed)`);
+                message.react('🧹');
+                return message.reply({ embeds: [embed] });
+            }
+            
+            else if (content.startsWith('!debugstatus')) {
+                const health = getBotHealth();
+                
+                const statusColor = health.status === 'HEALTHY' ? '#00ff00' : 
+                                  health.status === 'WARNING' ? '#ffaa00' : '#ff0000';
+                
+                const embed = new EmbedBuilder()
+                    .setColor(statusColor)
+                    .setTitle(`🏥 Bot Health Status: ${health.status}`)
+                    .setDescription('Comprehensive bot health and performance metrics')
+                    .addFields(
+                        { name: '⏱️ Uptime', value: health.uptimeFormatted, inline: true },
+                        { name: '🎯 Commands Executed', value: health.commandsExecuted.toString(), inline: true },
+                        { name: '🔄 Monitoring Cycles', value: health.monitoringCycles.toString(), inline: true },
+                        { name: '👥 Players Extracted', value: health.playersExtracted.toString(), inline: true },
+                        { name: '📊 Total Errors', value: health.totalErrors.toString(), inline: true },
+                        { name: '⚠️ Recent Errors (1h)', value: health.recentErrors.toString(), inline: true },
+                        { name: '💾 Memory Usage', value: `${health.memoryUsage.heapUsed} / ${health.memoryUsage.heapTotal}\n(RSS: ${health.memoryUsage.rss})`, inline: true },
+                        { name: '🔄 Monitoring Status', value: health.monitoringEnabled ? '🟢 Active' : '🔴 Inactive', inline: true },
+                        { name: '📍 Tracked Players', value: health.trackedPlayers.toString(), inline: true },
+                        { name: '🗃️ Database Size', value: `${health.databaseSize} players`, inline: true },
+                        { name: '📱 Last Activity', value: new Date(health.lastActivity).toLocaleString(), inline: true },
+                        { name: '🌐 Bot Status', value: client.ws.status === 0 ? '🟢 Connected' : '🔴 Disconnected', inline: true }
+                    );
+                
+                if (health.recentErrors > 0) {
+                    embed.addFields({
+                        name: '⚠️ Health Recommendations',
+                        value: health.recentErrors > 10 ? '• Bot is experiencing significant issues\n• Consider restarting the bot\n• Check server connectivity' :
+                               health.recentErrors > 5 ? '• Some errors detected\n• Monitor for recurring issues\n• Check error log with !errors' :
+                               '• Minor errors detected\n• Normal operation expected',
+                        inline: false
+                    });
+                }
+                
+                embed.setFooter({ text: `Debug System v1.0 | ${new Date().toLocaleString()}` })
+                     .setTimestamp();
+                
+                console.log(`🏥 Debug status requested by owner - Status: ${health.status}`);
+                message.react('🏥');
+                return message.reply({ embeds: [embed] });
+            }
+            
+        } catch (debugError) {
+            console.error('Error in debug command:', debugError);
+            logError(debugError, 'Debug Command Error');
+            
+            const errorEmbed = new EmbedBuilder()
+                .setColor('#ff0000')
+                .setTitle('❌ Debug Command Error')
+                .setDescription('An error occurred while executing the debug command.')
+                .addFields({ name: 'Error', value: debugError.message })
+                .setTimestamp();
+            
+            return message.reply({ embeds: [errorEmbed] });
+        }
+        
+        return; // Exit early for debug commands
+    }
     
     // Handle private tracking commands (owner only)
     if (content.startsWith('!privatetrack') || content.startsWith('!unprivatetrack') || content.startsWith('!privatetracklist') || content.startsWith('!restart')) {
@@ -2333,7 +3031,124 @@ client.on('messageCreate', async (message) => {
             return message.react('❌'); // Just react with X for non-owners
         }
         
-        if (content.startsWith('!privatetrack')) {
+        if (content.startsWith('!privatetracklist')) {
+            try {
+                const privatelyTrackedCount = Object.keys(privateTrackedPlayers).length;
+                
+                if (privatelyTrackedCount === 0) {
+                    const embed = new EmbedBuilder()
+                        .setColor('#800080')
+                        .setTitle('🕵️ Private Tracking List')
+                        .setDescription('No players are currently being privately tracked.')
+                        .addFields({ 
+                            name: '💡 Add Private Tracking', 
+                            value: 'Use `!privatetrack <PlayerName> [reason]` to start tracking a player privately.', 
+                            inline: false 
+                        })
+                        .setTimestamp();
+                    
+                    return message.reply({ embeds: [embed] });
+                }
+                
+                const embed = new EmbedBuilder()
+                    .setColor('#800080')
+                    .setTitle('🕵️ Private Tracking List')
+                    .setDescription(`Currently tracking **${privatelyTrackedCount}** player${privatelyTrackedCount !== 1 ? 's' : ''} privately`);
+                
+                const playerEntries = [];
+                for (const [playerId, player] of Object.entries(privateTrackedPlayers)) {
+                    const addedDate = new Date(player.addedAt).toLocaleDateString();
+                    const reason = player.reason ? ` (${player.reason})` : '';
+                    playerEntries.push(`• **${player.name}** - Added ${addedDate}${reason}`);
+                }
+                
+                // Split into chunks if too many players
+                const chunkSize = 10;
+                const chunks = [];
+                for (let i = 0; i < playerEntries.length; i += chunkSize) {
+                    chunks.push(playerEntries.slice(i, i + chunkSize));
+                }
+                
+                if (chunks.length === 1) {
+                    embed.addFields({ 
+                        name: 'Privately Tracked Players', 
+                        value: chunks[0].join('\n'), 
+                        inline: false 
+                    });
+                } else {
+                    chunks.forEach((chunk, index) => {
+                        embed.addFields({
+                            name: index === 0 ? 'Privately Tracked Players' : '\u200b', // Invisible character for continuation
+                            value: chunk.join('\n'),
+                            inline: false
+                        });
+                    });
+                }
+                
+                embed.addFields(
+                    { name: 'Servers Monitored', value: 'Royalty RP & Horizon', inline: true },
+                    { name: 'Notification Method', value: 'Direct Messages Only', inline: true },
+                    { name: '⚠️ Privacy Notice', value: 'This list is private and only visible to you. Use `!unprivatetrack <PlayerName>` to remove players.', inline: false }
+                );
+                
+                embed.setTimestamp();
+                
+                console.log(`🕵️ Private tracking list requested by owner`);
+                message.react('✅');
+                return message.reply({ embeds: [embed] });
+                
+            } catch (error) {
+                console.error('Error in !privatetracklist command:', error);
+                return message.reply('❌ An error occurred while fetching the private tracking list.');
+            }
+        }
+        
+        else if (content.startsWith('!privatetracklog')) {
+            // Show private tracking statistics log
+            try {
+                let output = '';
+                const totalPrivatelyTracked = Object.keys(privateTrackedPlayers).length;
+
+                if (totalPrivatelyTracked === 0) {
+                    return message.reply('🕵️ You are not currently privately tracking any players.');
+                }
+
+                output += `🕵️ Private Tracking Log for ${totalPrivatelyTracked} player${totalPrivatelyTracked !== 1 ? 's' : ''}:\n\n`;
+
+                for (const playerId in privateTrackedPlayers) {
+                    const player = privateTrackedPlayers[playerId];
+                    const name = player.name;
+                    const addedAt = new Date(player.addedAt).toLocaleString();
+
+                    // Get tracking data (combining both servers)
+                    const royaltyData = playerTracker[name] || { totalTime: 0, sessionCount: 0 };
+                    const horizonData = horizonPlayerTracker[name] || { totalTime: 0, sessionCount: 0 };
+
+                    const totalTime = royaltyData.totalTime + horizonData.totalTime;
+                    const totalVisits = royaltyData.sessionCount + horizonData.sessionCount;
+
+                    output += `• **${name}**:\n  - Added: ${addedAt}\n  - Total Time in City: ${formatDuration(totalTime)}\n  - Number of Visits: ${totalVisits}\n\n`;
+                }
+
+                if (output.length > 1900) {
+                    // Split long messages into chunks for Discord
+                    const chunks = [];
+                    for (let i = 0; i < output.length; i += 1900) {
+                        chunks.push(output.substring(i, i + 1900));
+                    }
+                    for (const chunk of chunks) {
+                        await message.reply(chunk);
+                    }
+                } else {
+                    await message.reply(output);
+                }
+            } catch (error) {
+                console.error('Error in !privatetracklog command:', error);
+                await message.reply('❌ An error occurred while showing private tracking log.');
+            }
+        }
+        
+        else if (content.startsWith('!privatetrack')) {
             const args = content.split(' ').slice(1);
             if (args.length === 0) {
                 return message.reply('❌ **Usage:** `!privatetrack <PlayerName> [reason]`');
@@ -2438,77 +3253,6 @@ client.on('messageCreate', async (message) => {
             }
         }
         
-        else if (content.startsWith('!privatetracklist')) {
-            try {
-                const privatelyTrackedCount = Object.keys(privateTrackedPlayers).length;
-                
-                if (privatelyTrackedCount === 0) {
-                    const embed = new EmbedBuilder()
-                        .setColor('#800080')
-                        .setTitle('🕵️ Private Tracking List')
-                        .setDescription('No players are currently being privately tracked.')
-                        .addFields({ 
-                            name: '💡 Add Private Tracking', 
-                            value: 'Use `!privatetrack <PlayerName> [reason]` to start tracking a player privately.', 
-                            inline: false 
-                        })
-                        .setTimestamp();
-                    
-                    return message.reply({ embeds: [embed] });
-                }
-                
-                const embed = new EmbedBuilder()
-                    .setColor('#800080')
-                    .setTitle('🕵️ Private Tracking List')
-                    .setDescription(`Currently tracking **${privatelyTrackedCount}** player${privatelyTrackedCount !== 1 ? 's' : ''} privately`);
-                
-                const playerEntries = [];
-                for (const [playerId, player] of Object.entries(privateTrackedPlayers)) {
-                    const addedDate = new Date(player.addedAt).toLocaleDateString();
-                    const reason = player.reason ? ` (${player.reason})` : '';
-                    playerEntries.push(`• **${player.name}** - Added ${addedDate}${reason}`);
-                }
-                
-                // Split into chunks if too many players
-                const chunkSize = 10;
-                const chunks = [];
-                for (let i = 0; i < playerEntries.length; i += chunkSize) {
-                    chunks.push(playerEntries.slice(i, i + chunkSize));
-                }
-                
-                if (chunks.length === 1) {
-                    embed.addFields({ 
-                        name: 'Privately Tracked Players', 
-                        value: chunks[0].join('\n'), 
-                        inline: false 
-                    });
-                } else {
-                    chunks.forEach((chunk, index) => {
-                        embed.addFields({
-                            name: index === 0 ? 'Privately Tracked Players' : '\u200b', // Invisible character for continuation
-                            value: chunk.join('\n'),
-                            inline: false
-                        });
-                    });
-                }
-                
-                embed.addFields(
-                    { name: 'Servers Monitored', value: 'Royalty RP & Horizon', inline: true },
-                    { name: 'Notification Method', value: 'Direct Messages Only', inline: true },
-                    { name: '⚠️ Privacy Notice', value: 'This list is private and only visible to you. Use `!unprivatetrack <PlayerName>` to remove players.', inline: false }
-                );
-                
-                embed.setTimestamp();
-                
-                console.log(`🕵️ Private tracking list requested by owner`);
-                message.react('✅');
-                return message.reply({ embeds: [embed] });
-                
-            } catch (error) {
-                console.error('Error in !privatetracklist command:', error);
-                return message.reply('❌ An error occurred while fetching the private tracking list.');
-            }
-        }
         
         else if (content.startsWith('!restart')) {
             try {

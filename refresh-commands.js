@@ -106,7 +106,11 @@ async function refreshCommands() {
                 .addChannelOption(option =>
                     option.setName('channel')
                         .setDescription('Channel for Horizon logs (optional - uses current if not specified)')
-                        .setRequired(false))
+                        .setRequired(false)),
+            
+            new SlashCommandBuilder()
+                .setName('refresh')
+                .setDescription('Refresh server connections and clear cached data (Admin only)')
         ].map(command => command.toJSON());
         
         await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands });
