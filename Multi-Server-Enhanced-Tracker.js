@@ -525,7 +525,7 @@ const commands = [
     new SlashCommandBuilder()
         .setName('elyxir')
         .setDescription('View current players in Elyxir city')
-];
+].map(command => command.toJSON());
 
 // Command handling
 client.on('interactionCreate', async interaction => {
