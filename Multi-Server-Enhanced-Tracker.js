@@ -35,7 +35,7 @@ const SERVERS = {
         city: 'Los Santos',
         url: 'https://servers.fivem.net/servers/detail/p5vrj9',
         priority: 1,
-        enabled: true
+        enabled: false
     },
     eclipse: {
         id: 'k4bpqj', // Example Eclipse RP server ID
@@ -43,7 +43,7 @@ const SERVERS = {
         city: 'Los Santos',
         url: 'https://servers.fivem.net/servers/detail/k4bpqj',
         priority: 2,
-        enabled: true
+        enabled: false
     },
     grandtheftrp: {
         id: 'x8nqv3', // Example GTA World server ID
@@ -51,7 +51,7 @@ const SERVERS = {
         city: 'San Andreas',
         url: 'https://servers.fivem.net/servers/detail/x8nqv3',
         priority: 3,
-        enabled: true
+        enabled: false
     },
     elyxir: {
         id: 'jad794',
@@ -81,6 +81,13 @@ const TRACKED_PLAYERS_FILE = './tracked_players_multi.json';
 // Tracked players storage
 let trackedPlayers = {};
 let privatelyTrackedPlayers = {};
+
+// Per-server player tracking for join/leave detection
+let serverPlayerStates = {
+    royalty: {},
+    horizon: {},
+    elyxir: {}
+};
 
 // Load existing data on startup
 function loadAllData() {
@@ -270,6 +277,9 @@ async function extractPlayersFromServer(serverKey) {
             crossServerPlayerData[playerName].lastKnownCity = server.city;
         });
         
+        // Detect joins and leaves for this server
+        await detectPlayerChanges(serverKey, currentPlayers);
+        
         // Mark players as offline for this server if they're not in current list
         Object.keys(crossServerPlayerData).forEach(playerName => {
             if (crossServerPlayerData[playerName].servers[serverKey] && 
@@ -296,6 +306,99 @@ async function extractPlayersFromServer(serverKey) {
         console.log(`❌ ${server.name} extraction failed: ${error.message}`);
         if (browser) await browser.close();
         return { players: [], error: error.message, serverInfo: { serverName: server.name, city: server.city } };
+    }
+}
+
+// Detect player joins and leaves
+async function detectPlayerChanges(serverKey, currentPlayers) {
+    const server = SERVERS[serverKey];
+    const previousPlayers = Object.keys(serverPlayerStates[serverKey] || {});
+    const currentTime = Date.now();
+    
+    // Initialize server state if it doesn't exist
+    if (!serverPlayerStates[serverKey]) {
+        serverPlayerStates[serverKey] = {};
+    }
+    
+    // Detect new joins
+    for (const playerName of currentPlayers) {
+        if (!serverPlayerStates[serverKey][playerName]) {
+            // New player joined
+            serverPlayerStates[serverKey][playerName] = {
+                joinTime: currentTime,
+                isOnline: true
+            };
+            
+            console.log(`✅ [${server.name}] Player joined: ${playerName}`);
+            await logPlayerActivity(playerName, 'joined', null, serverKey, server);
+            
+        } else if (!serverPlayerStates[serverKey][playerName].isOnline) {
+            // Player rejoined
+            serverPlayerStates[serverKey][playerName].joinTime = currentTime;
+            serverPlayerStates[serverKey][playerName].isOnline = true;
+            
+            console.log(`🔄 [${server.name}] Player rejoined: ${playerName}`);
+            await logPlayerActivity(playerName, 'joined', null, serverKey, server);
+        }
+    }
+    
+    // Detect leaves
+    for (const playerName of previousPlayers) {
+        if (serverPlayerStates[serverKey][playerName].isOnline && !currentPlayers.includes(playerName)) {
+            // Player left
+            const sessionDuration = currentTime - serverPlayerStates[serverKey][playerName].joinTime;
+            serverPlayerStates[serverKey][playerName].isOnline = false;
+            
+            console.log(`❌ [${server.name}] Player left: ${playerName} (Session: ${formatDuration(sessionDuration)})`);
+            await logPlayerActivity(playerName, 'left', sessionDuration, serverKey, server);
+        }
+    }
+}
+
+// Log player join/leave activity to Discord
+async function logPlayerActivity(playerName, action, duration = null, serverKey, server) {
+    // Get appropriate channel based on server
+    const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL : 
+                     serverKey === 'horizon' ? HORIZON_LOG_CHANNEL :
+                     serverKey === 'elyxir' ? ELYXIR_LOG_CHANNEL : 
+                     GLOBAL_LOG_CHANNEL;
+    
+    if (!channelId) return;
+    
+    try {
+        const channel = client.channels.cache.get(channelId);
+        if (!channel) {
+            console.error(`❌ Cannot find log channel with ID: ${channelId}`);
+            return;
+        }
+        
+        const embed = new EmbedBuilder()
+            .setTimestamp();
+        
+        if (action === 'joined') {
+            embed.setColor('#00ff00')
+                .setTitle('🟢 Player Joined')
+                .setDescription(`**${playerName}** joined **${server.name}**`)
+                .addFields(
+                    { name: 'Server', value: server.name, inline: true },
+                    { name: 'City', value: server.city, inline: true },
+                    { name: 'Time', value: new Date().toLocaleString(), inline: true }
+                );
+        } else if (action === 'left') {
+            embed.setColor('#ff0000')
+                .setTitle('🔴 Player Left')
+                .setDescription(`**${playerName}** left **${server.name}**`)
+                .addFields(
+                    { name: 'Server', value: server.name, inline: true },
+                    { name: 'Session Duration', value: formatDuration(duration), inline: true },
+                    { name: 'Time', value: new Date().toLocaleString(), inline: true }
+                );
+        }
+        
+        await channel.send({ embeds: [embed] });
+        
+    } catch (error) {
+        console.error('Error logging player activity to Discord:', error);
     }
 }
 
@@ -507,6 +610,14 @@ const commands = [
         .setDescription('Stop cross-server monitoring (Admin only)'),
     
     new SlashCommandBuilder()
+        .setName('setroyalty')
+        .setDescription('Set the Royalty RP logging channel (Admin only)')
+        .addChannelOption(option =>
+            option.setName('channel')
+                .setDescription('Channel for Royalty RP logs (optional - uses current if not specified)')
+                .setRequired(false)),
+    
+    new SlashCommandBuilder()
         .setName('sethorizon')
         .setDescription('Set the Horizon logging channel (Admin only)')
         .addChannelOption(option =>
@@ -550,6 +661,9 @@ client.on('interactionCreate', async interaction => {
                 break;
             case 'stopmonitoring':
                 await handleStopMonitoring(interaction);
+                break;
+            case 'setroyalty':
+                await handleSetRoyalty(interaction);
                 break;
             case 'sethorizon':
                 await handleSetHorizon(interaction);
@@ -719,6 +833,25 @@ async function handleStopMonitoring(interaction) {
     
     stopMultiServerMonitoring();
     await interaction.reply('⏹️ Stopped cross-server monitoring.');
+}
+
+async function handleSetRoyalty(interaction) {
+    if (!interaction.member.permissions.has('ADMINISTRATOR')) {
+        await interaction.reply({ content: '❌ You need Administrator permissions to use this command.', ephemeral: true });
+        return;
+    }
+    
+    const channel = interaction.options.getChannel('channel') || interaction.channel;
+    ROYALTY_LOG_CHANNEL = channel.id;
+    
+    const embed = new EmbedBuilder()
+        .setColor('#00ff00')
+        .setTitle('✅ Royalty RP Channel Set')
+        .setDescription(`Royalty RP tracking notifications will be sent to ${channel}`)
+        .setTimestamp();
+    
+    await interaction.reply({ embeds: [embed] });
+    console.log(`📢 Royalty RP log channel set to: ${channel.name} (${channel.id})`);
 }
 
 async function handleSetHorizon(interaction) {
