@@ -1,0 +1,246 @@
+{
+  "lastDiscovery": 1759172026816,
+  "totalServers": 16,
+  "servers": {
+    "pz8m77": {
+      "key": "pz8m77",
+      "id": "pz8m77",
+      "name": "Royalty Roleplay",
+      "city": "Los Santos",
+      "url": "https://servers.fivem.net/servers/detail/pz8m77",
+      "priority": 1,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "serious",
+        "economy"
+      ]
+    },
+    "brqqod": {
+      "key": "brqqod",
+      "id": "brqqod",
+      "name": "Horizon Roleplay",
+      "city": "San Andreas",
+      "url": "https://servers.fivem.net/servers/detail/brqqod",
+      "priority": 1,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "whitelist",
+        "serious"
+      ]
+    },
+    "o5v6m2": {
+      "key": "o5v6m2",
+      "id": "o5v6m2",
+      "name": "NoPixel Public",
+      "city": "Los Santos",
+      "url": "https://servers.fivem.net/servers/detail/o5v6m2",
+      "priority": 1,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "nopixel",
+        "public"
+      ]
+    },
+    "k4bpqj": {
+      "key": "k4bpqj",
+      "id": "k4bpqj",
+      "name": "Eclipse RP",
+      "city": "Los Santos",
+      "url": "https://servers.fivem.net/servers/detail/k4bpqj",
+      "priority": 2,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "eclipse",
+        "text"
+      ]
+    },
+    "x8nqv3": {
+      "key": "x8nqv3",
+      "id": "x8nqv3",
+      "name": "GTA World",
+      "city": "San Andreas",
+      "url": "https://servers.fivem.net/servers/detail/x8nqv3",
+      "priority": 2,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "text",
+        "hardcore"
+      ]
+    },
+    "p5vrj9": {
+      "key": "p5vrj9",
+      "id": "p5vrj9",
+      "name": "TwitchRP",
+      "city": "Los Santos",
+      "url": "https://servers.fivem.net/servers/detail/p5vrj9",
+      "priority": 2,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "whitelist",
+        "streamers"
+      ]
+    },
+    "q7w4r2": {
+      "key": "q7w4r2",
+      "id": "q7w4r2",
+      "name": "Purple RP",
+      "city": "Los Santos",
+      "url": "https://servers.fivem.net/servers/detail/q7w4r2",
+      "priority": 2,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "purple",
+        "community"
+      ]
+    },
+    "l3m8n5": {
+      "key": "l3m8n5",
+      "id": "l3m8n5",
+      "name": "State of Emergency RP",
+      "city": "San Andreas",
+      "url": "https://servers.fivem.net/servers/detail/l3m8n5",
+      "priority": 3,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "emergency",
+        "leo"
+      ]
+    },
+    "v9b2x7": {
+      "key": "v9b2x7",
+      "id": "v9b2x7",
+      "name": "Lucid City RP",
+      "city": "Los Santos",
+      "url": "https://servers.fivem.net/servers/detail/v9b2x7",
+      "priority": 3,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "lucid",
+        "new"
+      ]
+    },
+    "f4g8h1": {
+      "key": "f4g8h1",
+      "id": "f4g8h1",
+      "name": "Badlands RP",
+      "city": "San Andreas",
+      "url": "https://servers.fivem.net/servers/detail/f4g8h1",
+      "priority": 3,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "badlands",
+        "western"
+      ]
+    },
+    "z2k9p4": {
+      "key": "z2k9p4",
+      "id": "z2k9p4",
+      "name": "DOJ Roleplay",
+      "city": "Los Santos",
+      "url": "https://servers.fivem.net/servers/detail/z2k9p4",
+      "priority": 2,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "doj",
+        "government"
+      ]
+    },
+    "a5s3d8": {
+      "key": "a5s3d8",
+      "id": "a5s3d8",
+      "name": "Mafia City RP",
+      "city": "Liberty City",
+      "url": "https://servers.fivem.net/servers/detail/a5s3d8",
+      "priority": 3,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "mafia",
+        "crime"
+      ]
+    },
+    "w7e6r1": {
+      "key": "w7e6r1",
+      "id": "w7e6r1",
+      "name": "Project Homecoming",
+      "city": "Los Santos",
+      "url": "https://servers.fivem.net/servers/detail/w7e6r1",
+      "priority": 3,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "homecoming",
+        "community"
+      ]
+    },
+    "c8n4m2": {
+      "key": "c8n4m2",
+      "id": "c8n4m2",
+      "name": "Ontario RP",
+      "city": "Toronto",
+      "url": "https://servers.fivem.net/servers/detail/c8n4m2",
+      "priority": 3,
+      "enabled": true,
+      "country": "CA",
+      "tags": [
+        "roleplay",
+        "ontario",
+        "canadian"
+      ]
+    },
+    "t5y7u3": {
+      "key": "t5y7u3",
+      "id": "t5y7u3",
+      "name": "Pacific RP",
+      "city": "San Andreas",
+      "url": "https://servers.fivem.net/servers/detail/t5y7u3",
+      "priority": 3,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "pacific",
+        "westcoast"
+      ]
+    },
+    "i9o2p6": {
+      "key": "i9o2p6",
+      "id": "i9o2p6",
+      "name": "Atlantic RP",
+      "city": "Liberty City",
+      "url": "https://servers.fivem.net/servers/detail/i9o2p6",
+      "priority": 3,
+      "enabled": true,
+      "country": "US",
+      "tags": [
+        "roleplay",
+        "atlantic",
+        "eastcoast"
+      ]
+    }
+  }
+}
