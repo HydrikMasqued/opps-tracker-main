@@ -36,25 +36,19 @@ const client = new Client({
 
 // Server configurations
 const SERVERS = {
-    royalty: {
-        id: 'pz8m77',
-        name: 'Royalty RP',
-        url: 'https://servers.fivem.net/servers/detail/pz8m77'
-    },
-    horizon: {
-        id: 'brqqod',
-        name: 'Horizon',
-        url: 'https://servers.fivem.net/servers/detail/brqqod'
+    elyxir: {
+        id: 'jad794',
+        name: 'Elyxir',
+        url: 'https://servers.fivem.net/servers/detail/jad794'
     }
 };
 
 // Default server for monitoring
-const SERVER_ID = 'pz8m77';
+const SERVER_ID = 'jad794';
 const SERVER_URL = `https://servers.fivem.net/servers/detail/${SERVER_ID}`;
 
 // Configuration
-let ROYALTY_LOG_CHANNEL_ID = process.env.ROYALTY_LOG_CHANNEL || '';
-let HORIZON_LOG_CHANNEL_ID = process.env.HORIZON_LOG_CHANNEL || '';
+let ELYXIR_LOG_CHANNEL_ID = process.env.ELYXIR_LOG_CHANNEL || '';
 let MONITORING_ENABLED = false;
 let playerTracker = {};  // Store player join times and durations
 let monitoringInterval = null;
@@ -143,7 +137,6 @@ const TRACKING_CATEGORIES = {
 // Tracked players storage
 let trackedPlayers = {};
 let trackingNotifications = {};
-let horizonPlayerTracker = {};  // Separate tracking for Horizon server
 
 // Private tracking storage (hidden from regular commands)
 let privateTrackedPlayers = {};
@@ -369,13 +362,11 @@ function exportDebugLogs() {
     content += '\n';
     
     // Server Configuration
-    content += '========================================\n';
-    content += 'SERVER CONFIGURATION\n';
-    content += '========================================\n';
-    content += `Royalty RP Server: ${SERVERS.royalty.id}\n`;
-    content += `Horizon Server: ${SERVERS.horizon.id}\n`;
-    content += `Royalty Log Channel: ${ROYALTY_LOG_CHANNEL_ID || 'Not Set'}\n`;
-    content += `Horizon Log Channel: ${HORIZON_LOG_CHANNEL_ID || 'Not Set'}\n`;
+    content += '========================================'+'\n';
+    content += 'SERVER CONFIGURATION'+'\n';
+    content += '========================================'+'\n';
+    content += `Elyxir Server: ${SERVERS.elyxir.id}`+'\n';
+    content += `Elyxir Log Channel: ${ELYXIR_LOG_CHANNEL_ID || 'Not Set'}`+'\n';
     content += '\n';
     
     try {
@@ -476,27 +467,18 @@ function searchPlayerDatabase(searchTerm) {
     }).slice(0, 10); // Return top 10 matches
 }
 
-// Load existing player data on startup (both servers)
+// Load existing player data on startup
 function loadPlayerData() {
     try {
-        // Load Royalty RP data
+        // Load Elyxir data
         if (fs.existsSync(PLAYER_DATA_FILE)) {
             const data = fs.readFileSync(PLAYER_DATA_FILE, 'utf8');
             playerTracker = JSON.parse(data);
-            console.log(`📁 Loaded Royalty RP tracking data for ${Object.keys(playerTracker).length} players`);
-        }
-        
-        // Load Horizon data
-        const HORIZON_DATA_FILE = './horizon_tracking_data.json';
-        if (fs.existsSync(HORIZON_DATA_FILE)) {
-            const horizonData = fs.readFileSync(HORIZON_DATA_FILE, 'utf8');
-            horizonPlayerTracker = JSON.parse(horizonData);
-            console.log(`📁 Loaded Horizon tracking data for ${Object.keys(horizonPlayerTracker).length} players`);
+            console.log(`📁 Loaded Elyxir tracking data for ${Object.keys(playerTracker).length} players`);
         }
     } catch (error) {
         console.error('Error loading player data:', error);
         playerTracker = {};
-        horizonPlayerTracker = {};
     }
 }
 
@@ -585,14 +567,12 @@ function addTrackedPlayer(playerName, category, addedBy, reason = '') {
             leaveAlerts: true,
             sessionUpdates: true
         },
-        servers: ['royalty', 'horizon'], // Track on both servers by default
+        servers: ['elyxir'], // Track on Elyxir server
         lastSeen: {
-            royalty: null,
-            horizon: null
+            elyxir: null
         },
         sessionData: {
-            royalty: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 },
-            horizon: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 }
+            elyxir: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 }
         }
     };
     
@@ -631,14 +611,12 @@ function addPrivateTrackedPlayer(playerName, reason = '') {
         name: cleanName,
         addedAt: Date.now(),
         reason: reason,
-        servers: ['royalty', 'horizon'], // Track on both servers by default
+        servers: ['elyxir'], // Track on Elyxir server
         lastSeen: {
-            royalty: null,
-            horizon: null
+            elyxir: null
         },
         sessionData: {
-            royalty: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 },
-            horizon: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 }
+            elyxir: { isOnline: false, joinTime: null, totalTime: 0, sessionCount: 0 }
         }
     };
     
@@ -675,8 +653,7 @@ async function sendPrivateTrackingNotification(playerData, action, serverKey, se
         const serverName = SERVERS[serverKey]?.name || serverKey;
         
         // Get total time for this player
-        const tracker = serverKey === 'royalty' ? playerTracker : horizonPlayerTracker;
-        const totalTime = tracker[playerData.name]?.totalTime || 0;
+        const totalTime = playerTracker[playerData.name]?.totalTime || 0;
         
         const embed = new EmbedBuilder()
             .setTimestamp()
@@ -716,8 +693,8 @@ async function sendPrivateTrackingNotification(playerData, action, serverKey, se
 
 // Send enhanced tracking notification with ping
 async function sendTrackedPlayerNotification(playerData, action, serverKey, sessionDuration = null) {
-    // Get appropriate channel based on server
-    const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+    // Get channel for Elyxir
+    const channelId = ELYXIR_LOG_CHANNEL_ID;
     if (!channelId) return;
     
     try {
@@ -728,8 +705,7 @@ async function sendTrackedPlayerNotification(playerData, action, serverKey, sess
         const serverName = SERVERS[serverKey]?.name || serverKey;
         
         // Get total time for this player
-        const tracker = serverKey === 'royalty' ? playerTracker : horizonPlayerTracker;
-        const totalTime = tracker[playerData.name]?.totalTime || 0;
+        const totalTime = playerTracker[playerData.name]?.totalTime || 0;
         
         const embed = new EmbedBuilder()
             .setTimestamp()
@@ -786,15 +762,11 @@ async function sendTrackingNotification(playerData, action, serverKey, sessionDu
     return await sendTrackedPlayerNotification(playerData, action, serverKey, sessionDuration);
 }
 
-// Save player data to file (both servers)
+// Save player data to file
 function savePlayerData() {
     try {
-        // Save Royalty RP data
+        // Save Elyxir data
         fs.writeFileSync(PLAYER_DATA_FILE, JSON.stringify(playerTracker, null, 2));
-        
-        // Save Horizon data
-        const HORIZON_DATA_FILE = './horizon_tracking_data.json';
-        fs.writeFileSync(HORIZON_DATA_FILE, JSON.stringify(horizonPlayerTracker, null, 2));
     } catch (error) {
         console.error('Error saving player data:', error);
     }
@@ -1232,8 +1204,8 @@ async function extractAndTrackPlayers() {
                 console.log(`🔄 Player rejoined: ${player}`);
                 
                 // Log to Discord if channel is set
-                if (ROYALTY_LOG_CHANNEL_ID) {
-                    logPlayerActivity(player, 'joined', null, 'royalty');
+                if (ELYXIR_LOG_CHANNEL_ID) {
+                    logPlayerActivity(player, 'joined', null, 'elyxir');
                 }
             } else {
                 // Player is still online, update last seen
@@ -1253,15 +1225,15 @@ async function extractAndTrackPlayers() {
                 console.log(`❌ Player left: ${player} (Session: ${formatDuration(sessionDuration)})`);
                 
                 // Log to Discord if channel is set
-                if (ROYALTY_LOG_CHANNEL_ID) {
-                    logPlayerActivity(player, 'left', sessionDuration, 'royalty');
+                if (ELYXIR_LOG_CHANNEL_ID) {
+                    logPlayerActivity(player, 'left', sessionDuration, 'elyxir');
                 }
             }
         });
         
         // Add players to database
         if (currentPlayers.length > 0) {
-            addPlayersToDatabase(currentPlayers, 'royalty');
+            addPlayersToDatabase(currentPlayers, 'elyxir');
         }
         
         // Save data
@@ -1281,9 +1253,9 @@ async function extractAndTrackPlayers() {
 }
 
 // Log player activity to Discord with server information
-async function logPlayerActivity(playerName, action, duration = null, serverKey = 'royalty') {
-    // Get appropriate channel based on server
-    const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+async function logPlayerActivity(playerName, action, duration = null, serverKey = 'elyxir') {
+    // Get channel for Elyxir
+    const channelId = ELYXIR_LOG_CHANNEL_ID;
     if (!channelId) return;
     
     try {
@@ -1323,34 +1295,25 @@ async function logPlayerActivity(playerName, action, duration = null, serverKey 
     }
 }
 
-// Enhanced monitoring for both servers
-async function monitorBothServers() {
+// Enhanced monitoring for Elyxir server
+async function monitorElyxirServer() {
     if (!MONITORING_ENABLED) return;
     
     try {
-        // Monitor both servers simultaneously
-        const [royaltyResults, horizonResults] = await Promise.all([
-            extractPlayersFromServer('royalty'),
-            extractPlayersFromServer('horizon')
-        ]);
+        // Monitor Elyxir server
+        const elyxirResults = await extractPlayersFromServer('elyxir');
         
-        // Process Royalty RP server
-        if (royaltyResults.players && royaltyResults.players.length > 0) {
-            await processServerPlayerChanges('royalty', royaltyResults.players, playerTracker);
-            addPlayersToDatabase(royaltyResults.players, 'royalty');
+        // Process Elyxir server
+        if (elyxirResults.players && elyxirResults.players.length > 0) {
+            await processServerPlayerChanges('elyxir', elyxirResults.players, playerTracker);
+            addPlayersToDatabase(elyxirResults.players, 'elyxir');
         }
         
-        // Process Horizon server
-        if (horizonResults.players && horizonResults.players.length > 0) {
-            await processServerPlayerChanges('horizon', horizonResults.players, horizonPlayerTracker);
-            addPlayersToDatabase(horizonResults.players, 'horizon');
-        }
-        
-        // Save all tracking data
+        // Save tracking data
         savePlayerData();
         
     } catch (error) {
-        console.error('Error during dual-server monitoring:', error);
+        console.error('Error during Elyxir server monitoring:', error);
     }
 }
 
@@ -1375,7 +1338,7 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
             const privatelyTrackedPlayer = isPlayerPrivatelyTracked(player);
-            const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            const channelId = ELYXIR_LOG_CHANNEL_ID;
             
             if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
@@ -1399,7 +1362,7 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
             const privatelyTrackedPlayer = isPlayerPrivatelyTracked(player);
-            const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            const channelId = ELYXIR_LOG_CHANNEL_ID;
             
             if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'joined', serverKey);
@@ -1431,7 +1394,7 @@ async function processServerPlayerChanges(serverKey, currentPlayers, tracker) {
             // Check if player is tracked and send notification with ping
             const trackedPlayer = isPlayerTracked(player);
             const privatelyTrackedPlayer = isPlayerPrivatelyTracked(player);
-            const channelId = serverKey === 'royalty' ? ROYALTY_LOG_CHANNEL_ID : HORIZON_LOG_CHANNEL_ID;
+            const channelId = ELYXIR_LOG_CHANNEL_ID;
             
             if (trackedPlayer && channelId) {
                 await sendTrackedPlayerNotification(trackedPlayer, 'left', serverKey, sessionDuration);
@@ -1465,7 +1428,7 @@ function startMonitoring() {
             const startTime = Date.now();
             
             try {
-                await monitorBothServers();
+                await monitorElyxirServer();
                 consecutiveErrors = 0;
                 lastSuccessfulCheck = Date.now();
                 
@@ -1560,12 +1523,8 @@ const commands = [
         .setDescription('View all saved usernames with server information'),
     
     new SlashCommandBuilder()
-        .setName('royalty')
-        .setDescription('Get current Royalty RP player list'),
-    
-    new SlashCommandBuilder()
-        .setName('horizon')
-        .setDescription('Get current Horizon server player list'),
+        .setName('elyxir')
+        .setDescription('Get current Elyxir player list'),
     
     new SlashCommandBuilder()
         .setName('categories')
@@ -1580,19 +1539,11 @@ const commands = [
         .setDescription('Stop automatic player monitoring (Admin only)'),
     
     new SlashCommandBuilder()
-        .setName('setroyalty')
-        .setDescription('Set the Royalty RP logging channel (Admin only)')
+        .setName('setelyxir')
+        .setDescription('Set the Elyxir logging channel (Admin only)')
         .addChannelOption(option =>
             option.setName('channel')
-                .setDescription('Channel for Royalty RP logs (optional - uses current if not specified)')
-                .setRequired(false)),
-    
-    new SlashCommandBuilder()
-        .setName('sethorizon')
-        .setDescription('Set the Horizon logging channel (Admin only)')
-        .addChannelOption(option =>
-            option.setName('channel')
-                .setDescription('Channel for Horizon logs (optional - uses current if not specified)')
+                .setDescription('Channel for Elyxir logs (optional - uses current if not specified)')
                 .setRequired(false)),
     
     new SlashCommandBuilder()
@@ -1631,12 +1582,11 @@ client.on('ready', async () => {
     // Initialize debug system
     loadErrorLogs();
     
-    if (ROYALTY_LOG_CHANNEL_ID || HORIZON_LOG_CHANNEL_ID) {
-        console.log(`📊 Log channels configured:`);
-        if (ROYALTY_LOG_CHANNEL_ID) console.log(`   🎭 Royalty RP: ${ROYALTY_LOG_CHANNEL_ID}`);
-        if (HORIZON_LOG_CHANNEL_ID) console.log(`   🌅 Horizon: ${HORIZON_LOG_CHANNEL_ID}`);
+    if (ELYXIR_LOG_CHANNEL_ID) {
+        console.log(`📊 Log channel configured:`);
+        console.log(`   ⚔️ Elyxir: ${ELYXIR_LOG_CHANNEL_ID}`);
     } else {
-        console.log('⚠️ No log channels configured. Use /setroyalty and /sethorizon to set them.');
+        console.log('⚠️ No log channel configured. Use /setelyxir to set it.');
     }
     
     console.log(`📍 Loaded ${Object.keys(trackedPlayers).length} tracked players`);
@@ -1648,8 +1598,7 @@ client.on('ready', async () => {
         databaseSize: Object.keys(playerDatabase).length,
         monitoringEnabled: MONITORING_ENABLED,
         logChannels: {
-            royalty: ROYALTY_LOG_CHANNEL_ID || null,
-            horizon: HORIZON_LOG_CHANNEL_ID || null
+            elyxir: ELYXIR_LOG_CHANNEL_ID || null
         }
     });
     
@@ -1657,12 +1606,12 @@ client.on('ready', async () => {
     await registerSlashCommands();
     
     // Auto-start optimized monitoring
-    if (ROYALTY_LOG_CHANNEL_ID || HORIZON_LOG_CHANNEL_ID) {
-        console.log('🚀 Auto-starting optimized monitoring with smart intervals since log channels are configured...');
+    if (ELYXIR_LOG_CHANNEL_ID) {
+        console.log('🚀 Auto-starting optimized monitoring with smart intervals since log channel is configured...');
         startMonitoring();
     } else {
-        console.log('⚠️ No log channels configured, but starting optimized monitoring anyway...');
-        console.log('💡 Use /setroyalty and /sethorizon to set log channels for notifications.');
+        console.log('⚠️ No log channel configured, but starting optimized monitoring anyway...');
+        console.log('💡 Use /setelyxir to set log channel for notifications.');
         startMonitoring(); // Start monitoring regardless
     }
 });
@@ -1709,7 +1658,7 @@ client.on('interactionCreate', async interaction => {
                 .addFields(
                     { name: 'Category', value: `${categoryInfo.emoji} ${categoryInfo.name}`, inline: true },
                     { name: 'Added By', value: trackedPlayer.addedBy, inline: true },
-                    { name: 'Servers', value: 'Royalty RP & Horizon', inline: true }
+                    { name: 'Server', value: 'Elyxir', inline: true }
                 );
 
             if (reason) {
@@ -1844,57 +1793,41 @@ client.on('interactionCreate', async interaction => {
             const loadingEmbed = new EmbedBuilder()
                 .setColor('#ffff00')
                 .setTitle('🔍 Searching for Player...')
-                .setDescription(`Looking for **${trackedPlayer.name}** on both servers...\n\n*This may take 30-60 seconds*`)
+                .setDescription(`Looking for **${trackedPlayer.name}** on Elyxir...\n\n*This may take 30-60 seconds*`)
                 .setTimestamp();
 
             await interaction.editReply({ embeds: [loadingEmbed] });
 
             try {
-                // Check both servers
-                const [royaltyResults, horizonResults] = await Promise.all([
-                    extractPlayersFromServer('royalty'),
-                    extractPlayersFromServer('horizon')
-                ]);
+                // Check Elyxir server
+                const elyxirResults = await extractPlayersFromServer('elyxir');
 
                 const categoryInfo = TRACKING_CATEGORIES[trackedPlayer.category];
-                const isOnRoyalty = royaltyResults.players?.some(p => p.toLowerCase() === trackedPlayer.name.toLowerCase());
-                const isOnHorizon = horizonResults.players?.some(p => p.toLowerCase() === trackedPlayer.name.toLowerCase());
+                const isOnElyxir = elyxirResults.players?.some(p => p.toLowerCase() === trackedPlayer.name.toLowerCase());
 
                 const embed = new EmbedBuilder()
                     .setColor(categoryInfo.color)
                     .setTitle(`🔍 Search Results: ${trackedPlayer.name}`)
                     .setTimestamp();
 
-                if (isOnRoyalty || isOnHorizon) {
-                    const servers = [];
-                    if (isOnRoyalty) servers.push('**Royalty RP**');
-                    if (isOnHorizon) servers.push('**Horizon**');
-
-                    embed.setDescription(`🟢 **PLAYER FOUND ONLINE**\n\n${categoryInfo.emoji} **${trackedPlayer.name}** is currently on: ${servers.join(' and ')}`);
+                if (isOnElyxir) {
+                    embed.setDescription(`🟢 **PLAYER FOUND ONLINE**\n\n${categoryInfo.emoji} **${trackedPlayer.name}** is currently on: **Elyxir**`);
 
                     if (trackedPlayer.category === 'enemies') {
-                        embed.setDescription(`🚨 **ENEMY ALERT** 🚨\n\n⚔️ **${trackedPlayer.name}** is currently on: ${servers.join(' and ')}`);
+                        embed.setDescription(`🚨 **ENEMY ALERT** 🚨\n\n⚔️ **${trackedPlayer.name}** is currently on Elyxir`);
                     }
 
                     // Add server details
-                    if (isOnRoyalty && !royaltyResults.error) {
+                    if (!elyxirResults.error) {
                         embed.addFields({
-                            name: '🎭 Royalty RP',
-                            value: `**Players:** ${royaltyResults.players?.length || 0}/${royaltyResults.serverInfo?.maxClients || 'Unknown'}\n**Status:** 🟢 Online`,
-                            inline: true
-                        });
-                    }
-
-                    if (isOnHorizon && !horizonResults.error) {
-                        embed.addFields({
-                            name: '🌅 Horizon',
-                            value: `**Players:** ${horizonResults.players?.length || 0}/${horizonResults.serverInfo?.maxClients || 'Unknown'}\n**Status:** 🟢 Online`,
+                            name: '⚔️ Elyxir',
+                            value: `**Players:** ${elyxirResults.players?.length || 0}/${elyxirResults.serverInfo?.maxClients || 'Unknown'}\n**Status:** 🟢 Online`,
                             inline: true
                         });
                     }
 
                 } else {
-                    embed.setDescription(`🔴 **PLAYER NOT FOUND**\n\n${categoryInfo.emoji} **${trackedPlayer.name}** is not currently online on either server.`);
+                    embed.setDescription(`🔴 **PLAYER NOT FOUND**\n\n${categoryInfo.emoji} **${trackedPlayer.name}** is not currently online on Elyxir.`);
                     embed.setColor('#ff6b6b');
                 }
 
@@ -1954,7 +1887,7 @@ client.on('interactionCreate', async interaction => {
                 const lastSeenDate = new Date(player.lastSeen).toLocaleDateString();
                 const firstSeenDate = new Date(player.firstSeen).toLocaleDateString();
                 const servers = player.servers.map(s => {
-                    return s === 'royalty' ? 'Royalty RP' : s === 'horizon' ? 'Horizon' : s;
+                    return s === 'elyxir' ? 'Elyxir' : s;
                 }).join(', ');
 
                 let resultText = `**${player.name}**\n`;
@@ -2040,9 +1973,7 @@ client.on('interactionCreate', async interaction => {
                 allPlayers.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
                 // Calculate statistics
-                const royaltyCount = allPlayers.filter(p => p.servers.includes('royalty')).length;
-                const horizonCount = allPlayers.filter(p => p.servers.includes('horizon')).length;
-                const bothCount = allPlayers.filter(p => p.servers.includes('royalty') && p.servers.includes('horizon')).length;
+                const elyxirCount = allPlayers.filter(p => p.servers.includes('elyxir')).length;
                 const trackedCount = allPlayers.filter(p => isPlayerTracked(p.name)).length;
 
                 // Generate file content
@@ -2054,9 +1985,7 @@ client.on('interactionCreate', async interaction => {
                 fileContent += `#\n`;
                 fileContent += `# DATABASE STATISTICS:\n`;
                 fileContent += `# - Total Players: ${allPlayers.length}\n`;
-                fileContent += `# - Royalty RP Only: ${royaltyCount - bothCount}\n`;
-                fileContent += `# - Horizon Only: ${horizonCount - bothCount}\n`;
-                fileContent += `# - Both Servers: ${bothCount}\n`;
+                fileContent += `# - Elyxir Players: ${elyxirCount}\n`;
                 fileContent += `# - Currently Tracked: ${trackedCount}\n`;
                 fileContent += `#\n`;
                 fileContent += `# FORMAT: PlayerName [Server(s)] {TrackingStatus} | First Seen | Last Seen | Total Sightings\n`;
@@ -2069,15 +1998,11 @@ client.on('interactionCreate', async interaction => {
                     
                     // Format server brackets
                     let serverBrackets = '';
-                    if (player.servers.includes('royalty') && player.servers.includes('horizon')) {
-                        serverBrackets = '[Horizon/Royalty]';
-                    } else if (player.servers.includes('horizon')) {
-                        serverBrackets = '[Horizon]';
-                    } else if (player.servers.includes('royalty')) {
-                        serverBrackets = '[Royalty]';
+                    if (player.servers.includes('elyxir')) {
+                        serverBrackets = '[Elyxir]';
                     } else {
                         const serverNames = player.servers.map(s => {
-                            return s === 'royalty' ? 'Royalty' : s === 'horizon' ? 'Horizon' : s;
+                            return s === 'elyxir' ? 'Elyxir' : s;
                         });
                         serverBrackets = `[${serverNames.join('/')}]`;
                     }
@@ -2186,164 +2111,22 @@ client.on('interactionCreate', async interaction => {
             }
         }
 
-        else if (commandName === 'royalty') {
+        else if (commandName === 'elyxir') {
             // Check Full Patch role or admin permissions
             if (!hasFullPatchPermission(interaction.member)) {
                 return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', flags: MessageFlags.Ephemeral });
             }
 
             const loadingEmbed = new EmbedBuilder()
-                .setColor('#ffff00')
-                .setTitle('🎯 Extracting Player Names...')
-                .setDescription('Getting current player list and updating tracking data...\n\n*This may take 30-60 seconds*')
-                .setTimestamp();
-
-            await interaction.reply({ embeds: [loadingEmbed] });
-            console.log(`🎮 ${interaction.user.tag} requested /royalty command`);
-
-            try {
-                const results = await extractAndTrackPlayers();
-                console.log(`🎮 Extraction completed for ${interaction.user.tag}:`, {
-                    players: results.players?.length || 0,
-                    error: results.error || null
-                });
-
-                if (results.error) {
-                    const errorEmbed = new EmbedBuilder()
-                        .setColor('#ff0000')
-                        .setTitle('❌ Extraction Error')
-                        .setDescription('Error occurred during player name extraction.')
-                        .addFields({ name: 'Error Details', value: results.error })
-                        .setTimestamp();
-
-                    return await interaction.editReply({ embeds: [errorEmbed] });
-                }
-
-                if (!results.players || results.players.length === 0) {
-                    const noPlayersEmbed = new EmbedBuilder()
-                        .setColor('#ffaa00')
-                        .setTitle('⚠️ No Player Names Found')
-                        .setDescription('Server appears to be empty or inaccessible.')
-                        .setTimestamp();
-
-                    return await interaction.editReply({ embeds: [noPlayersEmbed] });
-                }
-
-                // Success - display found players with tracking info
-                const cleanHostname = results.serverInfo.hostname ? 
-                    results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim() : 
-                    'Royalty RP';
-
-                const embed = new EmbedBuilder()
-                    .setColor('#00ff00')
-                    .setTitle('🎮 Royalty RP Online Players')
-                    .setDescription(`**${cleanHostname}**`)
-                    .setTimestamp();
-
-                console.log(`🎮 Displaying ${results.players.length} players to ${interaction.user.tag}`);
-                console.log(`🎮 Player names: ${results.players.slice(0, 5).join(', ')}${results.players.length > 5 ? '...' : ''}`);
-
-                // Add player counter
-                embed.addFields({
-                    name: '👥 Players Online',
-                    value: `**${results.players.length}** out of **${results.serverInfo.maxClients || 'Unknown'}** slots`,
-                    inline: false
-                });
-
-                // Create player list with session times
-                const playerListWithTimes = results.players.map(player => {
-                    const trackingData = playerTracker[player];
-                    if (trackingData && trackingData.isOnline) {
-                        const currentSession = Date.now() - trackingData.joinTime;
-                        return `${player} (${formatDuration(currentSession)})`;
-                    }
-                    return player;
-                });
-
-                const playerList = playerListWithTimes.join('\n');
-
-                console.log(`🎮 Player list length: ${playerList.length} characters`);
-
-                // Handle Discord's character limit
-                if (playerList.length <= 1024) {
-                    embed.addFields({
-                        name: '📋 Complete Player List (with session times)',
-                        value: playerList || 'No player names available',
-                        inline: false
-                    });
-                } else {
-                    // Split into chunks if too long
-                    const chunkSize = 900;
-                    let currentChunk = '';
-                    let chunkNumber = 1;
-
-                    playerListWithTimes.forEach(player => {
-                        const playerLine = player + '\n';
-
-                        if (currentChunk.length + playerLine.length > chunkSize) {
-                            embed.addFields({
-                                name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
-                                value: currentChunk.trim() || 'No player names available',
-                                inline: false
-                            });
-                            currentChunk = playerLine;
-                            chunkNumber++;
-                        } else {
-                            currentChunk += playerLine;
-                        }
-                    });
-
-                    if (currentChunk.trim()) {
-                        embed.addFields({
-                            name: chunkNumber === 1 ? '📋 Player List (with times)' : '📋 Player List (continued)',
-                            value: currentChunk.trim() || 'No player names available',
-                            inline: false
-                        });
-                    }
-                }
-
-                // Add monitoring status
-                embed.addFields({
-                    name: '📊 Tracking Status',
-                    value: MONITORING_ENABLED ? '🟢 Monitoring Active' : '🔴 Monitoring Inactive',
-                    inline: true
-                });
-
-                embed.setFooter({ text: `Server ID: ${SERVER_ID} | Enhanced Tracking | ${results.players.length} players found` });
-
-                console.log(`🎮 Sending embed with ${embed.data.fields?.length || 0} fields to ${interaction.user.tag}`);
-                await interaction.editReply({ embeds: [embed] });
-
-            } catch (error) {
-                console.error('Error during extraction:', error);
-
-                const errorEmbed = new EmbedBuilder()
-                    .setColor('#ff0000')
-                    .setTitle('❌ Unexpected Error')
-                    .setDescription('An unexpected error occurred during extraction.')
-                    .addFields({ name: 'Error Details', value: error.message })
-                    .setTimestamp();
-
-                await interaction.editReply({ embeds: [errorEmbed] });
-            }
-        }
-
-        else if (commandName === 'horizon') {
-            // Check Full Patch role or admin permissions
-            if (!hasFullPatchPermission(interaction.member)) {
-                return await interaction.reply({ content: '❌ You need the "Full Patch" role or Administrator permissions to use this bot.', flags: MessageFlags.Ephemeral });
-            }
-
-            const loadingEmbed = new EmbedBuilder()
-                .setColor('#9932cc')
-                .setTitle('🌅 Extracting Horizon Player Names...')
-                .setDescription('Getting current player list from Horizon server...\n\n*This may take 30-60 seconds*')
+                .setColor('#ff00ff')
+                .setTitle('⚔️ Extracting Elyxir Player Names...')
+                .setDescription('Getting current player list from Elyxir server...\n\n*This may take 30-60 seconds*')
                 .setTimestamp();
 
             await interaction.reply({ embeds: [loadingEmbed] });
 
             try {
-                const results = await extractPlayersFromServer('horizon');
+                const results = await extractPlayersFromServer('elyxir');
 
                 if (results.error) {
                     const errorEmbed = new EmbedBuilder()
@@ -2360,7 +2143,7 @@ client.on('interactionCreate', async interaction => {
                     const noPlayersEmbed = new EmbedBuilder()
                         .setColor('#ffaa00')
                         .setTitle('⚠️ No Player Names Found')
-                        .setDescription('Horizon server appears to be empty or inaccessible.')
+                        .setDescription('Elyxir server appears to be empty or inaccessible.')
                         .setTimestamp();
 
                     return await interaction.editReply({ embeds: [noPlayersEmbed] });
@@ -2370,8 +2153,8 @@ client.on('interactionCreate', async interaction => {
                 const cleanHostname = results.serverInfo.hostname.replace(/\^\d/g, '').replace(/\|.*$/, '').trim();
 
                 const embed = new EmbedBuilder()
-                    .setColor('#9932cc')
-                    .setTitle('🌅 Horizon Online Players')
+                    .setColor('#ff00ff')
+                    .setTitle('⚔️ Elyxir Online Players')
                     .setDescription(`**${cleanHostname}**`)
                     .setTimestamp();
 
@@ -2382,9 +2165,9 @@ client.on('interactionCreate', async interaction => {
                     inline: false
                 });
 
-                // Create player list with session times for Horizon
+                // Create player list with session times for Elyxir
                 const playerListWithTimes = results.players.map(player => {
-                    const trackingData = horizonPlayerTracker[player];
+                    const trackingData = playerTracker[player];
                     if (trackingData && trackingData.isOnline) {
                         const currentSession = Date.now() - trackingData.joinTime;
                         const totalTime = trackingData.totalTime + currentSession;
@@ -2436,12 +2219,12 @@ client.on('interactionCreate', async interaction => {
                     }
                 }
 
-                embed.setFooter({ text: `Server ID: ${results.serverInfo.serverId} | Horizon Server` });
+                embed.setFooter({ text: `Server ID: ${results.serverInfo.serverId} | Elyxir Server` });
 
                 await interaction.editReply({ embeds: [embed] });
 
             } catch (error) {
-                console.error('Error during Horizon extraction:', error);
+                console.error('Error during Elyxir extraction:', error);
 
                 const errorEmbed = new EmbedBuilder()
                     .setColor('#ff0000')
@@ -2490,7 +2273,7 @@ client.on('interactionCreate', async interaction => {
             const embed = new EmbedBuilder()
                 .setColor('#00ff00')
                 .setTitle('🔄 Optimized Monitoring Started')
-                .setDescription('Player tracking has been started for both Royalty RP and Horizon servers. Using intelligent 3-8 second intervals for maximum speed and accuracy.')
+                .setDescription('Player tracking has been started for Elyxir server. Using intelligent 3-8 second intervals for maximum speed and accuracy.')
                 .addFields(
                     { name: '⚡ Performance', value: 'Smart delays (3-8s) based on server response times', inline: true },
                     { name: '🔄 Recovery', value: 'Auto-retry with exponential backoff on errors', inline: true },
@@ -2518,7 +2301,7 @@ client.on('interactionCreate', async interaction => {
             return await interaction.reply({ embeds: [embed] });
         }
 
-        else if (commandName === 'setroyalty') {
+        else if (commandName === 'setelyxir') {
             // Check admin permissions
             if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
                 return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', flags: MessageFlags.Ephemeral });
@@ -2526,51 +2309,23 @@ client.on('interactionCreate', async interaction => {
 
             const channel = interaction.options.getChannel('channel') || interaction.channel;
             const channelId = channel.id;
-            ROYALTY_LOG_CHANNEL_ID = channelId;
+            ELYXIR_LOG_CHANNEL_ID = channelId;
 
             // Update .env file
             const envContent = fs.readFileSync('.env', 'utf8');
-            const newEnvContent = envContent.includes('ROYALTY_LOG_CHANNEL=')
-                ? envContent.replace(/ROYALTY_LOG_CHANNEL=.*/, `ROYALTY_LOG_CHANNEL=${channelId}`)
-                : envContent + `\nROYALTY_LOG_CHANNEL=${channelId}`;
+            const newEnvContent = envContent.includes('ELYXIR_LOG_CHANNEL=')
+                ? envContent.replace(/ELYXIR_LOG_CHANNEL=.*/, `ELYXIR_LOG_CHANNEL=${channelId}`)
+                : envContent + `\nELYXIR_LOG_CHANNEL=${channelId}`;
 
             fs.writeFileSync('.env', newEnvContent);
 
             const embed = new EmbedBuilder()
-                .setColor('#FFD700')
-                .setTitle('🎭 Royalty RP Log Channel Set')
-                .setDescription(`Royalty RP player activity will now be logged to \u003c#${channelId}\u003e`)
+                .setColor('#ff00ff')
+                .setTitle('⚔️ Elyxir Log Channel Set')
+                .setDescription(`Elyxir server player activity will now be logged to \u003c#${channelId}\u003e`)
                 .setTimestamp();
 
-            console.log(`🎭 Royalty RP log channel set to: ${channelId}`);
-            return await interaction.reply({ embeds: [embed] });
-        }
-        
-        else if (commandName === 'sethorizon') {
-            // Check admin permissions
-            if (!interaction.member.permissions.has(PermissionFlagsBits.Administrator)) {
-                return await interaction.reply({ content: '❌ You need Administrator permissions to set log channels.', flags: MessageFlags.Ephemeral });
-            }
-
-            const channel = interaction.options.getChannel('channel') || interaction.channel;
-            const channelId = channel.id;
-            HORIZON_LOG_CHANNEL_ID = channelId;
-
-            // Update .env file
-            const envContent = fs.readFileSync('.env', 'utf8');
-            const newEnvContent = envContent.includes('HORIZON_LOG_CHANNEL=')
-                ? envContent.replace(/HORIZON_LOG_CHANNEL=.*/, `HORIZON_LOG_CHANNEL=${channelId}`)
-                : envContent + `\nHORIZON_LOG_CHANNEL=${channelId}`;
-
-            fs.writeFileSync('.env', newEnvContent);
-
-            const embed = new EmbedBuilder()
-                .setColor('#9932cc')
-                .setTitle('🌅 Horizon Log Channel Set')
-                .setDescription(`Horizon server player activity will now be logged to \u003c#${channelId}\u003e`)
-                .setTimestamp();
-
-            console.log(`🌅 Horizon log channel set to: ${channelId}`);
+            console.log(`⚔️ Elyxir log channel set to: ${channelId}`);
             return await interaction.reply({ embeds: [embed] });
         }
 
@@ -2606,39 +2361,25 @@ client.on('interactionCreate', async interaction => {
                 // Wait a moment for any pending operations to complete
                 await new Promise(resolve => setTimeout(resolve, 3000));
 
-                // Test both servers to verify connections are working
-                console.log('🔍 Testing server connections...');
+                // Test Elyxir server to verify connection is working
+                console.log('🔍 Testing server connection...');
                 const testResults = await Promise.allSettled([
-                    extractPlayersFromServer('royalty'),
-                    extractPlayersFromServer('horizon')
+                    extractPlayersFromServer('elyxir')
                 ]);
 
-                let royaltyStatus = '❌ Failed';
-                let horizonStatus = '❌ Failed';
-                let royaltyPlayers = 0;
-                let horizonPlayers = 0;
+                let elyxirStatus = '❌ Failed';
+                let elyxirPlayers = 0;
                 let errors = [];
 
-                // Check Royalty RP results
+                // Check Elyxir results
                 if (testResults[0].status === 'fulfilled' && !testResults[0].value.error) {
-                    royaltyStatus = '✅ Working';
-                    royaltyPlayers = testResults[0].value.players?.length || 0;
-                    console.log(`✅ Royalty RP connection test successful: ${royaltyPlayers} players`);
+                    elyxirStatus = '✅ Working';
+                    elyxirPlayers = testResults[0].value.players?.length || 0;
+                    console.log(`✅ Elyxir connection test successful: ${elyxirPlayers} players`);
                 } else {
                     const error = testResults[0].status === 'rejected' ? testResults[0].reason.message : testResults[0].value.error;
-                    errors.push(`Royalty RP: ${error}`);
-                    console.log(`❌ Royalty RP connection test failed: ${error}`);
-                }
-
-                // Check Horizon results
-                if (testResults[1].status === 'fulfilled' && !testResults[1].value.error) {
-                    horizonStatus = '✅ Working';
-                    horizonPlayers = testResults[1].value.players?.length || 0;
-                    console.log(`✅ Horizon connection test successful: ${horizonPlayers} players`);
-                } else {
-                    const error = testResults[1].status === 'rejected' ? testResults[1].reason.message : testResults[1].value.error;
-                    errors.push(`Horizon: ${error}`);
-                    console.log(`❌ Horizon connection test failed: ${error}`);
+                    errors.push(`Elyxir: ${error}`);
+                    console.log(`❌ Elyxir connection test failed: ${error}`);
                 }
 
                 // Restart monitoring if it was previously enabled
@@ -2651,26 +2392,21 @@ client.on('interactionCreate', async interaction => {
                 const embed = new EmbedBuilder()
                     .setTimestamp();
 
-                const successfulConnections = (royaltyStatus.includes('✅') ? 1 : 0) + (horizonStatus.includes('✅') ? 1 : 0);
+                const successfulConnections = elyxirStatus.includes('✅') ? 1 : 0;
 
-                if (successfulConnections === 2) {
+                if (successfulConnections === 1) {
                     embed.setColor('#00ff00')
-                        .setTitle('✅ Server Connections Refreshed Successfully')
-                        .setDescription('All server connections have been refreshed and are working properly.');
-                } else if (successfulConnections === 1) {
-                    embed.setColor('#ffaa00')
-                        .setTitle('⚠️ Partial Refresh Success')
-                        .setDescription('Some server connections are working, but there are issues with others.');
+                        .setTitle('✅ Server Connection Refreshed Successfully')
+                        .setDescription('Server connection has been refreshed and is working properly.');
                 } else {
                     embed.setColor('#ff0000')
                         .setTitle('❌ Refresh Issues Detected')
-                        .setDescription('Server connections have been reset, but there are still issues. This may be temporary.');
+                        .setDescription('Server connection has been reset, but there are still issues. This may be temporary.');
                 }
 
                 // Add server status fields
                 embed.addFields(
-                    { name: '🎭 Royalty RP Status', value: `${royaltyStatus}${royaltyPlayers > 0 ? ` (${royaltyPlayers} players)` : ''}`, inline: true },
-                    { name: '🌅 Horizon Status', value: `${horizonStatus}${horizonPlayers > 0 ? ` (${horizonPlayers} players)` : ''}`, inline: true },
+                    { name: '⚔️ Elyxir Status', value: `${elyxirStatus}${elyxirPlayers > 0 ? ` (${elyxirPlayers} players)` : ''}`, inline: true },
                     { name: '🔄 Monitoring Status', value: MONITORING_ENABLED ? '🟢 Active' : '🔴 Stopped', inline: true }
                 );
 
@@ -2701,7 +2437,7 @@ client.on('interactionCreate', async interaction => {
                     recommendations.push('• Monitoring was restarted automatically');
                 }
                 if (recommendations.length === 0) {
-                    recommendations.push('• /royalty and /horizon commands should work normally now');
+                    recommendations.push('• /elyxir command should work normally now');
                     recommendations.push('• Monitoring is running optimally');
                 }
 
@@ -2713,9 +2449,9 @@ client.on('interactionCreate', async interaction => {
                     });
                 }
 
-                embed.setFooter({ text: `Refresh completed | ${successfulConnections}/2 servers working` });
+                embed.setFooter({ text: `Refresh completed | ${successfulConnections}/1 server working` });
 
-                console.log(`🔄 Refresh completed for ${interaction.user.tag}: ${successfulConnections}/2 servers working`);
+                console.log(`🔄 Refresh completed for ${interaction.user.tag}: ${successfulConnections}/1 server working`);
                 await interaction.editReply({ embeds: [embed] });
 
             } catch (error) {
@@ -3086,7 +2822,7 @@ client.on('messageCreate', async (message) => {
                 }
                 
                 embed.addFields(
-                    { name: 'Servers Monitored', value: 'Royalty RP & Horizon', inline: true },
+                    { name: 'Server Monitored', value: 'Elyxir', inline: true },
                     { name: 'Notification Method', value: 'Direct Messages Only', inline: true },
                     { name: '⚠️ Privacy Notice', value: 'This list is private and only visible to you. Use `!unprivatetrack <PlayerName>` to remove players.', inline: false }
                 );
@@ -3120,12 +2856,11 @@ client.on('messageCreate', async (message) => {
                     const name = player.name;
                     const addedAt = new Date(player.addedAt).toLocaleString();
 
-                    // Get tracking data (combining both servers)
-                    const royaltyData = playerTracker[name] || { totalTime: 0, sessionCount: 0 };
-                    const horizonData = horizonPlayerTracker[name] || { totalTime: 0, sessionCount: 0 };
+                    // Get tracking data from Elyxir
+                    const elyxirData = playerTracker[name] || { totalTime: 0, sessionCount: 0 };
 
-                    const totalTime = royaltyData.totalTime + horizonData.totalTime;
-                    const totalVisits = royaltyData.sessionCount + horizonData.sessionCount;
+                    const totalTime = elyxirData.totalTime;
+                    const totalVisits = elyxirData.sessionCount;
 
                     output += `• **${name}**:\n  - Added: ${addedAt}\n  - Total Time in City: ${formatDuration(totalTime)}\n  - Number of Visits: ${totalVisits}\n\n`;
                 }
@@ -3178,7 +2913,7 @@ client.on('messageCreate', async (message) => {
                     .setDescription(`**${privatePlayer.name}** is now being privately tracked`)
                     .addFields(
                         { name: 'Notification Method', value: 'Direct Messages Only', inline: true },
-                        { name: 'Servers', value: 'Royalty RP & Horizon', inline: true },
+                        { name: 'Server', value: 'Elyxir', inline: true },
                         { name: 'Added', value: new Date().toLocaleString(), inline: true }
                     );
                 
@@ -3229,7 +2964,7 @@ client.on('messageCreate', async (message) => {
                     .setDescription(`**${privatePlayer.name}** is no longer being privately tracked`)
                     .addFields(
                         { name: 'Previously Tracked Since', value: new Date(privatePlayer.addedAt).toLocaleString(), inline: true },
-                        { name: 'Servers', value: 'Royalty RP & Horizon', inline: true },
+                        { name: 'Server', value: 'Elyxir', inline: true },
                         { name: 'Removed', value: new Date().toLocaleString(), inline: true }
                     );
                 
@@ -3327,8 +3062,8 @@ client.on('messageCreate', async (message) => {
                 .setDescription('This bot now uses **Slash Commands** only. The old `!` commands have been removed.')
                 .addFields(
                     { name: '🔄 How to Use Slash Commands', value: 'Type `/` in Discord and you\'ll see all available commands with descriptions and options.', inline: false },
-                    { name: '📍 Main Commands', value: '• `/track` - Add player to tracking\n• `/untrack` - Remove player from tracking\n• `/tracked` - View tracked players list\n• `/find` - Search for tracked player\n• `/search` - Search player database\n• `/players` - Show Royalty RP players\n• `/horizon` - Show Horizon players\n• `/categories` - View tracking categories', inline: false },
-                    { name: '⚙️ Admin Commands', value: '• `/startmonitor` - Start monitoring\n• `/stopmonitor` - Stop monitoring\n• `/setroyalty` - Set Royalty RP log channel\n• `/sethorizon` - Set Horizon log channel', inline: false },
+                    { name: '📍 Main Commands', value: '• `/track` - Add player to tracking\n• `/untrack` - Remove player from tracking\n• `/tracked` - View tracked players list\n• `/find` - Search for tracked player\n• `/search` - Search player database\n• `/elyxir` - Show Elyxir players\n• `/categories` - View tracking categories', inline: false },
+                    { name: '⚙️ Admin Commands', value: '• `/startmonitor` - Start monitoring\n• `/stopmonitor` - Stop monitoring\n• `/setelyxir` - Set Elyxir log channel', inline: false },
                     { name: '✨ Benefits of Slash Commands', value: '• Built-in help and validation\n• Cleaner interface\n• Auto-complete options\n• Better Discord integration', inline: false }
                 )
                 .setFooter({ text: 'Start typing "/" to see all available commands!' })
